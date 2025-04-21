@@ -32,6 +32,76 @@ class CardRepository extends ICardRepository {
     return await this.db.models.Card.findAll({ where: { listId } });
   }
 
+  async findAllCardInformation(listId, cardId){
+    return await this.db.models.Card.findOne({
+      where: { listId, id: cardId },
+      include: [
+        {
+          model: this.db.models.ProjectMember,
+          as: 'members',
+          attributes: ['id'],
+          include: [{
+            model: this.db.models.WorkspaceMember,
+            as: 'workspaceMember',
+            attributes: ['id'],
+            include: [{
+              model: this.db.models.User,
+              as: 'user',
+              attributes: ['id', 'name', 'email'],
+            }],
+          }],
+        },
+        {
+          model: this.db.models.List,
+          as: 'list',
+          attributes: ['id'],
+          include: [{
+            model: this.db.models.Project,
+            as: 'project',
+            attributes: ['id'],
+            include: [{
+              model: this.db.models.Label,
+              as: 'labels',
+              include: [{
+                model: this.db.models.Card,
+                as: 'cards',
+                attributes: ['id', 'name'],
+                required: false
+              }]
+            }]
+          }]
+        },
+        {
+          model: this.db.models.CardAttachment,
+          as: 'attachments',
+        },
+        {
+          model: this.db.models.Checklist,
+          as: 'checklists',
+          include: [{
+            model: this.db.models.ChecklistItem,
+            as: 'items',
+            include: [{
+              model: this.db.models.ProjectMember,
+              as: 'members',
+              attributes: ['id'],
+              include: [{
+                model: this.db.models.WorkspaceMember,
+                as: 'workspaceMember',
+                attributes: ['id'],
+                include: [{
+                  model: this.db.models.User,
+                  as: 'user',
+                  attributes: ['id', 'name', 'email'],
+                }],
+              }],
+            }]
+          }],
+        }
+      ]
+    });
+  }
+
   async checkProjectMemberByCardAndList(userId, listId, cardId){
     return await this.db.models.Card.findOne({
       where: { id: cardId },

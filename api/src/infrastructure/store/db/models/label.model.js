@@ -40,7 +40,7 @@ class Label extends Model {
       through: models.CardLabel,
       foreignKey: 'labelId',
       otherKey: 'cardId',
-      as: 'cards'
+      as: 'cards',
     });
   }
 

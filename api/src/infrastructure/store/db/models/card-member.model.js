@@ -44,7 +44,14 @@ const CardMemberSchema = {
 
 class CardMember extends Model {
   static associate(models) {
-
+    this.belongsTo(models.ProjectMember, {
+      as: 'projectMember',
+      foreignKey: 'projectMemberId'
+    });
+    this.belongsTo(models.Card, {
+      as: 'card',
+      foreignKey: 'cardId'
+    });
   }
 
   static config(sequelize) {

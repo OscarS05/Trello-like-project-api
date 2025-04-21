@@ -44,6 +44,7 @@ function setupModels(sequelize){
   ProjectMember.associate(sequelize.models);
   List.associate(sequelize.models);
   Card.associate(sequelize.models);
+  CardMember.associate(sequelize.models);
   CardAttachment.associate(sequelize.models);
   Checklist.associate(sequelize.models);
   ChecklistItem.associate(sequelize.models);

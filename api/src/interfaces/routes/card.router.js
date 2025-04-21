@@ -10,6 +10,13 @@ const { cardSchemas, createCardSchema, updateCardSchema } = require('../schemas/
 
 const cardControllers = require('../controllers/card.controller');
 
+router.get('/lists/:listId/cards/:cardId/information',
+  validateSession,
+  validatorHandler(cardSchemas, 'params'),
+  validateListAuthorization,
+  cardControllers.getAllCardInformation
+);
+
 router.get('/lists/:listId/cards',
   validateSession,
   validatorHandler(listIdSchema, 'params'),

@@ -1,9 +1,10 @@
 class CardMemberEntity {
-  constructor({ id, projectMemberId, cardId, createdAt }) {
+  constructor({ id, projectMember, projectMemberId, cardId, createdAt }) {
     this.id = id;
+    if(projectMember) this.name = projectMember?.workspaceMember?.user?.name || null;
     this.projectMemberId = projectMemberId;
     this.cardId = cardId;
-    this.createdAt = createdAt || new Date().toISOString();
+    this.createdAt = createdAt;
   }
 }
 

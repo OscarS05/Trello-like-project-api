@@ -9,6 +9,7 @@ const validateListAuthorization = async (req, res, next) => {
     const list = await listService.projectMembershipByList(userId, listId);
     if(!list?.id) throw boom.notFound('Something went wrong with data');
 
+    req.list = list;
     next();
   } catch (error) {
     next(error);

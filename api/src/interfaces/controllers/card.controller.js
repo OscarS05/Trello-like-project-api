@@ -2,6 +2,18 @@ const boom = require('@hapi/boom');
 
 const { cardService } = require('../../application/services/index');
 
+const getAllCardInformation = async (req, res, next) => {
+  try {
+    const { listId, cardId } = req.params;
+
+    const card = await cardService.getAllCardInformation(listId, cardId);
+
+    res.status(200).json({ card });
+  } catch (error) {
+    next(error);
+  }
+}
+
 const getCards = async (req, res, next) => {
   try {
     const { listId } = req.params;
@@ -53,6 +65,7 @@ const deleteCard = async (req, res, next) => {
 }
 
 module.exports = {
+  getAllCardInformation,
   getCards,
   createCard,
   updateCard,

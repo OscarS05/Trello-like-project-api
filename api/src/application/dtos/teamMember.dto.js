@@ -1,6 +1,7 @@
 class TeamMemberDto {
-  constructor({ id, workspaceMemberId, workspaceId, teamId, role, addedAt }) {
+  constructor({ id, workspaceMember, workspaceMemberId, workspaceId, teamId, role, addedAt }) {
     this.id = id;
+    this.name = workspaceMember?.user?.name || null;
     this.workspaceMemberId = workspaceMemberId,
     this.workspaceId = workspaceId;
     this.teamId = teamId;

@@ -66,7 +66,19 @@ class TeamMemberRepository extends ITeamMemberRepository{
   }
 
   async findAll(teamId, workspaceId){
-    return await this.db.models.TeamMember.findAll({ where: { teamId, workspaceId } });
+    return await this.db.models.TeamMember.findAll({
+      where: { teamId, workspaceId },
+      include: [{
+        model: this.db.models.WorkspaceMember,
+        as: 'workspaceMember',
+        attributes: ['id'],
+        include: [{
+          model: this.db.models.User,
+          as: 'user',
+          attributes: ['id', 'name', 'email']
+        }]
+      }]
+    });
   }
 
   async findOneByUserId(userId, workspaceId, teamId){

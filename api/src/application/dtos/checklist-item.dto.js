@@ -15,6 +15,7 @@ class ChecklistDto {
 
   static formatMembers(members) {
     return members.map(member => ({
+      id: member.ChecklistItemMember?.id || null,
       projectMemberId: member.id,
       name: member.workspaceMember?.user?.name ?? null
     }));

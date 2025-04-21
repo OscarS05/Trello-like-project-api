@@ -75,6 +75,11 @@ class Project extends Model {
       foreignKey: 'projectId',
       as: 'teams'
     });
+
+    this.hasMany(models.Label, {
+      as: 'labels',
+      foreignKey: 'projectId',
+    });
   }
 
   static config(sequelize) {

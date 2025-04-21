@@ -13,7 +13,7 @@
     "environment:status": "sequelize-cli db:migrate:status"
   },
   "keywords": [],
-  "author": "",
+  "author": "OscarS05",
   "license": "ISC",
   "description": "",
   "dependencies": {
