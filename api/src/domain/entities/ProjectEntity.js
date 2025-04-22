@@ -4,10 +4,11 @@ const ProjectName = require('../value-objects/projectName');
 const ProjectVisibility = require('../value-objects/projectVisibility');
 
 class ProjectEntity {
-  constructor({ name, visibility, workspaceId, workspaceMemberId, createdAt }) {
+  constructor({ name, visibility, backgroundUrl, workspaceId, workspaceMemberId, createdAt }) {
     this.id = uuidv4();
     this.name = new ProjectName(name).getValue();
     this.visibility = new ProjectVisibility(visibility).toString();
+    this.backgroundUrl = backgroundUrl;
     this.workspaceId = workspaceId;
     this.workspaceMemberId = workspaceMemberId;
     this.createdAt = createdAt || new Date().toISOString();

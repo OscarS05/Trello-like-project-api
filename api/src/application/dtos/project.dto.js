@@ -2,10 +2,11 @@ const ProjectMemberDto = require("./projectMember.dto");
 const TeamDto = require("./team.dto");
 
 class ProjectDto {
-  constructor({ id, name, visibility, workspaceId, workspaceMemberId, createdAt }) {
+  constructor({ id, name, visibility, backgroundUrl, workspaceId, workspaceMemberId, createdAt }) {
     this.id = id;
     this.name = name;
     this.visibility = visibility;
+    this.backgroundUrl = backgroundUrl;
     this.workspaceId = workspaceId;
     this.workspaceMemberId = workspaceMemberId;
     this.createdAt = createdAt;

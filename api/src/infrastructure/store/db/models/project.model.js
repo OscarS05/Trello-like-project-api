@@ -20,6 +20,12 @@ const ProjectSchema = {
     allowNull: false,
     type: Sequelize.DataTypes.STRING,
   },
+  backgroundUrl: {
+    field: 'background_url',
+    allowNull: false,
+    type: DataTypes.TEXT,
+    defaultValue: null
+  },
   workspaceId:{
     field: 'workspace_id',
     allowNull: false,

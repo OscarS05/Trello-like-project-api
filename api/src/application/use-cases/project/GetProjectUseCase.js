@@ -7,7 +7,7 @@ class GetProjectUseCase {
 
   async execute(projectId){
     const project = await this.projectRepository.findById(projectId);
-    return new ProjectDto(project);
+    return project?.id ? new ProjectDto(project) : {};
   }
 }
 

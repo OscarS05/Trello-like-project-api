@@ -7,6 +7,11 @@ const name = Joi.string().min(3).max(50)
     'string.pattern.base': 'The project name contains illegal characters'
   });
 const visibility = Joi.string().valid('private', 'workspace');
+const backgroundImage = Joi.string().uri()
+  .pattern(/^https:\/\/images\.unsplash\.com\//)
+  .messages({
+    'string.pattern.base': 'Only images from Unsplash are allowed.',
+  });
 
 const projectIdSchema = Joi.object({
   workspaceId: id.required(),
@@ -16,6 +21,7 @@ const projectIdSchema = Joi.object({
 const createProject = Joi.object({
   name: name.required(),
   visibility: visibility.required(),
+  backgroundUrl: backgroundImage.required(),
 });
 
 const updateProject = Joi.object({
