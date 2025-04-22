@@ -18,6 +18,10 @@ const projectIdSchema = Joi.object({
   projectId: id.required()
 });
 
+const projectId =  Joi.object({
+  projectId: id.required()
+});
+
 const createProject = Joi.object({
   name: name.required(),
   visibility: visibility.required(),
@@ -30,4 +34,4 @@ const updateProject = Joi.object({
 });
 
 
-module.exports = { createProject, updateProject, projectIdSchema }
+module.exports = { createProject, updateProject, projectIdSchema, projectId }

@@ -2,6 +2,19 @@ const boom = require('@hapi/boom');
 
 const { projectService } =  require('../../application/services/index');
 
+const getAllprojectInformation = async (req, res, next) => {
+  try {
+    const { projectId } = req.params;
+
+    const projectData = await projectService.getAllProjectInformation(projectId);
+    if(!projectData.id) throw boom.notFound('The operation to get all project information returns a null value');
+
+    res.status(200).json({ projectData });
+  } catch (error) {
+    next(error);
+  }
+}
+
 const getProjectsByWorkspace = async (req, res, next) => {
   try {
     const { workspaceId } = req.params;
@@ -72,6 +85,7 @@ const deleteProject = async (req, res, next) => {
 }
 
 module.exports = {
+  getAllprojectInformation,
   getProjectsByWorkspace,
   createProject,
   updateProject,

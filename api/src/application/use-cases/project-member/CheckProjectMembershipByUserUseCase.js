@@ -7,7 +7,7 @@ class CheckProjectMembershipByUserUseCase {
 
   async execute(userId, projectId){
     const projectMember = await this.projectMemberRepository.checkProjectMemberByUser(userId, projectId);
-    return new ProjectMemberDto(projectMember);
+    return projectMember?.id ? new ProjectMemberDto(projectMember) : {};
   }
 }
 

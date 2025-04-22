@@ -8,6 +8,12 @@ class ChecklistDto {
     this.createdAt = createdAt;
     this.items = items?.map(item => new ChecklistItemDto(item));
   }
+
+  static withItems(checklist) {
+    return {
+      items: checklist.items?.map(item => new ChecklistItemDto(item)),
+    }
+  }
 }
 
 module.exports = ChecklistDto;

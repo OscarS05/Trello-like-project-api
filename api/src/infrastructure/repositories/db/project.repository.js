@@ -42,6 +42,71 @@ class ProjectRepository extends IProjectRepository{
     });
   }
 
+  async getAllProjectInformation(projectId){
+    return await this.db.models.Project.findOne({
+      where: { id: projectId },
+      attributes: ['id', 'name', 'visibility', 'backgroundUrl'],
+      include: [
+        {
+          model: this.db.models.List,
+          as: 'lists',
+          include: [
+            {
+              model: this.db.models.Card,
+              as: 'cards',
+              include: [
+                {
+                  model: this.db.models.ProjectMember,
+                  as: 'members',
+                  attributes: ['id'],
+                  required: false,
+                  include: [
+                    {
+                      model: this.db.models.WorkspaceMember,
+                      as: 'workspaceMember',
+                      include: [
+                        {
+                          model: this.db.models.User,
+                          as: 'user',
+                          attributes: ['id', 'name', 'email']
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  model: this.db.models.Label,
+                  as: 'labels',
+                  required: false,
+                  attributes: ['id', 'name', 'color'],
+                  through: { where: { isVisible: true } }
+                },
+                {
+                  model: this.db.models.CardAttachment,
+                  as: 'attachments',
+                  required: false,
+                  attributes: ['filename']
+                },
+                {
+                  model: this.db.models.Checklist,
+                  as: 'checklists',
+                  attributes: ['id', 'name'],
+                  include: [
+                    {
+                      model: this.db.models.ChecklistItem,
+                      as: 'items',
+                      attributes: ['name', 'isChecked']
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    });
+  }
+
   async findAllByWorkspaceMember(workspaceId, workspaceMemberId){
     const projects = await this.db.models.Project.findAll({
       where: { workspaceId },

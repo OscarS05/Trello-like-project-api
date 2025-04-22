@@ -1,12 +1,16 @@
 const ProjectDto = require("./project.dto");
 
 class WorkspaceDto {
-  constructor({ id, name, description, userId, createdAt }) {
+  constructor({ id, name, description, userId, createdAt, projects }) {
     this.id = id;
     this.name = name;
     this.description = description;
     this.userId = userId;
     this.createdAt = createdAt
+
+    if(Array.isArray(projects)) {
+      this.projects = projects.length > 0 ? projects.map(project => new ProjectDto(project)) : [];
+    }
   }
 
   static fromEntity(workspace){

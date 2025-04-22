@@ -1,4 +1,4 @@
-class ChecklistDto {
+class ChecklistItemDto {
   constructor({ id, name, checklistId, isChecked, dueDate, createdAt, assignedMembers, members }) {
     this.id = id;
     this.name = name;
@@ -9,7 +9,7 @@ class ChecklistDto {
     this.assignedMembers = assignedMembers;
 
     if (Array.isArray(members)) {
-      this.members = members.length > 0 ? ChecklistDto.formatMembers(members) : [];
+      this.members = members.length > 0 ? ChecklistItemDto.formatMembers(members) : [];
     }
   }
 
@@ -22,4 +22,4 @@ class ChecklistDto {
   }
 }
 
-module.exports = ChecklistDto;
+module.exports = ChecklistItemDto;

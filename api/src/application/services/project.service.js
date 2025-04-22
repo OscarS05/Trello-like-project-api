@@ -1,7 +1,8 @@
 const boom = require('@hapi/boom');
 
 class ProjectService {
-  constructor({ getProjectsByWorkspaceUseCase, getProjectUseCase, countProjectsUseCase, createProjectUseCase, updateProjectUseCase, updateBackgroundProjectUseCase, deleteProjecUseCase }) {
+  constructor({ getProjectsByWorkspaceUseCase, getAllProjectInformationUseCase, getProjectUseCase, countProjectsUseCase, createProjectUseCase, updateProjectUseCase, updateBackgroundProjectUseCase, deleteProjecUseCase }) {
+    this.getAllProjectInformationUseCase = getAllProjectInformationUseCase;
     this.getProjectsByWorkspaceUseCase = getProjectsByWorkspaceUseCase;
     this.getProjectUseCase = getProjectUseCase;
     this.countProjectsUseCase = countProjectsUseCase;
@@ -33,6 +34,10 @@ class ProjectService {
 
   async findAllByWorkspace(workspaceId){
     return await this.getProjectsByWorkspaceUseCase.execute(workspaceId);
+  }
+
+  async getAllProjectInformation(projectId){
+    return await this.getAllProjectInformationUseCase.execute(projectId);
   }
 
   async countProjects(workspaceMember){

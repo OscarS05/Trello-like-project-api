@@ -1,10 +1,10 @@
 class LabelDto {
-  constructor({ id, projectId, name, color, isVisible }) {
+  constructor({ id, projectId, name, color, isVisible, CardLabel }) {
     this.id = id;
     this.name = name;
     this.color = color;
     this.projectId = projectId;
-    this.isVisible = isVisible;
+    this.isVisible = isVisible ? isVisible : CardLabel?.isVisible;
   }
 
   updateVisibility(updatedLabel){

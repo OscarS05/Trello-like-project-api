@@ -73,6 +73,7 @@ async function checkProjectMembershipByUserId(req, res, next){
     const { projectId } = req.params;
 
     const projectMember = await projectMemberService.checkProjectMembershipByUser(user.sub, projectId);
+    if(!projectMember?.id) throw boom.forbidden('You do not belong to the project');
 
     req.projectMember = projectMember;
     next();

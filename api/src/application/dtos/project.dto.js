@@ -1,8 +1,9 @@
+const ListDto = require("./list.dto");
 const ProjectMemberDto = require("./projectMember.dto");
 const TeamDto = require("./team.dto");
 
 class ProjectDto {
-  constructor({ id, name, visibility, backgroundUrl, workspaceId, workspaceMemberId, createdAt }) {
+  constructor({ id, name, visibility, backgroundUrl, workspaceId, workspaceMemberId, createdAt, lists }) {
     this.id = id;
     this.name = name;
     this.visibility = visibility;
@@ -10,6 +11,10 @@ class ProjectDto {
     this.workspaceId = workspaceId;
     this.workspaceMemberId = workspaceMemberId;
     this.createdAt = createdAt;
+
+    if(Array.isArray(lists)){
+      this.lists = lists.length > 0 ? lists.map(list =>  new ListDto(list)) : [];
+    }
   }
 
   static withTeams(project){
