@@ -100,7 +100,19 @@ class TeamMemberRepository extends ITeamMemberRepository{
   }
 
   async findOneById(teamId, teamMemberId){
-    return await this.db.models.TeamMember.findOne({ where: { id: teamMemberId, teamId } });
+    return await this.db.models.TeamMember.findOne({
+      where: { id: teamMemberId, teamId },
+      include: [{
+        model: this.db.models.WorkspaceMember,
+        as: 'workspaceMember',
+        attributes: ['id'],
+        include: [{
+          model: this.db.models.User,
+          as: 'user',
+          attributes: ['id', 'name']
+        }]
+      }]
+    });
   }
 }
 

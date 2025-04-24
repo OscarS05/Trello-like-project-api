@@ -35,7 +35,7 @@ const changeRoleToMember = async (req, res, next) => {
     const requesterAsProjectMember = req.projectMember;
 
     if(requesterAsProjectMember.id === projectMemberId) throw boom.forbidden('You cannot update your own role in the project');
-    const updatedMember = await projectMemberService.updateRole(projectId, projectMemberId, newRole);
+    const updatedMember = await projectMemberService.updateRole(projectMemberId, newRole);
     if(!updatedMember?.id) throw boom.badRequest('The update role operation returns null');
 
     res.status(200).json({ message: 'The role has been changed successfully', updatedMember });

@@ -7,7 +7,7 @@ class GetTeamMemberByIdUseCase {
 
   async execute(teamId, teamMemberId){
     const teamMember = await this.teamMemberRepository.findOneById(teamId, teamMemberId);
-    return new TeamMemberDto(teamMember);
+    return !teamMember?.id ? {} : new TeamMemberDto(teamMember);
   }
 }
 

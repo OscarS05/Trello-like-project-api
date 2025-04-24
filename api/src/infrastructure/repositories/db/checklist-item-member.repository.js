@@ -19,6 +19,27 @@ class ChecklistItemMemberRepository extends IChecklistItemMemberRepository {
     return await this.db.models.ChecklistItemMember.destroy({ where: { checklistItemId, projectMemberId } });
   }
 
+  async getByIds(checklistItemId, checklistItemMemberIds){
+    return await this.db.models.ChecklistItemMember.findAll({
+      where: { checklistItemId, id: checklistItemMemberIds },
+      include: [{
+        model: this.db.models.ProjectMember,
+        as: 'projectMember',
+        attributes: ['id'],
+        include: [{
+          model: this.db.models.WorkspaceMember,
+          as: 'workspaceMember',
+          attributes: ['id'],
+          include: [{
+            model: this.db.models.User,
+            as: 'user',
+            attributes: ['name']
+          }]
+        }]
+      }]
+    });
+  }
+
   async findAll(checklistItemId){
     return await this.db.models.ChecklistItemMember.findAll({
       where: { checklistItemId },

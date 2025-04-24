@@ -57,7 +57,18 @@ class ProjectMemberRepository extends IProjectMemberRepository {
   }
 
   async findProjectMemberById(projectMemberId){
-    return await this.db.models.ProjectMember.findOne({ where: { id: projectMemberId } });
+    return await this.db.models.ProjectMember.findOne({
+      where: { id: projectMemberId },
+      include: [{
+        model: this.db.models.WorkspaceMember,
+        as: 'workspaceMember',
+        include: [{
+          model: this.db.models.User,
+          as: 'user',
+          attributes: ['id', 'name'],
+        }]
+      }]
+    });
   }
 
   async findByWorkspaceMember(workspaceMemberId, projectId){

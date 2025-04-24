@@ -14,7 +14,6 @@ class SendEmailConfirmationUseCase{
     const payload = { sub: user.id, role: user.role};
     const token = jwt.sign(payload, config.jwtSecretVerifyEmail, { expiresIn: '30min' });
 
-    // await this.UserRepository.update(user.id, { recoveryToken: token });
     await this.AuthRedis.saveTokenInRedis(user.id, token);
 
     const link = `${config.frontUrl}/auth/verify-email/email-confirmed?token=${token}`

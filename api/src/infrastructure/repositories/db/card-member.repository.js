@@ -14,6 +14,33 @@ class CardMemberRepository extends ICardMemberRepository {
     return await this.db.models.CardMember.destroy({ where: { cardId, projectMemberId } });
   }
 
+  async findOne(cardId, cardMemberId){
+    return await this.db.models.CardMember.findOne({
+      where: { cardId, id: cardMemberId },
+      include: [
+        {
+          model: this.db.models.ProjectMember,
+          as: 'projectMember',
+          attributes: ['id'],
+          include: [
+            {
+              model: this.db.models.WorkspaceMember,
+              as: 'workspaceMember',
+              attributes: ['id'],
+              include: [
+                {
+                  model: this.db.models.User,
+                  as: 'user',
+                  attributes: ['id', 'name'],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    });
+  }
+
   async findAll(cardId){
     return await this.db.models.CardMember.findAll({
       where: { cardId },

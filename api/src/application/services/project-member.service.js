@@ -29,13 +29,27 @@ class ProjectMemberService {
   async addMemberToProject(projectId, workspaceMemberId){
     const memberToBeAdded = await this.getProjectMemberByWorkspaceMemberUseCase.execute(workspaceMemberId, projectId);
     if(memberToBeAdded?.id) throw boom.conflict('The workspace member is already a member if the project');
-    return await this.addMemberToProjectUseCase.execute(projectId, workspaceMemberId);
+
+    const updatedProjectMember = await this.addMemberToProjectUseCase.execute(projectId, workspaceMemberId);
+    if(!updatedProjectMember?.id) throw boom.internal('The project member was not added to the project');
+
+    const projectMember = await this.getProjectMemberById(updatedProjectMember.id);
+    if(!projectMember?.id) throw boom.internal('The new project member was not found in the project');
+
+    return projectMember?.id ? projectMember : {};
   }
 
-  async updateRole(projectId, projectMemberId, newRole){
+  async updateRole(projectMemberId, newRole){
     const memberToBeUpdated = await this.getProjectMemberById(projectMemberId);
     if(!memberToBeUpdated?.id) throw boom.notFound('The project member does not exist in the project');
-    return await this.updateRoleUseCase.execute(memberToBeUpdated, newRole);
+
+    const updatedMember = await this.updateRoleUseCase.execute(memberToBeUpdated, newRole);
+    if(!updatedMember?.id) throw boom.internal('The project member was not updated');
+
+    const projectMember = await this.getProjectMemberById(updatedMember.id);
+    if(!projectMember?.id) throw boom.internal('The project member was not found in the project');
+
+    return projectMember?.id ? projectMember : {};
   }
 
   async transferOwnership(projectId, currentProjectOwner, newProjectOwnerId){

@@ -43,7 +43,8 @@ async function checkAdminRole(req, res, next){
     const { workspaceId, projectId } = req.params;
 
     const projectMember = await projectMemberService.getProjectMemberByUserId(userId, workspaceId, projectId);
-    if(projectMember?.role === 'member') throw boom.forbidden('You do not have permission to perform this action');
+    if(!projectMember?.id) throw boom.forbidden('You do not belong to the project');
+    if(projectMember.role === 'member') throw boom.forbidden('You do not have permission to perform this action');
 
     req.projectMember = projectMember;
     next();
@@ -58,6 +59,7 @@ async function checkOwnership(req, res, next){
     const { workspaceId, projectId } = req.params;
 
     const projectMember = await projectMemberService.getProjectMemberByUserId(user.sub, workspaceId, projectId);
+    if(!projectMember?.id) throw boom.forbidden('You do not belong to the project');
     if(projectMember.role !== 'owner') throw boom.forbidden('You do not have permission to perform this action');
 
     req.projectMember = projectMember;

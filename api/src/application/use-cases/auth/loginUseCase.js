@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const boom = require('@hapi/boom');
 const UserDto = require('../../dtos/user.dto');
 
 class LoginUseCase {

@@ -29,7 +29,7 @@ async function checkTeamMembership(req, res, next){
     const { workspaceId, teamId } = req.params;
 
     const teamMember = await teamService.getTeamMemberByUserId(user.sub, workspaceId, teamId);
-    if(!teamMember.id) throw boom.notFound('You do not belong to the team');
+    if(!teamMember?.id) throw boom.notFound('You do not belong to the team');
     if(teamMember.role === 'member') throw boom.forbidden('You do not have permission to perform this action');
 
     req.teamMember = teamMember;
@@ -45,14 +45,14 @@ async function checkAdminRoleToAssign(req, res, next){
     const { workspaceId, projectId } = req.params;
 
     const workspaceMember = await workspaceMemberService.getWorkspaceMemberByUserId(workspaceId, userId);
-    if(!workspaceMember) throw boom.forbidden('You do not belong in the workspace');
+    if(!workspaceMember?.id) throw boom.forbidden('You do not belong in the workspace');
 
     if(workspaceMember.role !== 'member'){
       req.workspaceMember = workspaceMember;
       return next();
     } else if(workspaceMember.role === 'member'){
       const projectMember = await projectMemberService.getProjectMemberByUserId(userId, workspaceId, projectId);
-      if(!projectMember) throw boom.forbidden('You do not belong in the project');
+      if(!projectMember?.id) throw boom.forbidden('You do not belong in the project');
       if(projectMember.role !== 'admin') throw boom.forbidden('You do not have permission to perform this action');
 
       req.projectMember = projectMember;
@@ -71,6 +71,7 @@ async function checkTeamOwnership(req, res, next){
     const { workspaceId, teamId } = req.params;
 
     const teamMember = await teamService.getTeamMemberByUserId(user.sub, workspaceId, teamId);
+    if(!teamMember?.id) throw boom.forbidden('You do not belong to the team');
     if(teamMember.role !== 'owner') throw boom.forbidden('You do not have permission to perform this action');
 
     req.teamMember = teamMember;

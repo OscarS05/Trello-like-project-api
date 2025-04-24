@@ -34,13 +34,22 @@ class WorkspaceMemberService {
     const workspaceMember = await this.getWorkspaceMemberByUserId(workspaceId, userIdToAdd);
     if(workspaceMember) throw boom.conflict('User is already a member of this workspace');
 
-    return await this.addMemberToWorkspaceUseCase.execute(workspaceId, userIdToAdd);
+    const newMember = await this.addMemberToWorkspaceUseCase.execute(workspaceId, userIdToAdd);
+    if(!newMember.id) throw boom.notFound('Something went wrong while adding the user to the workspace');
+
+    const workspaceMemberToReturn = await this.getWorkspaceMemberById(newMember.id);
+    return workspaceMemberToReturn?.id ? workspaceMemberToReturn : {};
   }
 
   async updateRole(workspaceId, WorkspaceMemberIdToUpdate, newRole){
     const workspaceMember = await this.getWorkspaceMemberById(WorkspaceMemberIdToUpdate);
     if(!workspaceMember?.id) throw boom.notFound('The workspace member to update the role does not exist');
-    return await this.updateRoleUseCase.execute(workspaceId, workspaceMember, newRole);
+
+    const updatedMember = await this.updateRoleUseCase.execute(workspaceId, workspaceMember, newRole);
+    if(!updatedMember?.id) throw boom.notFound('Something went wrong while updating the role of the user');
+
+    const updatedWorkspaceMember = await this.getWorkspaceMemberById(updatedMember.id);
+    return updatedWorkspaceMember?.id ? updatedWorkspaceMember : {};
   }
 
   async removeMember(requesterAsWorkspaceMember, workspaceMemberId){

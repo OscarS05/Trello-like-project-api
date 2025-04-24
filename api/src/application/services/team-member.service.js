@@ -25,13 +25,25 @@ class TeamMemberService {
   }
 
   async addMember(teamId, dataOfNewTeamMember){
-    return await this.addMemberUseCase.execute(teamId, dataOfNewTeamMember);
+    const addedMember = await this.addMemberUseCase.execute(teamId, dataOfNewTeamMember);
+    if(!addedMember?.id) throw boom.notFound('Something went wrong while adding the team member');
+
+    const teamMember = await this.getTeamMember(teamId, addedMember.id);
+    if(!teamMember?.id) throw boom.notFound('The new team member does not belong to the team');
+
+    return teamMember;
   }
 
   async updateRole(teamId, teamMemberId, newRole){
     const teamMember = await this.getTeamMember(teamId, teamMemberId);
     if(!teamMember?.id) throw boom.notFound('This team member does not belong to the team');
-    return await this.updateRoleUseCase.execute(teamMember, newRole);
+
+    const updatedMember = await this.updateRoleUseCase.execute(teamMember, newRole);
+    if(!updatedMember?.id) throw boom.notFound('Something went wrong while updating the team member role');
+
+    const updatedTeamMember = await this.getTeamMember(teamId, updatedMember.id);
+    if(!updatedTeamMember?.id) throw boom.notFound('The updated team member does not belong to the team');
+    return updatedTeamMember;
   }
 
   async transferOwnership(currentTeamMember, teamMemberId){
