@@ -43,6 +43,10 @@ class ProjectService {
   async countProjects(workspaceMember){
     return await this.countProjectsUseCase.execute(workspaceMember.id);
   }
+
+  async getProjectById(projectId){
+    return await this.getProjectUseCase.execute(projectId);
+  }
 }
 
 module.exports = ProjectService;

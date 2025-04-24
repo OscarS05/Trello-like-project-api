@@ -53,6 +53,16 @@ class ListRepository extends IListRepository {
       }],
     });
   }
+
+  async getProjectByList(listId){
+    return await this.db.models.List.findOne({
+      where: { id: listId },
+      include: [{
+        model: this.db.models.Project,
+        as: 'project',
+      }],
+    });
+  }
 }
 
 module.exports = ListRepository;

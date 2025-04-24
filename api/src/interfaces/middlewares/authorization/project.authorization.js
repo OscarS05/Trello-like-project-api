@@ -1,6 +1,6 @@
 const boom = require('@hapi/boom');
 
-const { projectService, projectMemberService } = require('../../../application/services/index');
+const { projectService, projectMemberService, workspaceMemberService } = require('../../../application/services/index');
 const { LIMITS } = require('./workspace.authorization');
 
 async function authorizationToCreateProject(req, res, next){
@@ -82,10 +82,37 @@ async function checkProjectMembershipByUserId(req, res, next){
   }
 }
 
+async function validateProjectReadPermission(req, res, next){
+  try {
+    const user = req.user;
+    const { projectId } = req.params;
+
+    const project = await projectService.getProjectById(projectId);
+    if(!project?.id) throw boom.forbidden('You do not belong to the project');
+
+    if(project.visibility === 'private'){
+      const projectMember = await projectMemberService.checkProjectMembershipByUser(user.sub, projectId);
+      if(!projectMember?.id) throw boom.forbidden('You do not belong to the project');
+
+      return next();
+    }
+
+    if(project.visibility === 'workspace'){
+      const workspaceMember = await workspaceMemberService.getWorkspaceMemberByUserId(project.workspaceId, user.sub);
+      if(!workspaceMember?.id) throw boom.forbidden('You do not belong to the project');
+
+      return next();
+    }
+  } catch (error) {
+    next(error);
+  }
+}
+
 module.exports = {
   checkAdminRole,
   checkProjectMembership,
   authorizationToCreateProject,
   checkOwnership,
-  checkProjectMembershipByUserId
+  checkProjectMembershipByUserId,
+  validateProjectReadPermission,
 };

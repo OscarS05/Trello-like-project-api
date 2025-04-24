@@ -3,7 +3,7 @@ const router = express.Router();
 
 const { validateSession } = require('../middlewares/authentication.handler');
 const { validatorHandler } = require('../middlewares/validator.handler');
-const { validateListAuthorization } = require('../middlewares/authorization/list.authorization');
+const { validateListAuthorization, validateProjectReadPermission } = require('../middlewares/authorization/list.authorization');
 const { validateCardAuthorization } = require('../middlewares/authorization/card.authorization');
 const { listIdSchema } = require('../schemas/list.schema');
 const { cardSchemas, createCardSchema, updateCardSchema } = require('../schemas/card.schema');
@@ -13,7 +13,7 @@ const cardControllers = require('../controllers/card.controller');
 router.get('/lists/:listId/cards/:cardId/information',
   validateSession,
   validatorHandler(cardSchemas, 'params'),
-  validateListAuthorization,
+  validateProjectReadPermission,
   cardControllers.getAllCardInformation
 );
 

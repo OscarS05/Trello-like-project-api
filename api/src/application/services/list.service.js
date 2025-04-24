@@ -1,7 +1,8 @@
 const boom = require('@hapi/boom');
 
 class ListService {
-  constructor({ createListUseCase, getAllListsUseCase, getListUseCase, updateListUseCase, deleteListUseCase, checkProjectMembershipByListUseCase }) {
+  constructor({ getProjectByListUseCase, createListUseCase, getAllListsUseCase, getListUseCase, updateListUseCase, deleteListUseCase, checkProjectMembershipByListUseCase }) {
+    this.getProjectByListUseCase = getProjectByListUseCase;
     this.checkProjectMembershipByListUseCase = checkProjectMembershipByListUseCase;
     this.getListUseCase = getListUseCase;
     this.getAllListsUseCase = getAllListsUseCase;
@@ -36,6 +37,10 @@ class ListService {
 
   async projectMembershipByList(userId, listId){
     return await this.checkProjectMembershipByListUseCase.execute(userId, listId);
+  }
+
+  async getProjectByList(listId){
+    return await this.getProjectByListUseCase.execute(listId);
   }
 }
 
