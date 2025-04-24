@@ -1,4 +1,5 @@
 const boom = require('@hapi/boom');
+const { Op } = require('sequelize');
 const IProjectMemberRepository = require('../../../domain/repositories/db/IProjectMemberRepository');
 
 class ProjectMemberRepository extends IProjectMemberRepository {
@@ -47,6 +48,12 @@ class ProjectMemberRepository extends IProjectMemberRepository {
 
   async delete(projectMemberId){
     return await this.db.models.ProjectMember.destroy({ where: { id: projectMemberId } });
+  }
+
+  async bulkDelete(projectMemberIds){
+    return await this.db.models.ProjectMember.destroy({
+      where: { id: { [Op.in]: projectMemberIds } }
+    });
   }
 
   async findProjectMemberById(projectMemberId){

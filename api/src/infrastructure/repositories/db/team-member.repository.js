@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const ITeamMemberRepository = require('../../../domain/repositories/db/ITeamMemberRepository');
 
 class TeamMemberRepository extends ITeamMemberRepository{
@@ -43,6 +44,12 @@ class TeamMemberRepository extends ITeamMemberRepository{
 
   async delete(teamMemberId){
     return await this.db.models.TeamMember.destroy({ where: { id: teamMemberId } });
+  }
+
+  async bulkDelete(teamMemberIds){
+    return await this.db.models.TeamMember.destroy({
+      where: { id: { [Op.in]: teamMemberIds } }
+    });
   }
 
   async findProjectsByTeamMember(projectIds, teamMember){

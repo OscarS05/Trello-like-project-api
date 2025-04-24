@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 const Password = require('../../../domain/value-objects/password');
 
 class ChangePasswordUseCase {
-  constructor(userRepository){
+  constructor({ userRepository }){
     this.userRepository = userRepository;
   }
 

@@ -49,6 +49,41 @@ class UserRepository extends IUserRepository {
       { where: { id } }
     );
   }
+
+  async findAllWorkspacesByUserId(userId){
+    return await this.db.models.User.findOne({
+      where: { id: userId },
+      attributes: { exclude: ['password', 'recoveryToken'] },
+      include: {
+        model: this.db.models.Workspace,
+        as: 'workspaces',
+        through: { attributes: [] },
+        include: [
+          {
+            model: this.db.models.WorkspaceMember,
+            as: 'workspaceMembers',
+          },
+          {
+            model: this.db.models.Project,
+            as: 'projects',
+            include: [{
+              model: this.db.models.ProjectMember,
+              as: 'projectMembers',
+
+            }]
+          },
+          {
+            model: this.db.models.Team,
+            as: 'teams',
+            include: [{
+              model: this.db.models.TeamMember,
+              as: 'teamMembers',
+            }]
+          }
+        ]
+      }
+    });
+  }
 }
 
 module.exports = UserRepository;

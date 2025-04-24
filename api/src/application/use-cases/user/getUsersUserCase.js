@@ -1,7 +1,7 @@
 const UserDto = require('../../dtos/user.dto');
 
 class GetUsersUseCase {
-  constructor(userRepository) {
+  constructor({ userRepository }) {
     this.userRepository = userRepository;
   }
 

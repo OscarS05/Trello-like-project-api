@@ -31,7 +31,7 @@ async function checkAdminRole(req, res, next){
   const { workspaceId } = req.params;
   try {
     const workspaceMember = await workspaceMemberService.getWorkspaceMemberByUserId(workspaceId, user.sub);
-    if(!workspaceMember) throw boom.notFound('Workspace member not found');
+    if(!workspaceMember?.id) throw boom.notFound('Workspace member not found');
     if(workspaceMember.role === 'member') throw boom.forbidden('You do not have the admin role to perfom this action');
 
     req.workspaceMember = workspaceMember;

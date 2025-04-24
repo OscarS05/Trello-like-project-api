@@ -1,7 +1,7 @@
 const boom = require('@hapi/boom');
 
 class UpdateUserUseCase {
-  constructor(userRepository){
+  constructor({ userRepository }){
     this.userRepository = userRepository;
   }
 

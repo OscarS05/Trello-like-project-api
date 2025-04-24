@@ -5,7 +5,7 @@ const UserDto = require('../../dtos/user.dto');
 const UserEntity = require('../../../domain/entities/UserEntity');
 
 class SignUpUseCase {
-  constructor(userRepository) {
+  constructor({ userRepository }) {
     this.userRepository = userRepository;
   }
 

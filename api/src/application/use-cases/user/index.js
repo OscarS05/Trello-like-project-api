@@ -1,4 +1,4 @@
-const { userRepository } = require('../../../infrastructure/repositories/db/index');
+const dbRepositories = require('../../../infrastructure/repositories/db/index');
 
 const GetUserByEmailUseCase = require('./getUserByEmailUseCase');
 const GetUserUseCase = require('./getUsersUserCase');
@@ -7,12 +7,12 @@ const UpdateUserUseCase = require('./updateUserUseCase');
 const ChangePasswordUseCase = require('./changePasswordUseCase');
 const DeleteAccountUseCase = require('./DeleteAccountUseCase');
 
-const getUserByEmailUseCase = new GetUserByEmailUseCase(userRepository);
-const getUserUseCase = new GetUserUseCase(userRepository);
-const signUpUseCase = new SignUpUseCase(userRepository);
-const updateUserUseCase = new UpdateUserUseCase(userRepository);
-const changePasswordUseCase = new ChangePasswordUseCase(userRepository);
-const deleteAccountUseCase = new DeleteAccountUseCase(userRepository);
+const getUserByEmailUseCase = new GetUserByEmailUseCase(dbRepositories);
+const getUserUseCase = new GetUserUseCase(dbRepositories);
+const signUpUseCase = new SignUpUseCase(dbRepositories);
+const updateUserUseCase = new UpdateUserUseCase(dbRepositories);
+const changePasswordUseCase = new ChangePasswordUseCase(dbRepositories);
+const deleteAccountUseCase = new DeleteAccountUseCase(dbRepositories);
 
 module.exports = {
   getUserByEmailUseCase,

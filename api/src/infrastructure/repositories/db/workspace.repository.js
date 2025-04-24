@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const IWorkspaceRepository = require('../../../domain/repositories/db/IWorkspaceRepository');
 
 class WorkspaceRepository extends IWorkspaceRepository {
@@ -33,6 +34,16 @@ class WorkspaceRepository extends IWorkspaceRepository {
   async delete(id) {
     return await this.db.models.Workspace.destroy({
       where: { id }
+    });
+  }
+
+  async bulkDelete(workspaceIds) {
+    return await this.db.models.Workspace.destroy({
+      where: {
+        id: {
+          [Op.in]: workspaceIds
+        }
+       }
     });
   }
 

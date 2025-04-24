@@ -46,6 +46,16 @@ class Workspace extends Model {
       as: 'members'
     });
 
+    this.hasMany(models.WorkspaceMember, {
+      as: 'workspaceMembers',
+      foreignKey: 'workspaceId',
+    });
+
+    this.hasMany(models.Team, {
+      as: 'teams',
+      foreignKey: 'workspaceId',
+    });
+
     this.hasMany(models.Project, {
       as: 'projects',
       foreignKey: 'workspaceId',

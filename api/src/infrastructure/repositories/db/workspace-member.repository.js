@@ -1,5 +1,6 @@
 const boom = require('@hapi/boom');
 const IWorkspaceMemberRepository = require('../../../domain/repositories/db/IWorkspaceMemberRepository');
+const { Op } = require('sequelize');
 
 class WorkspaceMemberRepository extends IWorkspaceMemberRepository {
   constructor(db){
@@ -47,6 +48,12 @@ class WorkspaceMemberRepository extends IWorkspaceMemberRepository {
 
   async delete(workspaceMemberId){
     return await this.db.models.WorkspaceMember.destroy({ where: { id: workspaceMemberId } });
+  }
+
+  async bulkDelete(workspaceMemberIds){
+    return await this.db.models.WorkspaceMember.destroy({
+      where: { id: { [Op.in]: workspaceMemberIds } }
+    });
   }
 
   async findWorkspaceMemberByUserId(workspaceId, userId){
