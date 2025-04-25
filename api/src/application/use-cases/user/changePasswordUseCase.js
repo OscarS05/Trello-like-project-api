@@ -7,9 +7,9 @@ class ChangePasswordUseCase {
   }
 
   async execute(userId, newPassword){
-    const password = new Password(newPassword);
+    const password = new Password(newPassword).value;
 
-    const hash = await bcrypt.hash(newPassword, 10);
+    const hash = await bcrypt.hash(password, 10);
     await this.userRepository.update(userId, { recoveryToken: null, password: hash, isVerified: true });
     return { message: 'Password was successfully changed. Please, sign in!' }
   }

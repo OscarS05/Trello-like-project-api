@@ -3,14 +3,12 @@ const boom = require('@hapi/boom');
 const UserDto = require('../../dtos/user.dto');
 
 class LoginUseCase {
-  constructor({ userRepository }){
+  constructor({ userRepository }, { emailQueueService }){
     this.userRepository = userRepository;
+    this.emailQueueService = emailQueueService;
   }
 
-  async execute(email, password){
-    const user = await this.userRepository.findByEmailToLogin(email);
-    if(!user) throw boom.unauthorized('User not found');
-
+  async execute(user, password){
     const isMatch = await bcrypt.compare(password, user.password);
     if(!isMatch) throw boom.unauthorized('The password is incorrect');
 

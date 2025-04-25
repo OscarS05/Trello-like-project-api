@@ -6,7 +6,7 @@ const { config } = require('../../../config/config');
 class AuthService {
   constructor(
     { loginUseCase, generateTokensUsecase, sendEmailConfirmationUseCase, verifyEmailByTokenUseCase },
-    { getUserByEmailUseCase, updateUserUseCase, changePasswordUseCase }) {
+    { getUserByEmailUseCase, getUserByEmailToLoginUseCase, updateUserUseCase, changePasswordUseCase }) {
       // auth use-cases
     this.loginUseCase = loginUseCase;
     this.generateTokensUsecase = generateTokensUsecase;
@@ -14,23 +14,31 @@ class AuthService {
     this.verifyEmailByTokenUseCase = verifyEmailByTokenUseCase;
 
       // user use-cases
+    this.getUserByEmailToLoginUseCase = getUserByEmailToLoginUseCase;
     this.getUserByEmailUseCase = getUserByEmailUseCase;
     this.updateUserUseCase = updateUserUseCase;
     this.changePasswordUseCase = changePasswordUseCase;
   }
 
+  async getUserByEmail(email){
+    return await this.getUserByEmailUseCase.execute(email);
+  }
+
   async login(email, password){
-    return await this.loginUseCase.execute(email, password);
+    const user = await this.getUserByEmailToLoginUseCase.execute(email);
+
+    if(!user?.id) throw boom.notFound('Incorrect email or password');
+    if(user.isVerified === false) throw boom.forbidden(`The user has not verified their email`);
+
+    return await this.loginUseCase.execute(user, password);
   }
 
   async generateTokens(user){
     return await this.generateTokensUsecase.execute(user);
   }
 
-  async sendEmailConfirmation(email){
-    const user = await this.getUserByEmailUseCase.execute(email);
-    if(!user) throw boom.notFound('User not found');
-
+  async sendEmailConfirmation(user){
+    if(!user?.id) throw boom.notFound('User not found');
     return await this.sendEmailConfirmationUseCase.execute(user);
   }
 

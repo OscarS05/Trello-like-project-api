@@ -32,7 +32,7 @@ const signUp = async (req, res, next) => {
     const body = req.body;
 
     const newUser = await userService.signUp(body);
-    const { send, token } = await authService.sendEmailConfirmation(newUser.email);
+    const { send, token } = await authService.sendEmailConfirmation(newUser);
 
     setTokenCookieToVerifyEmail(res, 'verifyEmail', token);
     res.status(201).json({ user: newUser, send: send });

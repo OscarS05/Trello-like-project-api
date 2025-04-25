@@ -1,27 +1,31 @@
+const passport = require('passport');
 const boom = require('@hapi/boom');
 
 const { setCookieRefreshToken, setTokenCookieToVerifyEmail, clearCookie } = require('../../../utils/cookieHelper');
 const { authService } = require('../../application/services/index');
 
-
 const login = async (req, res, next) => {
-  try {
-    const user = req.user;
+  passport.authenticate('local', { session: false }, async (err, user, info) => {
+    try {
+      if(err) return next(err);
+      if(!user?.id) throw boom.unauthorized('Incorrect email or password');
 
-    const { accessToken, refreshToken } = await authService.generateTokens(user);
+      const { accessToken, refreshToken } = await authService.generateTokens(user);
 
-    setCookieRefreshToken(res, 'refreshToken', refreshToken)
-    res.status(200).json({ accessToken });
-  } catch (error) {
-    next(error);
-  }
+      setCookieRefreshToken(res, 'refreshToken', refreshToken)
+      res.status(200).json({ accessToken });
+    } catch (error) {
+      next(error);
+    }
+  })(req, res, next);
 }
 
 const sendVerificationEmail = async (req, res, next) => {
   try {
     const { email } = req.body;
 
-    const { message, token } = await authService.sendEmailConfirmation(email);
+    const user = await authService.getUserByEmail(email);
+    const { message, token } = await authService.sendEmailConfirmation(user);
 
     if(token) setTokenCookieToVerifyEmail(res, 'verifyEmail', token);
     res.status(200).json({ message: 'The verification email was sent successfully!' });
@@ -36,7 +40,7 @@ const resendVerificationEmail = async (req, res, next) => {
     if(!tokenToVerifyEmail) throw boom.unauthorized('Token not provided');
 
     const { user } = await authService.verifyEmailByToken(tokenToVerifyEmail);
-    const { token } = await authService.sendEmailConfirmation(user.email);
+    const { token } = await authService.sendEmailConfirmation(user);
 
     if(token) setTokenCookieToVerifyEmail(res, 'verifyEmail', token);
     res.status(200).json({ message: 'The verification email was send successfully!' });

@@ -8,10 +8,10 @@ const { AuthRedis } = require('../../infrastructure/repositories/cache/index');
 const { authService } = require('../../application/services/index');
 
 
-const limiter = (limit, windowMs) => rateLimit( {
+const limiter = (limit, windowMs, message) => rateLimit( {
   windowMs: windowMs,
   limit: limit,
-  message: 'Too many email requests, please try again after an 15 minutes',
+  message: message,
   standardHeaders: true,
   legacyHeaders: false,
 });

@@ -6,6 +6,7 @@ const redis = new Redis({
   host: config.redisHost,
   port: config.redisPort,
   password: config.redisPassword,
+  maxRetriesPerRequest: null,
 });
 
 redis.on("connect", () =>{
