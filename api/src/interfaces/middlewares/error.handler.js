@@ -1,5 +1,7 @@
 const { ValidationError } = require("sequelize");
 const boom = require('@hapi/boom');
+const logger = require('../../../utils/logger/logger');
+const { config } = require('../../../config/config');
 
 function logErrors(err, req, res, next){
   next(err);
@@ -26,7 +28,12 @@ function boomErrorHandler(err, req, res, next){
 }
 
 function errorHandler(err, req, res, next){
-  console.log('err:', err);
+  const isProd = config.isProd;
+  if(isProd){
+    logger.warn('error 500:', err)
+  } else {
+    console.log('err:', err);
+  }
   res.status(500).json({
     message: err,
     stack: err.message,

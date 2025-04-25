@@ -22,7 +22,6 @@ const validateProjectReadPermission = async (req, res, next) => {
     const { listId } = req.params;
 
     const listWithItsProject = await listService.getProjectByList(listId);
-    console.log('listWithItsProject', listWithItsProject);
     if(!listWithItsProject?.id) throw boom.notFound('Something went wrong with data');
 
     if(listWithItsProject.project?.visibility === 'private') {
