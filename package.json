@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "pm2": "pm2 start ecosystem.config.js",
     "dev": "nodemon api/index.js",
     "start": "node api/index.js",
     "lint": "eslint",
