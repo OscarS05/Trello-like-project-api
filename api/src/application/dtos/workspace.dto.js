@@ -19,6 +19,7 @@ class WorkspaceDto {
       name: workspace.name,
       userId: workspace.userId,
       role: workspace.role || 'member',
+      description: workspace.description,
       projects: workspace.projects ? workspace.projects.map(ProjectDto.fromEntity) : [],
     };
   }

@@ -21,7 +21,7 @@ class WorkspaceService {
   }
 
   async delete(workspaceId){
-    return await this.deleteWorkspaceUseCase.execute(workspaceId, projects);
+    return await this.deleteWorkspaceUseCase.execute(workspaceId);
   }
 
   async getWorkspaceAndItsProjects(workspaceMember){

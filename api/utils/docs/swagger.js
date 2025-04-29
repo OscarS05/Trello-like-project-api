@@ -34,12 +34,12 @@ const options = {
         description: 'Everything about the authentication'
       },
       {
-        name: 'project',
-        description: 'Operations about projects'
-      },
-      {
         name: 'workspace',
         description: 'Manage workspaces'
+      },
+      {
+        name: 'project',
+        description: 'Operations about projects'
       },
       {
         name: 'team',

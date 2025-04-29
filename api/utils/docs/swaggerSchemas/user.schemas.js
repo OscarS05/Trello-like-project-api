@@ -2,6 +2,7 @@
  * @swagger
  * components:
  *   schemas:
+ *
  *     UserCreationBody:
  *       type: object
  *       required:
@@ -25,6 +26,7 @@
  *           type: string
  *           format: password
  *           example: O123456@k
+ *
  *     UserResponse:
  *       type: object
  *       properties:
@@ -42,4 +44,5 @@
  *         role:
  *           type: string
  *           example: basic
+ *
  */

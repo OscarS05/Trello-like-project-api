@@ -61,7 +61,7 @@ const deleteWorkspace = async (req, res, next) => {
     const { workspaceId } = req.params;
 
     const deletedWorkspace = await workspaceService.delete(workspaceId);
-    if(deletedWorkspace === 0) throw boom.notFound('Delete workspace operation returns 0');
+    if(deletedWorkspace === 0) throw boom.internal('Delete workspace operation returns 0');
 
     res.status(200).json({ message: 'Workspace deleted successfully' });
   } catch (error) {

@@ -24,6 +24,7 @@ class ProjectDto {
       visibility: project.visibility,
       workspaceId: project.workspaceId,
       workspaceMemberId: project.workspaceMemberId,
+      backgroundUrl: project.backgroundUrl || null,
       createdAt: project.createdAt,
       teams: project.teams.map(team => new TeamDto(team)),
     }
@@ -35,6 +36,7 @@ class ProjectDto {
       name: project.name,
       visibility: project.visibility,
       workspaceId: project.workspaceId,
+      backgroundUrl: project.backgroundUrl || null,
       workspaceMemberId: project.workspaceMemberId
     }
   }
@@ -57,6 +59,7 @@ class ProjectDto {
       name: project.name,
       visibility: project.visibility,
       workspaceId: project.workspaceId,
+      backgroundUrl: project.backgroundUrl,
       access: project.access || false,
     }
   }

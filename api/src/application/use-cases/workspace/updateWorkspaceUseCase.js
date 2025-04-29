@@ -14,12 +14,6 @@ class UpdateWorkspaceUseCase {
     const [updatedRows, [updatedWorkspace]] = await this.workspaceRepository.update(workspaceId, updateWorkspaceEntity);
     if(updatedRows === 0) throw boom.notFound('Workspace not found');
 
-    try {
-      await this.redisModels.WorkspaceRedis.updateWorkspace(updatedWorkspace);
-    } catch (error) {
-      logger.warn('❗Failed to update the workspace in Redis. Error:', error);
-    }
-
     return new WorkspaceDto(updatedWorkspace);
   }
 }
