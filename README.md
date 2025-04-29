@@ -1,6 +1,6 @@
 # Autumn(Trello-like API)
 
-Autumn is an API for collaborative project management inspired by Trello. It is built using **Node.js, Express.js, PostgreSQL, JWT authentication, Redis for caching, Sequelize ORM, and Docker**. The project follows **SOLID principles, Clean Architecture, and Domain-Driven Design (DDD)** to ensure maintainability and scalability. It features authentication management, roles, teams, tasks, attachments, and more.
+Autumn is an API for collaborative project management inspired by Trello. It is built using **Node.js, Express.js, PostgreSQL, JWT authentication, Redis for caching, Sequelize ORM, BullMQ, and Docker**. The project follows **Clean Architecture, and Domain-Driven Design (DDD)** to ensure maintainability and scalability. It features authentication management, roles, teams, tasks, attachments, and more.
 
 ## Documentation API
 - **Swagger UI** available in: /api-docs
@@ -155,7 +155,7 @@ Currently **automated tests are not included**, but functionality has been verif
 
 ## ER schema of the database
 The file with the ER diagram is located in the root of the project:
- - database.drawio
+ - Trello-like-api-db-schema.drawio
 To edit it, install the "Draw.io Integration" extension in VSCode.
 If the diagram doesn't display, right-click on the file → "Reopen Editor With" → "Draw.io".
 
@@ -179,9 +179,12 @@ The authentication system, along with the creation of lists and cards, is part o
 
 ---
 
+## Developer
+Oscar Santiago Monsalve
+
+---
+
 ## License
 
 [![License: CC BY-NC 4.0](https://img.shields.io/badge/License-BY--NC%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc/4.0/)
 
-**Developer**
-Oscar Santiago Monsalve

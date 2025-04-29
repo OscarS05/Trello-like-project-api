@@ -4,8 +4,10 @@ const cookieParser = require('cookie-parser');
 
 const { logErrors, errorHandler, boomErrorHandler, ormErrorHandler } = require('./src/interfaces/middlewares/error.handler');
 
-const routerApi = require('./src/interfaces/routes');
 const { config } = require('./config/config');
+const routerApi = require('./src/interfaces/routes');
+const swaggerUI = require('swagger-ui-express');
+const specs = require('./utils/docs/swagger');
 
 const path = require('path');
 const morganMiddleware = require('./utils/logger/morgan');
@@ -30,6 +32,7 @@ require('./utils/auth');
 require('./utils/cron');
 
 app.use(morganMiddleware);
+app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(specs));
 routerApi(app);
 
 const publicPath = path.join(__dirname, '../public');

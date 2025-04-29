@@ -18,11 +18,30 @@ const limiter = (limit, windowMs, message) => rateLimit( {
 
 async function validateSession(req, res, next) {
   const accessToken = req.headers.authorization?.split(' ')[1];
+
+  if(!accessToken) return next(boom.unauthorized('Tokens not provided'));
+
+  try {
+    const decodedAccessToken = authService.validateAccessToken(accessToken);
+    if(decodedAccessToken){
+      req.user = decodedAccessToken;
+      req.tokens = { accessToken };
+      return next();
+    }
+  } catch (accessError) {
+    if(accessError.name === 'TokenExpiredError'){
+      return next(accessError.message);
+    } else {
+      return next(boom.unauthorized(accessError.message || 'Invalid token'));
+    }
+  }
+}
+
+async function refreshTokens(req, res, next) {
+  const accessToken = req.headers.authorization?.split(' ')[1];
   const refreshToken = req.cookies.refreshToken;
 
-  if(!accessToken || !refreshToken){
-    return next(boom.unauthorized('Tokens not provided'));
-  }
+  if(!accessToken || !refreshToken) return next(boom.unauthorized('Tokens not provided'));
 
   try {
     const decodedAccessToken = authService.validateAccessToken(accessToken);
@@ -46,8 +65,8 @@ async function validateSession(req, res, next) {
         if(storedRefreshToken !== refreshToken) throw boom.unauthorized('Refresh token does not match');
         if(storedAccessToken !== accessToken) throw boom.unauthorized('Access token does not match');
 
-        await AuthRedis.removeAccessToken(decodedRefreshToken.sub, accessToken);
         await AuthRedis.removeRefreshToken(decodedRefreshToken.sub, refreshToken);
+        await AuthRedis.removeAccessToken(decodedRefreshToken.sub, accessToken);
 
         const user = {
           sub: decodedRefreshToken.sub,
@@ -71,4 +90,4 @@ async function validateSession(req, res, next) {
 }
 
 
-module.exports = { limiter, validateSession };
+module.exports = { limiter, validateSession, refreshTokens };
