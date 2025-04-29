@@ -111,6 +111,7 @@ router.post('/',
  *         name: id
  *         schema:
  *           type: string
+ *           format: uuid
  *         required: true
  *         description: ID of the user to delete
  *     responses:

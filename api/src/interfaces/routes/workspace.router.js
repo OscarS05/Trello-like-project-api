@@ -36,6 +36,7 @@ const workspaceControllers = require('../controllers/workspace.controller');
  *         required: true
  *         schema:
  *           type: string
+ *           format: uuid
  *         description: The ID of the workspace to retrieve.
  *     responses:
  *       200:
@@ -174,6 +175,7 @@ router.post('/',
  *         required: true
  *         schema:
  *           type: string
+ *           format: uuid
  *         description: ID of the workspace to update.
  *     requestBody:
  *       required: true
@@ -228,6 +230,7 @@ router.patch('/:workspaceId',
  *         required: true
  *         schema:
  *           type: string
+ *           format: uuid
  *         description: ID of the workspace to delete.
  *     responses:
  *       200:

@@ -38,6 +38,10 @@ const options = {
         description: 'Manage workspaces'
       },
       {
+        name: 'workspace-member',
+        description: 'Manage workspace members'
+      },
+      {
         name: 'project',
         description: 'Operations about projects'
       },
