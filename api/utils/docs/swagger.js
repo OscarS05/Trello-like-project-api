@@ -47,11 +47,15 @@ const options = {
       },
       {
         name: 'project-member',
-        description: 'Operations about projects'
+        description: 'Operations about project members'
       },
       {
         name: 'team',
         description: 'Manage teams inside a workspace'
+      },
+      {
+        name: 'team-member',
+        description: 'Operations about team members'
       },
     ],
     externalDocs:{

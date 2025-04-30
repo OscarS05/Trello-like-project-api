@@ -57,7 +57,7 @@ const transferOwnership = async (req, res, next) => {
 
     const updatedMember = await teamMemberService.transferOwnership(currentTeamMember, teamMemberId);
 
-    res.status(201).json({ message: 'The team member was added successfully', updatedMember });
+    res.status(201).json({ message: 'The team member was updated successfully', updatedMember });
   } catch (error) {
     next(error);
   }
