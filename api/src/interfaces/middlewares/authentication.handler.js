@@ -65,9 +65,6 @@ async function refreshTokens(req, res, next) {
         if(storedRefreshToken !== refreshToken) throw boom.unauthorized('Refresh token does not match');
         if(storedAccessToken !== accessToken) throw boom.unauthorized('Access token does not match');
 
-        await AuthRedis.removeRefreshToken(decodedRefreshToken.sub, refreshToken);
-        await AuthRedis.removeAccessToken(decodedRefreshToken.sub, accessToken);
-
         const user = {
           sub: decodedRefreshToken.sub,
           role: decodedRefreshToken.role

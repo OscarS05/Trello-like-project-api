@@ -1,5 +1,4 @@
 const TeamMemberDto = require('../dtos/teamMember.dto');
-const ProjectDto = require('./project.dto');
 
 const ACTIONS = {
   MEMBER: [ "leave_team" ],
@@ -40,6 +39,7 @@ class TeamDto {
   }
 
   static WithData(team, requesterAsWorkspaceMember){
+    const ProjectDto = require('./project.dto');
     return {
       id: team.id,
       name: team.name,

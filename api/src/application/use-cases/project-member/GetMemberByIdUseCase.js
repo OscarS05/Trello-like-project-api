@@ -7,7 +7,7 @@ class GetMemberByIdUseCase {
 
   async execute(projectMemberId){
     const projectMember = await this.projectMemberRepository.findProjectMemberById(projectMemberId);
-    return new ProjectMemberDto(projectMember)
+    return !projectMember?.id ? {} : new ProjectMemberDto(projectMember);
   }
 }
 

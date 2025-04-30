@@ -46,6 +46,10 @@ const options = {
         description: 'Operations about projects'
       },
       {
+        name: 'project-member',
+        description: 'Operations about projects'
+      },
+      {
         name: 'team',
         description: 'Manage teams inside a workspace'
       },
