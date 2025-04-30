@@ -20,7 +20,7 @@ const projectBackgroundImage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
     folder: PROJECT_BACKGROUND_FOLER,
-    allowed_formats: ['jpg', 'png', 'jpeg', 'pdf', 'doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx', 'svg'],
+    allowed_formats: ['jpg', 'avif', 'png', 'jpeg', 'pdf', 'doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx', 'svg'],
     use_filename: true,
     unique_filename: true,
   },

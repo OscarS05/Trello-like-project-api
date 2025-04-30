@@ -48,6 +48,7 @@ class ProjectDto {
       visibility: project.visibility,
       workspaceId: project.workspaceId,
       workspaceMemberId: project.workspaceMemberId,
+      backgroundUrl: project.backgroundUrl || null,
       createdAt: project.createdAt,
       projectMembers: project.projectMembers.map(member => new ProjectMemberDto(member)),
     }
