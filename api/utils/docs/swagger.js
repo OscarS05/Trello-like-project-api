@@ -83,7 +83,11 @@ const options = {
       },
       {
         name: 'checklist-item',
-        description: 'Operations about checklists'
+        description: 'Operations about checklist-item'
+      },
+      {
+        name: 'checklist-item-member',
+        description: 'Operations about checklist-item-member'
       },
     ],
     externalDocs:{
