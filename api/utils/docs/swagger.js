@@ -69,6 +69,10 @@ const options = {
         name: 'card-member',
         description: 'Operations about cards'
       },
+      {
+        name: 'label',
+        description: 'Operations about labels'
+      },
     ],
     externalDocs:{
       description: 'Find out the github repository',
