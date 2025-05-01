@@ -57,6 +57,10 @@ const options = {
         name: 'team-member',
         description: 'Operations about team members'
       },
+      {
+        name: 'list',
+        description: 'Operations about lists'
+      },
     ],
     externalDocs:{
       description: 'Find out the github repository',

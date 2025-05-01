@@ -31,4 +31,21 @@
  *           example: 2
  *         checklistProgress:
  *           $ref: '#/components/schemas/ChecklistProgress'
+ *
+ *     Card:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *           format: uuid
+ *         name:
+ *           type: string
+ *         description:
+ *           type: string
+ *         listId:
+ *           type: string
+ *           format: uuid
+ *         createdAt:
+ *           type: string
+ *           format: date-time
  */
