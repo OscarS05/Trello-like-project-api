@@ -8,7 +8,7 @@ class UpdateCardAttachmentUseCase {
   }
 
   async execute(cardAttachment, cardAttachmentData){
-    if(cardAttachment.type !== 'external-link' && cardAttachmentData.url) throw Boom.badData('You can only modify the URL of external link attachments');
+    if(cardAttachment.type !== 'external-link') delete cardAttachmentData.url || null;
 
     const entityUpdateCardAttachment = new EntityUpdateCardAttachment(cardAttachmentData);
 

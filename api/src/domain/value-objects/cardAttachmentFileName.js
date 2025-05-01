@@ -2,7 +2,7 @@ const Boom = require('@hapi/boom');
 
 class CardAttachmentFileName {
   static VALID_EXTENSIONS = {
-    image: ['jpeg', 'jpg', 'png', 'svg'],
+    image: ['jpeg', 'avif', 'jpg', 'png', 'svg'],
     pdf: ['pdf'],
     word: ['doc', 'docx'],
     excel: ['xls', 'xlsx'],

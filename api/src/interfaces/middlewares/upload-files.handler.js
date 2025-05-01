@@ -1,6 +1,8 @@
 const multer = require('multer');
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const cloudinary = require('../../infrastructure/store/storage/cloudinary');
+const { validatorHandler } = require('./validator.handler');
+const { attachLink } = require('../schemas/card-attachment.schema');
 
 const CARD_ATTACHMENT_FOLER = 'card-attachments';
 const PROJECT_BACKGROUND_FOLER = 'project-backgrounds';
@@ -9,7 +11,7 @@ const storageCardAttachments = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
     folder: CARD_ATTACHMENT_FOLER,
-    allowed_formats: ['jpg', 'png', 'jpeg', 'pdf', 'doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx', 'svg'],
+    allowed_formats: ['jpg', 'png', 'avif', 'jpeg', 'pdf', 'doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx', 'svg'],
     use_filename: true,
     unique_filename: true,
   },
@@ -33,7 +35,7 @@ const conditionalUploadFileMiddleware = (req, res, next) => {
     return uploadCardAttachment.single('file')(req, res, next);
   }
 
-  next();
+  return validatorHandler(attachLink, 'body')(req, res, next);
 };
 
 module.exports = {
