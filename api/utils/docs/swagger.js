@@ -77,6 +77,10 @@ const options = {
         name: 'card-attachment',
         description: 'Operations about labels'
       },
+      {
+        name: 'checklist',
+        description: 'Operations about checklists'
+      },
     ],
     externalDocs:{
       description: 'Find out the github repository',
