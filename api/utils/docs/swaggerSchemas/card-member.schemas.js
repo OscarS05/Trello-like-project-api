@@ -17,6 +17,6 @@
  *           format: uuid
  *         name:
  *           type: string
- *           example: Joe John
+ *           example: Juanita
  *
  */

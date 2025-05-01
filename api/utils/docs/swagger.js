@@ -65,6 +65,10 @@ const options = {
         name: 'card',
         description: 'Operations about cards'
       },
+      {
+        name: 'card-member',
+        description: 'Operations about cards'
+      },
     ],
     externalDocs:{
       description: 'Find out the github repository',
