@@ -53,7 +53,7 @@ class ChecklistItemRepository extends IChecklistItemRepository {
         model: this.db.models.ProjectMember,
         as: 'members',
         attributes: ['id', 'workspaceMemberId'],
-        through: { attributes: [] },
+        through: { attributes: ['id'] },
         include: [{
           model: this.db.models.WorkspaceMember,
           as: 'workspaceMember',

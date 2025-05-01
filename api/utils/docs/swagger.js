@@ -81,6 +81,10 @@ const options = {
         name: 'checklist',
         description: 'Operations about checklists'
       },
+      {
+        name: 'checklist-item',
+        description: 'Operations about checklists'
+      },
     ],
     externalDocs:{
       description: 'Find out the github repository',
