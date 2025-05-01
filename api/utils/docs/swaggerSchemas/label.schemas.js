@@ -13,6 +13,9 @@
  *           type: string
  *         color:
  *           type: string
+ *         projectId:
+ *           type: string
+ *           format: uuid
  *         isVisible:
  *           type: boolean
  *
