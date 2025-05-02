@@ -175,12 +175,6 @@ router.post('/verify-email',
  *       - auth
  *     security:
  *       - bearerAuth: []
- *     parameters:
- *       - in: cookie
- *         name: verifyEmail
- *         description: HTTP-only cookie containing the email verification token for password recovery. **(You must paste it manually when testing in Swagger UI)**
- *         schema:
- *           type: string
  *     responses:
  *       200:
  *         description: Email verified successfully for password recovery.

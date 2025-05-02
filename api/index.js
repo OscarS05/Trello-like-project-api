@@ -9,7 +9,6 @@ const routerApi = require('./src/interfaces/routes');
 const swaggerUI = require('swagger-ui-express');
 const specs = require('./utils/docs/swagger');
 
-const path = require('path');
 const morganMiddleware = require('./utils/logger/morgan');
 
 const port = config.port || 3000;
@@ -19,7 +18,6 @@ app.use(express.json());
 app.use(cookieParser());
 
 const whiteList = [config.frontUrl];
-// app.options('*', cors());
 
 app.use(cors({
   origin: whiteList,
@@ -34,17 +32,6 @@ require('./utils/cron');
 app.use(morganMiddleware);
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(specs));
 routerApi(app);
-
-const publicPath = path.join(__dirname, '../public');
-app.use(express.static(publicPath));
-
-app.get('*', (req, res) => {
-  res.sendFile(path.join(publicPath, 'index.html'));
-});
-
-app.get('/', (req, res) => {
-  res.redirect('/sign-in');
-});
 
 app.use(logErrors);
 app.use(ormErrorHandler);

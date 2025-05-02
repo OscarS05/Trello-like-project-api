@@ -15,7 +15,7 @@ const emailWorker = new Worker(
           from: config.smtpEmail,
           to: email,
           subject: 'Email Verification',
-          html: `<p>Hello ${name},</p><p>Please verify your email by clicking the link below:</p><a href="${config.frontUrl}/auth/verify-email/email-confirmed?token=${token}">Verify Email</a>`,
+          html: `<p>Hello ${name},</p><p>Please verify your email by clicking the link below(This link doesn't work, it's just an example.):</p><a href="${config.frontUrl}/auth/verify-email/email-confirmed?token=${token}">Verify Email. Please, Please copy this token and paste it into the authorize section of the swagger documentation. Token: ${token}</a>`,
         });
         break;
       default:
