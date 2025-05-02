@@ -2,6 +2,27 @@
 
 Autumn is an API for collaborative project management inspired by Trello. It is built using **Node.js, Express.js, PostgreSQL, JWT authentication, Redis for caching, Sequelize ORM, BullMQ, and Docker**. The project follows **Clean Architecture, and Domain-Driven Design (DDD)** to ensure maintainability and scalability. It features authentication management, roles, teams, tasks, attachments, and more.
 
+## Table of Contents
+
+- [Documentation API](#documentation-api)
+- [User Testing Flow (via Swagger UI)](#user-testing-flow-via-swagger-ui)
+- [Technologies Used](#technologies-used)
+- [Authentication System](#authentication-system)
+- [Project Structure](#project-structure)
+- [📦 Features](#-features)
+- [🔐 Authentication and roles](#-authentication-and-roles)
+- [🧪 Testing](#-testing)
+- [How to Run the Project](#how-to-run-the-project)
+  - [Prerequisites](#prerequisites)
+  - [Setup and Installation](#setup-and-installation)
+- [Available Scripts](#available-scripts)
+- [ER schema of the database](#er-schema-of-the-database)
+- [Project Status](#project-status)
+- [Upcoming implementations](#upcoming-implementations)
+- [📤 API Example Requests & Responses](#-api-example-requests--responses)
+- [Developer](#developer)
+- [License](#license)
+
 ## Documentation API
 - **Swagger UI** available at: /api-docs in the browser
 
@@ -273,6 +294,7 @@ The file with the ER diagram is located in the root of the project:
 To edit it, install the "Draw.io Integration" extension in VSCode.
 If the diagram doesn't display, right-click on the file → "Reopen Editor With" → "Draw.io".
 
+If you want to view the .png image of the database's ER schema, you must view it from the GitHub repository because it cannot be viewed properly in VSC.
 
 ## Project Status
 The project is completed.
@@ -462,11 +484,12 @@ body:
 
 
 ## Developer
-Oscar Santiago Monsalve
-
+ - Oscar Santaigo Monsalve
+ - [Oscar Santiago Monsalve](https://github.com/OscarS05)
 ---
 
 ## License
+This project is licensed under the [Creative Commons BY-NC 4.0 License](https://creativecommons.org/licenses/by-nc/4.0/).
 
 [![License: CC BY-NC 4.0](https://img.shields.io/badge/License-BY--NC%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc/4.0/)
 
