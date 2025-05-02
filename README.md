@@ -3,7 +3,11 @@
 Autumn is an API for collaborative project management inspired by Trello. It is built using **Node.js, Express.js, PostgreSQL, JWT authentication, Redis for caching, Sequelize ORM, BullMQ, and Docker**. The project follows **Clean Architecture, and Domain-Driven Design (DDD)** to ensure maintainability and scalability. It features authentication management, roles, teams, tasks, attachments, and more.
 
 ## Documentation API
-- **Swagger UI** available in: /api-docs
+- **Swagger UI** available at: /api-docs in the browser
+
+Here you can see a preview of the Swagger documentation:
+![Swagger UI Screenshot](./api/utils/docs/assets/docs-swagger-example.png)
+![Swagger UI Screenshot](./api/utils/docs/assets/docs-swagger-example-2.png)
 
 ## Technologies Used
 - **Node.js** - Backend runtime
