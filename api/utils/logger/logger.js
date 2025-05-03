@@ -27,12 +27,10 @@ const logger = winston.createLogger({
     }),
   ),
   transports: [
-    !config.isProd && new winston.transports.Console({
-      level: 'info',
-    }),
     fileRotateTransport,
     new winston.transports.File({ filename: `${logDirectory}/performance.log`, level: 'info'}),
-  ]
+    !config.isProd && new winston.transports.Console({ level: 'info' })
+  ].filter(Boolean)
 });
 
 module.exports = logger;

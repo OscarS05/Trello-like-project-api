@@ -201,7 +201,7 @@ api/src/
 - Users (with recursive deletion)
 - Workspaces, Projects, and Teams
 - Lists, Cards, Checklists, and Items
-- Members, Tags, and Attachments
+- Members, Labels, and Attachments
 - ✅ User roles by context belonging to workspaces, projects or teams: `owner`, `admin`, `member`
 - ✅ Roles per subscription plan: `basic`, `premium`
 - ✅ Assigning/de-assigning equipment to projects
@@ -254,7 +254,7 @@ Currently **automated tests are not included**, but functionality has been verif
    ```
 4. Install dependencies:
    ```bash
-   npm install
+   npm install --legacy-peer-deps
    ```
 5. Run database migrations:
    ```bash
