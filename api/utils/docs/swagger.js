@@ -1,5 +1,6 @@
 const swaggerJsDoc = require('swagger-jsdoc');
 const path = require('path');
+const { config } = require('../../config/config');
 
 const options = {
   definition: {
@@ -20,8 +21,12 @@ const options = {
     },
     servers: [
       {
-        url: 'http://localhost:3000/api/v1',
+        url: `http://localhost:${config.port}/api/v1`,
         description: 'Local server'
+      },
+      {
+        url: 'https://trello-like-project-api.onrender.com/api/v1/',
+        description: 'Remote server'
       }
     ],
     tags: [

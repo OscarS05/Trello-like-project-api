@@ -20,7 +20,6 @@ app.use(cookieParser());
 const whiteList = [config.frontUrl];
 
 app.use(cors({
-  origin: whiteList,
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],

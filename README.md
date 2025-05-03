@@ -27,14 +27,18 @@ Autumn is an API for collaborative project management inspired by Trello. It is 
 ## Documentation API
 
 The API documentation is available through **Swagger UI**, providing an interactive interface to explore and test the endpoints.
-
 ### Access in Production
 - Visit the following URL to access the Swagger documentation:  
-  [Swagger UI - Production](https://trello-like-project-api.onrender.com/api-docs)
+  [Swagger UI - Production](https://trello-like-project-api.onrender.com/api-docs)  
+  Ensure to set the server to: `https://trello-like-project-api.onrender.com/api/v1/` - Remote server.
 
 ### Access in Development
 - When running the project locally, you can access the Swagger documentation at:  
-  [Swagger UI - Development](http://localhost:3000/api-docs)
+  [Swagger UI - Development](http://localhost:3000/api-docs)  
+  Ensure to set the server to: `http://localhost:3000/api/v1/` - Local server.
+
+- If you specify a different port in the `.env` file (other than `3000`), the local backend URL will change accordingly. For example, if the port is set to `4000`, the Swagger documentation will be available at:  
+  And the server should be set to: `http://localhost:4000/api/v1/`.
 
 Swagger UI offers a user-friendly way to test the API endpoints, view request/response formats, and understand the available features.
 
