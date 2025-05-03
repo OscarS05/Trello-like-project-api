@@ -13,10 +13,10 @@ const { CARD_TABLE } = require('../models/card.model');
 const { CARD_MEMBER_TABLE } = require('../models/card-member.model');
 const { CARD_ATTACHMENT_TABLE } = require('../models/card-attachment.model');
 const { LABEL_TABLE } = require('../models/label.model');
-const { COLOR_TABLE } = require('../models/color.model');
+const { CARD_LABELS_TABLE } = require('../models/card-labels.model');
 const { CHECKLIST_TABLE } = require('../models/checklist.model');
 const { CHECKLIST_ITEM_TABLE } = require('../models/checklist-item.model');
-const { ITEM_MEMBER_TABLE } = require('../models/item-members.model');
+const { CHECKLIST_ITEM_MEMBER_TABLE } = require('../models/checklist-item-members.model');
 
 
 module.exports = {
@@ -153,6 +153,12 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING,
       },
+      backgroundUrl: {
+        field: 'background_url',
+        allowNull: false,
+        type: Sequelize.TEXT,
+        defaultValue: null
+      },
       workspaceId:{
         field: 'workspace_id',
         allowNull: false,
@@ -203,7 +209,7 @@ module.exports = {
       role: {
         allowNull: false,
         type: Sequelize.STRING,
-        defaultValue: 'member',
+        defaultValue: 'member'
       },
       projectId:{
         field: 'project_id',
@@ -217,9 +223,9 @@ module.exports = {
         onDelete: 'CASCADE'
       },
       addedAt: {
-        field: 'added_at',
         allowNull: false,
         type: Sequelize.DATE,
+        field: 'added_at',
         defaultValue: Sequelize.NOW
       }
     });
@@ -257,9 +263,9 @@ module.exports = {
         onDelete: 'CASCADE'
       },
       createdAt: {
-        field: 'created_at',
         allowNull: false,
         type: Sequelize.DATE,
+        field: 'created_at',
         defaultValue: Sequelize.NOW
       }
     });
@@ -450,79 +456,22 @@ module.exports = {
         defaultValue: Sequelize.UUIDV4,
         type: Sequelize.UUID
       },
-      name: {
+      filename: {
         allowNull: false,
         type: Sequelize.STRING,
       },
-      attachmentUrl: {
+      url: {
         allowNull: false,
+        type: Sequelize.TEXT
+      },
+      type: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      publicId: {
+        field: 'public_id',
+        allowNull: true,
         type: Sequelize.STRING
-      },
-      cardId: {
-        field: 'card_id',
-        allowNull: false,
-        type: Sequelize.UUID,
-        references: {
-          model: CARD_TABLE,
-          key: 'id',
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
-      },
-      projectMemberId: {
-        field: 'project_member_id',
-        allowNull: false,
-        type: Sequelize.UUID,
-        references: {
-          model: PROJECT_MEMBER_TABLE,
-          key: 'id',
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'SET NULL'
-      }
-    });
-    await queryInterface.createTable(COLOR_TABLE, {
-      id: {
-        allowNull: false,
-        primaryKey: true,
-        defaultValue: Sequelize.UUIDV4,
-        type: Sequelize.UUID
-      },
-      color: {
-        allowNull: false,
-        type: Sequelize.STRING,
-      },
-      rgb: {
-        allowNull: false,
-        type: Sequelize.STRING,
-      },
-    });
-    await queryInterface.createTable(LABEL_TABLE, {
-      id: {
-        allowNull: false,
-        primaryKey: true,
-        defaultValue: Sequelize.UUIDV4,
-        type: Sequelize.UUID
-      },
-      name: {
-        allowNull: false,
-        type: Sequelize.STRING,
-      },
-      status: {
-        allowNull: false,
-        type: Sequelize.BOOLEAN,
-        defaultValue: false,
-      },
-      colorId: {
-        field: 'color_id',
-        allowNull: false,
-        type: Sequelize.UUID,
-        references: {
-          model: COLOR_TABLE,
-          key: 'id',
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'SET NULL',
       },
       cardId: {
         field: 'card_id',
@@ -541,6 +490,65 @@ module.exports = {
         field: 'created_at',
         defaultValue: Sequelize.NOW
       }
+    });
+    await queryInterface.createTable(LABEL_TABLE, {
+      id: {
+        allowNull: false,
+        primaryKey: true,
+        defaultValue: Sequelize.UUIDV4,
+        type: Sequelize.UUID
+      },
+      name: {
+        allowNull: false,
+        type: Sequelize.STRING,
+      },
+      color: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      projectId: {
+        field: 'project_id',
+        type: Sequelize.UUID,
+        allowNull: false,
+        references: {
+          model: PROJECT_TABLE,
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      },
+    });
+    await queryInterface.createTable(CARD_LABELS_TABLE, {
+      cardId: {
+        field: 'card_id',
+        type: Sequelize.UUID,
+        allowNull: false,
+        primaryKey: true,
+        references: {
+          model: CARD_TABLE,
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      },
+      labelId: {
+        field: 'label_id',
+        type: Sequelize.UUID,
+        allowNull: false,
+        primaryKey: true,
+        references: {
+          model: LABEL_TABLE,
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      },
+      isVisible: {
+        field: 'is_visible',
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: true,
+      },
     });
     await queryInterface.createTable(CHECKLIST_TABLE, {
       id: {
@@ -593,20 +601,16 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
       },
-      status: {
+      isChecked: {
+        field: 'is_checked',
         allowNull: false,
         type: Sequelize.BOOLEAN,
         defaultValue: false,
       },
-      startDate: {
+      dueDate: {
         allowNull: true,
         type: Sequelize.DATE,
-        field: 'start_date',
-      },
-      endDate: {
-        allowNull: true,
-        type: Sequelize.DATE,
-        field: 'end_date',
+        field: 'due_date',
       },
       createdAt: {
         allowNull: false,
@@ -615,7 +619,7 @@ module.exports = {
         defaultValue: Sequelize.NOW
       }
     });
-    await queryInterface.createTable(ITEM_MEMBER_TABLE, {
+    await queryInterface.createTable(CHECKLIST_ITEM_MEMBER_TABLE, {
       id: {
         allowNull: false,
         primaryKey: true,
@@ -633,8 +637,8 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
       },
-      itemId:{
-        field: 'item_id',
+      checklistItemId:{
+        field: 'checklist_item_id',
         allowNull: false,
         type: Sequelize.UUID,
         references: {
@@ -654,11 +658,11 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    await queryInterface.dropTable(ITEM_MEMBER_TABLE);
+    await queryInterface.dropTable(CHECKLIST_ITEM_MEMBER_TABLE);
     await queryInterface.dropTable(CHECKLIST_ITEM_TABLE);
     await queryInterface.dropTable(CHECKLIST_TABLE);
+    await queryInterface.dropTable(CARD_LABELS_TABLE);
     await queryInterface.dropTable(LABEL_TABLE);
-    await queryInterface.dropTable(COLOR_TABLE);
     await queryInterface.dropTable(CARD_ATTACHMENT_TABLE);
     await queryInterface.dropTable(CARD_MEMBER_TABLE);
     await queryInterface.dropTable(CARD_TABLE);

@@ -26,6 +26,7 @@ const sequelize = new Sequelize(config.dbUrl, options);
     console.info('Database connected!');
   } catch (error) {
     logger.error(`❌ Database connection failed: ${error.message}`);
+    console.log(`❌ Database connection failed: ${error.message}`)
     process.exit(1);
   }
 })();

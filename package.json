@@ -11,7 +11,7 @@
     "migrations:run": "sequelize-cli db:migrate",
     "migrations:revert": "sequelize-cli db:migrate:undo",
     "migrations:delete": "sequelize-cli db:migrate:undo:all",
-    "environment:status": "sequelize-cli db:migrate:status"
+    "migrations:status": "sequelize-cli db:migrate:status"
   },
   "keywords": [],
   "author": "OscarS05",

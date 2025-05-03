@@ -2,6 +2,7 @@
 
 Autumn is an API for collaborative project management inspired by Trello. It is built using **Node.js, Express.js, PostgreSQL, JWT authentication, Redis for caching, Sequelize ORM, BullMQ, and Docker**. The project follows **Clean Architecture, and Domain-Driven Design (DDD)** to ensure maintainability and scalability. It features authentication management, roles, teams, tasks, attachments, and more.
 
+
 ## Table of Contents
 
 - [Documentation API](#documentation-api)
@@ -24,7 +25,18 @@ Autumn is an API for collaborative project management inspired by Trello. It is 
 - [License](#license)
 
 ## Documentation API
-- **Swagger UI** available at: /api-docs in the browser
+
+The API documentation is available through **Swagger UI**, providing an interactive interface to explore and test the endpoints.
+
+### Access in Production
+- Visit the following URL to access the Swagger documentation:  
+  [Swagger UI - Production](https://trello-like-project-api.onrender.com/api-docs)
+
+### Access in Development
+- When running the project locally, you can access the Swagger documentation at:  
+  [Swagger UI - Development](http://localhost:3000/api-docs)
+
+Swagger UI offers a user-friendly way to test the API endpoints, view request/response formats, and understand the available features.
 
 Here you can see a preview of the Swagger documentation:
 ![Swagger UI Screenshot](./api/utils/docs/assets/docs-swagger-example.png)
@@ -284,7 +296,7 @@ Currently **automated tests are not included**, but functionality has been verif
   "migrations:run": "sequelize-cli db:migrate",
   "migrations:revert": "sequelize-cli db:migrate:undo",
   "migrations:delete": "sequelize-cli db:migrate:undo:all",
-  "environment:status": "sequelize-cli db:migrate:status"
+  "migrations:status": "sequelize-cli db:migrate:status"
 }
 ```
 
@@ -484,7 +496,6 @@ body:
 
 
 ## Developer
- - Oscar Santaigo Monsalve
  - [Oscar Santiago Monsalve](https://github.com/OscarS05)
 ---
 
