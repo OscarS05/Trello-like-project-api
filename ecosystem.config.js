@@ -6,12 +6,12 @@ module.exports = {
     {
       name: 'api-server',
       script: './api/index.js',
-      watch: isProd,
+      watch: !isProd,
     },
     {
       name: 'email-worker',
       script: './api/src/infrastructure/queues/workers/email.worker.js',
-      watch: isProd,
+      watch: !isProd,
     },
   ],
 };
