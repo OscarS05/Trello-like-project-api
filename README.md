@@ -9,8 +9,8 @@ Autumn is an API for collaborative project management inspired by Trello. It is 
 
 Watch a **2-3 minute video demonstration** showcasing how to use the API via Swagger in production. The video highlights key features such as authentication, creating workspaces, and managing projects.
 
-[Trello-like API Demonstration Video](https://www.youtube.com/watch?v=dQw4w9WgXcQ)  
-Click the link above to watch a short demonstration showcasing the key features of the Autumn API.
+[Trello-like API Demonstration Video](https://www.loom.com/share/97b510a937424fe49184aa59831e2bed?sid=8f42347b-79fc-4af5-8fa4-2fb56527952d)  
+Click the link above to watch a short demonstration showcasing some features of the Autumn API.
 
 
 ## Table of Contents
