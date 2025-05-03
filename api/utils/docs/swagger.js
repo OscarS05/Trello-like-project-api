@@ -21,12 +21,12 @@ const options = {
     },
     servers: [
       {
-        url: `http://localhost:${config.port}/api/v1`,
-        description: 'Local server'
-      },
-      {
         url: 'https://trello-like-project-api.onrender.com/api/v1/',
         description: 'Remote server'
+      },
+      {
+        url: `http://localhost:${config.port}/api/v1`,
+        description: 'Local server'
       }
     ],
     tags: [
