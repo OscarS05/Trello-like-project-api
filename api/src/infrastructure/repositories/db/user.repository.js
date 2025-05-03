@@ -20,9 +20,10 @@ class UserRepository extends IUserRepository {
     });
   }
 
-  async findAll() {
+  async findAll(query = {}) {
     return await this.db.models.User.findAll({
-      attributes:  { exclude: ['password', 'recoveryToken']  }
+      where: query,
+      attributes: { exclude: ['password', 'recoveryToken'] }
     });
   }
 

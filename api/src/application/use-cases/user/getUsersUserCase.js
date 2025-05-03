@@ -5,8 +5,8 @@ class GetUsersUseCase {
     this.userRepository = userRepository;
   }
 
-  async execute() {
-    const users = await this.userRepository.findAll();
+  async execute(query) {
+    const users = await this.userRepository.findAll(query);
     return users.map(user => new UserDto(user));
   }
 

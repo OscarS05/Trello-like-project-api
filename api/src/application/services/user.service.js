@@ -13,8 +13,8 @@ class UserService {
     return user;
   }
 
-  async getUsers() {
-    return await this.getUserUseCase.execute();
+  async getUsers(query = {}) {
+    return await this.getUserUseCase.execute(query);
   }
 
   async signUp(userData) {

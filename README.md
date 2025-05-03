@@ -2,6 +2,14 @@
 
 Autumn is an API for collaborative project management inspired by Trello. It is built using **Node.js, Express.js, PostgreSQL, JWT authentication, Redis for caching, Sequelize ORM, BullMQ, and Docker**. The project follows **Clean Architecture, and Domain-Driven Design (DDD)** to ensure maintainability and scalability. It features authentication management, roles, teams, tasks, attachments, and more.
 
+[Swagger UI - Production](https://trello-like-project-api.onrender.com/api-docs)
+
+## 🎥 Demonstration Video
+
+Watch a **2-3 minute video demonstration** showcasing how to use the API via Swagger in production. The video highlights key features such as authentication, creating workspaces, and managing projects.
+
+[![Watch the Video](https://img.youtube.com/vi/dQw4w9WgXcQ/0.jpg)](https://www.youtube.com/watch?v=dQw4w9WgXcQ "Autumn API Demonstration")
+
 
 ## Table of Contents
 
@@ -224,6 +232,22 @@ api/src/
 - ✅ Securely upload files and images with Cloudinary
 - ✅ Secure download via proxy endpoint with streams
 - ✅ Message queues with BullMQ for sending emails
+
+## 🛠 Additional Features
+
+### ⏰ Cron Job
+
+The project includes an automated task using `node-cron` that runs every day at midnight (`00:00`). This scheduled job checks for users who haven't verified their email within **7 days** of account creation and removes them from the system. This helps keep the database clean and free of inactive accounts.
+
+### 🔐 Rate Limiting
+
+Rate limiting is implemented to enhance the system’s security by restricting the number of requests allowed to certain sensitive endpoints. This prevents abuse and brute-force attacks. The protected endpoints are:
+
+- `authauth/login`
+- `auth/send-verification-email`
+- `auth/resend-verification-email`
+
+This mechanism improves overall system stability and security.
 
 ---
 

@@ -26,7 +26,7 @@ app.use(cors({
 }));
 
 require('./utils/auth');
-require('./utils/cron');
+require('./utils/cron/verification.cron');
 
 app.use(morganMiddleware);
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(specs));

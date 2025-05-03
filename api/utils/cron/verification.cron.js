@@ -1,34 +1,42 @@
 const cron = require('node-cron');
-const boom = require('@hapi/boom');
+const logger = require('../logger/logger');
+const { config } = require('../../config/config');
+const { userService } = require('../../src/application/services/index');
+
+const isProd = config.isProd;
 
 function isVerificationExpired(createdAt, expirationTime){
-  const EXPIRATION_TIME = expirationTime;
-  const expirationDate = new Date(createdAt).getTime() + EXPIRATION_TIME;
+  const expirationDate = new Date(createdAt).getTime() + expirationTime;
   return Date.now() > expirationDate;
 };
 
-module.exports = cron.schedule('0 0 * * *', async () => {
+const deleteUnverifiedUsersJob = cron.schedule('0 0 * * *', async () => {
   try {
-    const users = await userService.findAll({
-      where: {
-        isVerified: false,
-      },
-    });
+    const users = await userService.getUsers({ isVerified: false });
 
     let deletedUsersCount = 0;
 
     for(const user of users){
       if(isVerificationExpired(user.createdAt, 7 * 24 * 60 * 60 * 1000)) {
-        await userService.delete(user.id);
+        await userService.deleteAccount(user.id);
         deletedUsersCount++;
       }
     }
-    if (deletedUsersCount > 0) {
-      return { message: `${deletedUsersCount} unverified accounts removed.` };
-    } else {
-      return { message: 'No unverified accounts were found to remove.' };
-    }
+
+    const message =
+      deletedUsersCount > 0
+        ? `${deletedUsersCount} unverified accounts removed.`
+        : `No unverified accounts found for removal.`;
+
+    if(isProd) logger.info(message);
+    console.log(message)
   } catch (error) {
-    return boom.internal('Error in cron job', error);
+    const messageError = `Error in cron job ${error.message}`;
+    if(isProd) logger.error(messageError);
+    if(!isProd) console.error(error)
   }
 });
+
+deleteUnverifiedUsersJob.start();
+
+module.exports = { deleteUnverifiedUsersJob }
