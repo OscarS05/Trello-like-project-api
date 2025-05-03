@@ -97,6 +97,7 @@ router.post('/',
  *       If the user does not belong to any workspace, they will be deleted immediately without restrictions.
  *
  *       If the user is a member of one or more workspaces, the following rules apply:
+ *       - Requires a valid Bearer access token.
  *       - If the user is the **only member** of a workspace, the system will delete the user along with the workspace and all its associated projects, teams, and resources.
  *       - If the workspace has **other members**, the system will:
  *         - Check all projects and teams associated with the user.
@@ -106,6 +107,8 @@ router.post('/',
  *       This ensures data integrity by preventing orphaned projects and teams without any active members.
  *     tags:
  *       - user
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
