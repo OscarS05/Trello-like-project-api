@@ -1,46 +1,95 @@
 const multer = require('multer');
-const { CloudinaryStorage } = require('multer-storage-cloudinary');
-const cloudinary = require('../../infrastructure/store/storage/cloudinary');
+const path = require('path');
+
 const { validatorHandler } = require('./validator.handler');
 const { attachLink } = require('../schemas/card-attachment.schema');
 
-const CARD_ATTACHMENT_FOLER = 'card-attachments';
-const PROJECT_BACKGROUND_FOLER = 'project-backgrounds';
+const allowedFormatsForImage = ['jpg', 'avif', 'png', 'jpeg', 'svg'];
+const allowedFormatsForAttachments = [
+  'jpg',
+  'avif',
+  'png',
+  'jpeg',
+  'svg',
+  'doc',
+  'docx',
+  'pdf',
+  'ppt',
+  'pptx',
+  'xls',
+  'xlsx',
+];
 
-const storageCardAttachments = new CloudinaryStorage({
-  cloudinary: cloudinary,
-  params: {
-    folder: CARD_ATTACHMENT_FOLER,
-    allowed_formats: ['jpg', 'png', 'avif', 'jpeg', 'pdf', 'doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx', 'svg'],
-    use_filename: true,
-    unique_filename: true,
-  },
-});
-const uploadCardAttachment = multer({ storage: storageCardAttachments });
+const { CARD_ATTACHMENT_FOLDER } = require('../../../utils/constants');
 
-const projectBackgroundImage = new CloudinaryStorage({
-  cloudinary: cloudinary,
-  params: {
-    folder: PROJECT_BACKGROUND_FOLER,
-    allowed_formats: ['jpg', 'avif', 'png', 'jpeg', 'pdf', 'doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx', 'svg'],
-    use_filename: true,
-    unique_filename: true,
-  },
-});
-const uploadProjectBackgroundImage = multer({ storage: projectBackgroundImage });
+const storage = multer.memoryStorage();
+const uploadSingle = (allowedFormats, inputName = 'file') => {
+  return multer({
+    storage,
+    fileFilter: fileFilterByExtension(allowedFormats),
+  }).single(inputName);
+};
+
+const fileFilterByExtension = (allowedFormats) => {
+  return (req, file, cb) => {
+    const ext = path.extname(file.originalname).toLowerCase().slice(1);
+    if (allowedFormats.includes(ext)) {
+      cb(null, true);
+    } else {
+      cb(new Error(`Invalid file type: ${ext}`), false);
+    }
+  };
+};
+
+const uploadToCloudinary = (folder) => {
+  return async (req, res, next) => {
+    // try {
+    //   if (!req.file) {
+    //   }
+    //   const buffer = req.file.buffer;
+    //   const dimensions = imageSize(buffer);
+    //   const { width, height } = dimensions;
+    //   if (width < 800 || width < height) {
+    //     return next(
+    //       new Error('The image must be horizontal and at least 800px wide.')
+    //     );
+    //   }
+    //   const base64file = `data:${req.file.mimetype};base64,${buffer.toString(
+    //     'base64'
+    //   )}`;
+    //   const result = await cloudinaryStorageRepository.upload(
+    //     { path: base64file },
+    //     folder
+    //   );
+    //   console.log('RESULT', result);
+    //   req.file = {
+    //     ...result,
+    //     originalname: req.file.originalname,
+    //     mimetype: req.file.mimetype,
+    //   };
+    //   next();
+    // } catch (error) {
+    //   next(error);
+    // }
+  };
+};
 
 const conditionalUploadFileMiddleware = (req, res, next) => {
   const contentType = req.headers['content-type'];
   if (contentType && contentType.includes('multipart/form-data')) {
-    return uploadCardAttachment.single('file')(req, res, next);
+    uploadSingle(allowedFormatsForAttachments, 'file');
+    return next();
   }
 
   return validatorHandler(attachLink, 'body')(req, res, next);
 };
 
+const uploadProjectBackgroundImage = uploadSingle(
+  allowedFormatsForImage,
+  'background-image'
+);
+
 module.exports = {
   conditionalUploadFileMiddleware,
-  uploadCardAttachment,
   uploadProjectBackgroundImage,
-  CARD_ATTACHMENT_FOLER,
 };

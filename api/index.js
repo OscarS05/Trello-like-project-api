@@ -2,7 +2,13 @@ const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 
-const { logErrors, errorHandler, boomErrorHandler, ormErrorHandler } = require('./src/interfaces/middlewares/error.handler');
+const {
+  logErrors,
+  errorHandler,
+  boomErrorHandler,
+  ormErrorHandler,
+  multerErrorHandler,
+} = require('./src/interfaces/middlewares/error.handler');
 
 const { config } = require('./config/config');
 const routerApi = require('./src/interfaces/routes');
@@ -19,11 +25,13 @@ app.use(cookieParser());
 
 const whiteList = [config.frontUrl];
 
-app.use(cors({
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-}));
+app.use(
+  cors({
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  })
+);
 
 require('./utils/auth');
 require('./utils/cron/verification.cron');
@@ -35,6 +43,7 @@ routerApi(app);
 app.use(logErrors);
 app.use(ormErrorHandler);
 app.use(boomErrorHandler);
+app.use(multerErrorHandler);
 app.use(errorHandler);
 
 app.use((err, req, res, next) => {

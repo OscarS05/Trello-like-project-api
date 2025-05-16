@@ -1,14 +1,30 @@
 const router = require('./workspace-members.router');
 
 const { workspaceIdSchema } = require('../schemas/workspace.schema');
-const { createProject, updateProject, projectIdSchema, projectId } = require('../schemas/project.schema');
-const { checkWorkspaceMembership } = require('../middlewares/authorization/workspace.authorization');
-const { checkProjectMembershipByUserId, validateProjectReadPermission } = require('../middlewares/authorization/project.authorization');
+const {
+  createProject,
+  updateProject,
+  projectIdSchema,
+  projectId,
+} = require('../schemas/project.schema');
+const {
+  checkWorkspaceMembership,
+} = require('../middlewares/authorization/workspace.authorization');
+const {
+  checkProjectMembershipByUserId,
+  validateProjectReadPermission,
+} = require('../middlewares/authorization/project.authorization');
 
-const { uploadProjectBackgroundImage } = require('../middlewares/upload-files.handler');
+const {
+  uploadProjectBackgroundImage,
+} = require('../middlewares/upload-files.handler');
 const { validatorHandler } = require('../middlewares/validator.handler');
 const { validateSession } = require('../middlewares/authentication.handler');
-const { authorizationToCreateProject, checkAdminRole, checkOwnership } = require('../middlewares/authorization/project.authorization');
+const {
+  authorizationToCreateProject,
+  checkAdminRole,
+  checkOwnership,
+} = require('../middlewares/authorization/project.authorization');
 
 const projectControllers = require('../controllers/project.controller');
 
@@ -48,11 +64,12 @@ const projectControllers = require('../controllers/project.controller');
  *       404:
  *         description: Project not found
  */
-router.get('/projects/:projectId/board',
+router.get(
+  '/projects/:projectId/board',
   validateSession,
   validatorHandler(projectId, 'params'),
   validateProjectReadPermission,
-  projectControllers.getAllprojectInformation,
+  projectControllers.getAllprojectInformation
 );
 
 /**
@@ -92,11 +109,12 @@ router.get('/projects/:projectId/board',
  *       403:
  *         description: You do not belong to the workspace.
  */
-router.get('/:workspaceId/projects',
+router.get(
+  '/:workspaceId/projects',
   validateSession,
   validatorHandler(workspaceIdSchema, 'params'),
   checkWorkspaceMembership,
-  projectControllers.getProjectsByWorkspace,
+  projectControllers.getProjectsByWorkspace
 );
 
 /**
@@ -143,12 +161,13 @@ router.get('/:workspaceId/projects',
  *       403:
  *         description: User is not a member of the workspace or has reached the project limit.
  */
-router.post('/:workspaceId/projects',
+router.post(
+  '/:workspaceId/projects',
   validateSession,
   validatorHandler(createProject, 'body'),
   checkWorkspaceMembership,
   authorizationToCreateProject,
-  projectControllers.createProject,
+  projectControllers.createProject
 );
 
 /**
@@ -204,7 +223,8 @@ router.post('/:workspaceId/projects',
  *       404:
  *         description: Project not found
  */
-router.patch('/:workspaceId/projects/:projectId',
+router.patch(
+  '/:workspaceId/projects/:projectId',
   validateSession,
   validatorHandler(projectIdSchema, 'params'),
   validatorHandler(updateProject, 'body'),
@@ -269,11 +289,12 @@ router.patch('/:workspaceId/projects/:projectId',
  *       403:
  *         $ref: '#/components/responses/Forbidden'
  */
-router.patch('/:workspaceId/projects/:projectId/background',
+router.patch(
+  '/:workspaceId/projects/:projectId/background',
   validateSession,
   validatorHandler(projectIdSchema, 'params'),
   checkAdminRole,
-  uploadProjectBackgroundImage.single('background-image'),
+  uploadProjectBackgroundImage,
   projectControllers.updateBackgroundProject
 );
 
@@ -321,7 +342,8 @@ router.patch('/:workspaceId/projects/:projectId/background',
  *       404:
  *         $ref: '#/components/responses/NotFound'
  */
-router.delete('/:workspaceId/projects/:projectId',
+router.delete(
+  '/:workspaceId/projects/:projectId',
   validateSession,
   validatorHandler(projectIdSchema, 'params'),
   checkOwnership,

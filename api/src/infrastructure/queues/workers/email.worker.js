@@ -1,16 +1,21 @@
 const { Worker } = require('bullmq');
+
 const { config } = require('../../../../config/config');
 const logger = require('../../../../utils/logger/logger');
 const redis = require('../../store/cache/index');
 const { sendEmail } = require('../../adapters/email/nodemailerAdapter');
+const {
+  emailQueueName,
+  sendVerificationEmailName,
+} = require('../../../../utils/constants');
 
 const emailWorker = new Worker(
-  'emailQueue',
+  emailQueueName,
   async (job) => {
     const { email, name, token } = job.data;
 
-    switch (job.name){
-      case 'sendVerificationEmail':
+    switch (job.name) {
+      case sendVerificationEmailName:
         await sendEmail({
           from: config.smtpEmail,
           to: email,
@@ -29,7 +34,7 @@ const isProd = config.isProd;
 
 emailWorker.on('completed', (job) => {
   const message = `Job ${job.id} completed successfully`;
-  if(isProd){
+  if (isProd) {
     logger.info(message);
   } else {
     console.log(message);
@@ -38,7 +43,7 @@ emailWorker.on('completed', (job) => {
 
 emailWorker.on('failed', (job, err) => {
   const message = `Job ${job.id} failed with error: ${err.message}`;
-  if(isProd){
+  if (isProd) {
     logger.error(message);
   } else {
     console.error(message);

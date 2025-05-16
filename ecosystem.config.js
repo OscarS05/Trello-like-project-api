@@ -13,5 +13,10 @@ module.exports = {
       script: './api/src/infrastructure/queues/workers/email.worker.js',
       watch: !isProd,
     },
+    {
+      name: 'attachment-worker',
+      script: './api/src/infrastructure/queues/workers/attachment.worker.js',
+      watch: !isProd,
+    },
   ],
 };
