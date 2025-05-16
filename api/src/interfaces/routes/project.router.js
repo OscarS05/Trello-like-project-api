@@ -238,7 +238,11 @@ router.patch(
  *   patch:
  *     summary: Update project background image
  *     tags: [project]
- *     description: Allows admins or owners to update the background image of a project using a file upload.
+ *     description: |
+ *        Allows admins or owners to update the background image of a project using a file upload.
+ *        - Supported file types: **jpg, png, avif, jpeg, svg, webp, gif**.
+ *        - Maximum file size: **5MB**.
+ *        - Files must be sent as `multipart/form-data` using the field name `background-image`.
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -279,9 +283,11 @@ router.patch(
  *               properties:
  *                 message:
  *                   type: string
- *                   example: Project updated successfully
- *                 updatedProject:
- *                   $ref: '#/components/schemas/Project'
+ *                   example: Bakground image queued successfully
+ *                 job:
+ *                   type: string
+ *                   example: 14
+ *
  *       400:
  *         $ref: '#/components/responses/BadRequest'
  *       401:

@@ -2,21 +2,23 @@ const boom = require('@hapi/boom');
 
 const { MAX_FILE_SIZE_IN_BYTES } = require('../../../../utils/constants');
 
-class LoadBackgroundImageUseCase {
-  constructor({ projectRepository }, { attachmentQueueService }) {
-    this.projectRepository = projectRepository;
+class AddJobForAttachmentsUseCase {
+  constructor({ cardAttachmentRepository }, { attachmentQueueService }) {
+    this.cardAttachmentRepository = cardAttachmentRepository;
     this.attachmentQueueService = attachmentQueueService;
   }
 
-  async execute(fileData, folder, projectId) {
+  async execute({ fileData, folder, cardId }) {
     if (fileData.size > MAX_FILE_SIZE_IN_BYTES) {
       throw boom.badData('The file is too large');
     }
 
-    const addedJob = await this.attachmentQueueService.loadBackgroundImage({
+    const addedJob = await this.attachmentQueueService.loadCardAttachment({
       buffer: fileData.buffer,
       folder,
-      projectId,
+      cardId,
+      type: fileData.mimetype,
+      filename: fileData.originalname,
     });
 
     if (!addedJob.id || !addedJob.name) {
@@ -27,4 +29,4 @@ class LoadBackgroundImageUseCase {
   }
 }
 
-module.exports = LoadBackgroundImageUseCase;
+module.exports = AddJobForAttachmentsUseCase;

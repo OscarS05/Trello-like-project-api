@@ -1,4 +1,9 @@
-const { nameQueueLoadBackgroundImage } = require('../../../../utils/constants');
+const boom = require('@hapi/boom');
+
+const {
+  nameQueueLoadBackgroundImage,
+  loadCardAttachmentName,
+} = require('../../../../utils/constants');
 
 class AttachmentQueueService {
   constructor(queue) {
@@ -6,6 +11,10 @@ class AttachmentQueueService {
   }
 
   async loadBackgroundImage({ buffer, folder, projectId }) {
+    if (!buffer || !folder || !projectId) {
+      throw boom.badRequest('Missing required job data');
+    }
+
     return await this.queue.add(
       nameQueueLoadBackgroundImage,
       {
@@ -23,13 +32,19 @@ class AttachmentQueueService {
     );
   }
 
-  // async saveCardAttachment({ email, name, token }) {
-  //   return await this.queue.add('sendVerificationEmail', {
-  //     email,
-  //     name,
-  //     token,
-  //   });
-  // }
+  async loadCardAttachment({ buffer, folder, cardId, type, filename }) {
+    if (!buffer || !folder || !cardId || !type || !filename) {
+      throw boom.badRequest('Missing required job data');
+    }
+
+    return await this.queue.add(loadCardAttachmentName, {
+      buffer,
+      folder,
+      cardId,
+      type,
+      filename,
+    });
+  }
 }
 
 module.exports = AttachmentQueueService;

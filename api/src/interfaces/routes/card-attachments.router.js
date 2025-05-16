@@ -3,10 +3,18 @@ const router = express.Router();
 
 const { validateSession } = require('../middlewares/authentication.handler');
 const { validatorHandler } = require('../middlewares/validator.handler');
-const { checkProjectMembershipByCard } = require('../middlewares/authorization/card.authorization');
+const {
+  checkProjectMembershipByCard,
+} = require('../middlewares/authorization/card.authorization');
 const { cardIdSchema } = require('../schemas/card.schema');
-const { attachLink, cardAttachmentSchema, updateCardAttachmentSchema } = require('../schemas/card-attachment.schema');
-const { conditionalUploadFileMiddleware } = require('../middlewares/upload-files.handler');
+const {
+  attachLink,
+  cardAttachmentSchema,
+  updateCardAttachmentSchema,
+} = require('../schemas/card-attachment.schema');
+const {
+  conditionalUploadFileMiddleware,
+} = require('../middlewares/upload-files.handler');
 
 const cardAttachmentControllers = require('../controllers/card-attachments.controller');
 
@@ -54,7 +62,8 @@ const cardAttachmentControllers = require('../controllers/card-attachments.contr
  *       404:
  *         description: Card not found
  */
-router.get('/:cardId/attachments',
+router.get(
+  '/:cardId/attachments',
   validateSession,
   validatorHandler(cardIdSchema, 'params'),
   checkProjectMembershipByCard,
@@ -68,9 +77,10 @@ router.get('/:cardId/attachments',
  *     summary: Attach a file or link to a card
  *     description: |
  *       Saves a new attachment (either a file or an external link) to a specific card.
- *       Files must be sent as `multipart/form-data` using the field name `file`.
- *       Supported file types: **jpg, png, avif, jpeg, pdf, doc, docx, ppt, pptx, xls, xlsx, svg**.
- *       If sending an external link, use JSON with `filename` and `url` in the body.
+ *       - Files must be sent as `multipart/form-data` using the field name `file`.
+ *       - Supported file types: **jpg, png, avif, jpeg, svg, webp, gif**.
+ *       - Maximum file size: **5MB**.
+ *       - If sending an external link, use JSON with `filename` and `url` in the body.
  *
  *       This endpoint can only be used to upload a file or a link, **you cannot do both at the same time**.
  *
@@ -127,8 +137,15 @@ router.get('/:cardId/attachments',
  *                 message:
  *                   type: string
  *                   example: The attachment was saved successfully
- *                 newAttachment:
- *                    $ref: '#/components/schemas/Attachment'
+ *                 job:
+ *                    type: object
+ *                    properties:
+ *                      id:
+ *                        type: string
+ *                        example: 12
+ *                      name:
+ *                        type: string
+ *                        example: loadCardAttachment
  *       400:
  *         description: Invalid input or unsupported file type
  *       401:
@@ -138,7 +155,8 @@ router.get('/:cardId/attachments',
  *       404:
  *         description: Card not found
  */
-router.post('/:cardId/attachments',
+router.post(
+  '/:cardId/attachments',
   validateSession,
   validatorHandler(cardIdSchema, 'params'),
   checkProjectMembershipByCard,
@@ -219,7 +237,8 @@ router.post('/:cardId/attachments',
  *       404:
  *         description: Attachment or card not found
  */
-router.patch('/:cardId/attachments/:attachmentId',
+router.patch(
+  '/:cardId/attachments/:attachmentId',
   validateSession,
   validatorHandler(cardAttachmentSchema, 'params'),
   validatorHandler(updateCardAttachmentSchema, 'body'),
@@ -283,7 +302,8 @@ router.patch('/:cardId/attachments/:attachmentId',
  *       404:
  *         description: Attachment or card not found
  */
-router.delete('/:cardId/attachments/:attachmentId',
+router.delete(
+  '/:cardId/attachments/:attachmentId',
   validateSession,
   validatorHandler(cardAttachmentSchema, 'params'),
   checkProjectMembershipByCard,
@@ -343,7 +363,8 @@ router.delete('/:cardId/attachments/:attachmentId',
  *       404:
  *         description: Attachment not found or does not belong to the specified card
  */
-router.get('/:cardId/attachments/:attachmentId/download',
+router.get(
+  '/:cardId/attachments/:attachmentId/download',
   validateSession,
   validatorHandler(cardAttachmentSchema, 'params'),
   checkProjectMembershipByCard,

@@ -7,40 +7,36 @@ const redis = require('../../store/cache/index');
 const {
   cloudinaryStorageRepository,
 } = require('../../repositories/storage/index');
-const { projectService } = require('../../../application/services/index');
+const {
+  projectService,
+  cardAttachmentService,
+} = require('../../../application/services/index');
 const {
   nameQueueLoadBackgroundImage,
   attachmentQueueName,
+  loadCardAttachmentName,
 } = require('../../../../utils/constants');
 
 const attachmentWorker = new Worker(
   attachmentQueueName,
 
   async (job) => {
-    const { buffer, folder, projectId } = job.data;
+    const { buffer, folder } = job.data;
     const realBuffer = Buffer.from(buffer.data);
 
-    if (!realBuffer || !folder || !projectId) {
+    if (!realBuffer || !folder) {
       throw new Error('Missing required job data');
     }
 
-    console.log('realBuffer', realBuffer);
     switch (job.name) {
       case nameQueueLoadBackgroundImage:
-        const dimensions = imageSize(realBuffer);
-        const { width, height } = dimensions;
-
-        if (width < 800 || width < height) {
-          throw boom.badData(
-            'The image must be horizontal and at least 800px wide.'
-          );
-        }
+        validationImageSize(realBuffer);
 
         const result = await cloudinaryStorageRepository.uploadStream({
           buffer: realBuffer,
           folder,
         });
-        console.log('RESULT', result);
+
         if (!result.secure_url) {
           throw new Error(
             'Something went wrong loading the file. File url is null'
@@ -49,12 +45,42 @@ const attachmentWorker = new Worker(
 
         const projectUpdatedInDb =
           await projectService.updateBackgroundProjectInDb(
-            projectId,
+            job.projectId,
             result.secure_url
           );
 
         if (!projectUpdatedInDb?.id) {
           throw new Error('Failed to update project background');
+        }
+
+        break;
+      case loadCardAttachmentName:
+        validationImageSize(realBuffer);
+
+        const resultAttachment = await cloudinaryStorageRepository.uploadStream(
+          {
+            buffer: realBuffer,
+            folder,
+          }
+        );
+
+        if (!resultAttachment.secure_url || !resultAttachment.public_id) {
+          throw new Error(
+            'Something went wrong loading the file. File url or public_id is null'
+          );
+        }
+
+        const cardAttachmentUpdatedInDb =
+          await cardAttachmentService.saveCardAttachment({
+            cardId: job.data.cardId,
+            filename: job.data.filename,
+            type: job.data.type,
+            url: resultAttachment.secure_url,
+            publicId: resultAttachment.public_id,
+          });
+
+        if (!cardAttachmentUpdatedInDb?.id) {
+          throw new Error('Failed to update card attachment');
         }
 
         break;
@@ -84,6 +110,15 @@ attachmentWorker.on('failed', (job, err) => {
     console.error(message);
   }
 });
+
+function validationImageSize(buffer) {
+  const dimensions = imageSize(buffer);
+  const { width, height } = dimensions;
+
+  if (width < 800 || width < height) {
+    throw boom.badData('The image must be horizontal and at least 800px wide.');
+  }
+}
 
 module.exports = {
   attachmentWorker,

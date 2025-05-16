@@ -1,6 +1,7 @@
 const boom = require('@hapi/boom');
 
 const { cardAttachmentService } = require('../../application/services/index');
+const { CARD_ATTACHMENT_FOLDER } = require('../../../utils/constants');
 
 const getAllCardAttachments = async (req, res, next) => {
   try {
@@ -20,33 +21,21 @@ const saveCardAttachment = async (req, res, next) => {
   try {
     const { cardId } = req.params;
 
-    if (req.file) {
-      const {
-        secure_url: url, // Este ya no estaría
-        public_id: publicId, // Este ya no estaría
-        originalname,
-        mimetype,
-      } = req.file;
-
-      if (!publicId) {
-        throw boom.badRequest('File upload failed. The publicId is null');
-      }
-
-      const newCardAttachment = await cardAttachmentService.saveCardAttachment({
+    if (req.file && req.file.buffer) {
+      const addedJob = await cardAttachmentService.addJobForAttachments({
+        fileData: req.file,
+        folder: CARD_ATTACHMENT_FOLDER,
         cardId,
-        filename: originalname,
-        type: mimetype,
-        url,
-        publicId,
       });
 
       return res.status(201).json({
         message: 'The attachment was saved successfully',
-        newCardAttachment,
+        job: {
+          id: addedJob.id,
+          name: addedJob.name,
+        },
       });
-    }
-
-    if (req.body) {
+    } else if (req.body) {
       const { url, filename } = req.body;
 
       const newAttachment = await cardAttachmentService.saveCardAttachment({
@@ -56,6 +45,10 @@ const saveCardAttachment = async (req, res, next) => {
         url,
         publicId: null,
       });
+
+      if (!newAttachment?.id) {
+        throw boom.badRequest('Something went wrong saving the attachment');
+      }
 
       return res.status(201).json({
         message: 'The attachment was saved successfully',

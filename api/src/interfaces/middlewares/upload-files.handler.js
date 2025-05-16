@@ -4,23 +4,7 @@ const path = require('path');
 const { validatorHandler } = require('./validator.handler');
 const { attachLink } = require('../schemas/card-attachment.schema');
 
-const allowedFormatsForImage = ['jpg', 'avif', 'png', 'jpeg', 'svg'];
-const allowedFormatsForAttachments = [
-  'jpg',
-  'avif',
-  'png',
-  'jpeg',
-  'svg',
-  'doc',
-  'docx',
-  'pdf',
-  'ppt',
-  'pptx',
-  'xls',
-  'xlsx',
-];
-
-const { CARD_ATTACHMENT_FOLDER } = require('../../../utils/constants');
+const { allowedFormatsForImage } = require('../../../utils/constants');
 
 const storage = multer.memoryStorage();
 const uploadSingle = (allowedFormats, inputName = 'file') => {
@@ -41,44 +25,10 @@ const fileFilterByExtension = (allowedFormats) => {
   };
 };
 
-const uploadToCloudinary = (folder) => {
-  return async (req, res, next) => {
-    // try {
-    //   if (!req.file) {
-    //   }
-    //   const buffer = req.file.buffer;
-    //   const dimensions = imageSize(buffer);
-    //   const { width, height } = dimensions;
-    //   if (width < 800 || width < height) {
-    //     return next(
-    //       new Error('The image must be horizontal and at least 800px wide.')
-    //     );
-    //   }
-    //   const base64file = `data:${req.file.mimetype};base64,${buffer.toString(
-    //     'base64'
-    //   )}`;
-    //   const result = await cloudinaryStorageRepository.upload(
-    //     { path: base64file },
-    //     folder
-    //   );
-    //   console.log('RESULT', result);
-    //   req.file = {
-    //     ...result,
-    //     originalname: req.file.originalname,
-    //     mimetype: req.file.mimetype,
-    //   };
-    //   next();
-    // } catch (error) {
-    //   next(error);
-    // }
-  };
-};
-
 const conditionalUploadFileMiddleware = (req, res, next) => {
   const contentType = req.headers['content-type'];
   if (contentType && contentType.includes('multipart/form-data')) {
-    uploadSingle(allowedFormatsForAttachments, 'file');
-    return next();
+    return uploadSingle(allowedFormatsForImage, 'file')(req, res, next);
   }
 
   return validatorHandler(attachLink, 'body')(req, res, next);

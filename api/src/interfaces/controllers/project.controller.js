@@ -98,7 +98,10 @@ const updateBackgroundProject = async (req, res, next) => {
 
     res
       .status(200)
-      .json({ message: 'Project queued successfully', job: addedJob.id });
+      .json({
+        message: 'Bakground image queued successfully',
+        job: addedJob.id,
+      });
   } catch (error) {
     next(error);
   }
