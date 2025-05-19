@@ -1,11 +1,22 @@
-const { cardMemberRouter: cardRouter, router: labelRouter } = require('./label.router');
+const {
+  cardMemberRouter: cardRouter,
+  router: labelRouter,
+} = require('./label.router');
 
 const { validateSession } = require('../middlewares/authentication.handler');
 const { validatorHandler } = require('../middlewares/validator.handler');
-const { checkProjectMembershipByUserId } = require('../middlewares/authorization/project.authorization');
-const { checkProjectMembershipByCard } = require('../middlewares/authorization/card.authorization');
+const {
+  checkProjectMembershipByUserId,
+} = require('../middlewares/authorization/project.authorization');
+const {
+  checkProjectMembershipByCard,
+} = require('../middlewares/authorization/card.authorization');
 const { cardIdSchema, projectIdSchema } = require('../schemas/label.schema');
-const { checklistSchema, createChecklistSchema, updateCardSchema } = require('../schemas/checklist.schema');
+const {
+  checklistSchema,
+  createChecklistSchema,
+  updateCardSchema,
+} = require('../schemas/checklist.schema');
 
 const checklistControllers = require('../controllers/checklist.controller');
 
@@ -55,11 +66,12 @@ const checklistControllers = require('../controllers/checklist.controller');
  *       404:
  *         description: Project not found or the user does not belong to the project
  */
-labelRouter.get('/projects/:projectId/checklists',
+labelRouter.get(
+  '/projects/:projectId/checklists',
   validateSession,
   validatorHandler(projectIdSchema, 'params'),
   checkProjectMembershipByUserId,
-  checklistControllers.getAllChecklistsByProject
+  checklistControllers.getAllChecklistsByProject,
 );
 
 /**
@@ -105,11 +117,12 @@ labelRouter.get('/projects/:projectId/checklists',
  *       404:
  *         description: Card not found
  */
-cardRouter.get('/:cardId/checklists',
+cardRouter.get(
+  '/:cardId/checklists',
   validateSession,
   validatorHandler(cardIdSchema, 'params'),
   checkProjectMembershipByCard,
-  checklistControllers.getAllChecklistsByCard
+  checklistControllers.getAllChecklistsByCard,
 );
 
 /**
@@ -169,12 +182,13 @@ cardRouter.get('/:cardId/checklists',
  *       404:
  *         description: Card not found
  */
-cardRouter.post('/:cardId/checklists',
+cardRouter.post(
+  '/:cardId/checklists',
   validateSession,
   validatorHandler(cardIdSchema, 'params'),
   validatorHandler(createChecklistSchema, 'body'),
   checkProjectMembershipByCard,
-  checklistControllers.createChecklist
+  checklistControllers.createChecklist,
 );
 
 /**
@@ -242,12 +256,13 @@ cardRouter.post('/:cardId/checklists',
  *       404:
  *         description: Card or checklist not found
  */
-cardRouter.post('/:cardId/checklists/:checklistId/copy',
+cardRouter.post(
+  '/:cardId/checklists/:checklistId/copy',
   validateSession,
   validatorHandler(checklistSchema, 'params'),
   validatorHandler(createChecklistSchema, 'body'),
   checkProjectMembershipByCard,
-  checklistControllers.createChecklistByCopyingItems
+  checklistControllers.createChecklistByCopyingItems,
 );
 
 /**
@@ -317,12 +332,13 @@ cardRouter.post('/:cardId/checklists/:checklistId/copy',
  *       404:
  *         description: Card or checklist not found
  */
-cardRouter.patch('/:cardId/checklists/:checklistId',
+cardRouter.patch(
+  '/:cardId/checklists/:checklistId',
   validateSession,
   validatorHandler(checklistSchema, 'params'),
   validatorHandler(updateCardSchema, 'body'),
   checkProjectMembershipByCard,
-  checklistControllers.updateChecklist
+  checklistControllers.updateChecklist,
 );
 
 /**
@@ -378,11 +394,12 @@ cardRouter.patch('/:cardId/checklists/:checklistId',
  *       404:
  *         description: Card or checklist not found
  */
-cardRouter.delete('/:cardId/checklists/:checklistId',
+cardRouter.delete(
+  '/:cardId/checklists/:checklistId',
   validateSession,
   validatorHandler(checklistSchema, 'params'),
   checkProjectMembershipByCard,
-  checklistControllers.deleteChecklist
+  checklistControllers.deleteChecklist,
 );
 
 module.exports = { cardRouter, labelRouter };

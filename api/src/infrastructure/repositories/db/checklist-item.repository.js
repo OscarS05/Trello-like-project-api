@@ -1,70 +1,86 @@
-const boom = require('@hapi/boom');
 const IChecklistItemRepository = require('../../../domain/repositories/db/IChecklistItemRepository');
 
 class ChecklistItemRepository extends IChecklistItemRepository {
-  constructor(db){
+  constructor(db) {
     super();
     this.db = db;
   }
 
-  async create(checklistItemEntity){
-    return await this.db.models.ChecklistItem.create(checklistItemEntity);
+  async create(checklistItemEntity) {
+    return this.db.models.ChecklistItem.create(checklistItemEntity);
   }
 
-  async bulkCreate(checklistItemEntities){
-    return await this.db.models.ChecklistItem.bulkCreate(checklistItemEntities);
+  async bulkCreate(checklistItemEntities) {
+    return this.db.models.ChecklistItem.bulkCreate(checklistItemEntities);
   }
 
-  async update(checklistItemId, updateChecklistItemEntity){
-    return await this.db.models.ChecklistItem.update(updateChecklistItemEntity, { where: { id: checklistItemId }, returning: true });
-  }
-
-  async delete(checklistItemId){
-    return await this.db.models.ChecklistItem.destroy({ where: { id: checklistItemId } });
-  }
-
-  async findOneByIdAndProject(checklistItemId, projectId){
-    return await this.db.models.ChecklistItem.findOne({
-      where: { id:checklistItemId },
-      include: [{
-        model: this.db.models.Checklist,
-        as: 'checklist',
-        include: [{
-          model: this.db.models.Card,
-          as: 'card',
-          include: [{
-            model: this.db.models.List,
-            as: 'list',
-            where: { projectId }
-          }]
-        }]
-      }]
+  async update(checklistItemId, updateChecklistItemEntity) {
+    return this.db.models.ChecklistItem.update(updateChecklistItemEntity, {
+      where: { id: checklistItemId },
+      returning: true,
     });
   }
 
-  async findOne(checklistItemId){
-    return await this.db.models.ChecklistItem.findOne(checklistItemId);
+  async delete(checklistItemId) {
+    return this.db.models.ChecklistItem.destroy({
+      where: { id: checklistItemId },
+    });
   }
 
-  async findAll(checklistId){
-    return await this.db.models.ChecklistItem.findAll({
+  async findOneByIdAndProject(checklistItemId, projectId) {
+    return this.db.models.ChecklistItem.findOne({
+      where: { id: checklistItemId },
+      include: [
+        {
+          model: this.db.models.Checklist,
+          as: 'checklist',
+          include: [
+            {
+              model: this.db.models.Card,
+              as: 'card',
+              include: [
+                {
+                  model: this.db.models.List,
+                  as: 'list',
+                  where: { projectId },
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    });
+  }
+
+  async findOne(checklistItemId) {
+    return this.db.models.ChecklistItem.findOne(checklistItemId);
+  }
+
+  async findAll(checklistId) {
+    return this.db.models.ChecklistItem.findAll({
       where: { checklistId },
-      include: [{
-        model: this.db.models.ProjectMember,
-        as: 'members',
-        attributes: ['id', 'workspaceMemberId'],
-        through: { attributes: ['id'] },
-        include: [{
-          model: this.db.models.WorkspaceMember,
-          as: 'workspaceMember',
-          attributes: ['id', 'workspaceId'],
-          include: [{
-            model: this.db.models.User,
-            as: 'user',
-            attributes: ['id', 'name'],
-          }]
-        }]
-      }]
+      include: [
+        {
+          model: this.db.models.ProjectMember,
+          as: 'members',
+          attributes: ['id', 'workspaceMemberId'],
+          through: { attributes: ['id'] },
+          include: [
+            {
+              model: this.db.models.WorkspaceMember,
+              as: 'workspaceMember',
+              attributes: ['id', 'workspaceId'],
+              include: [
+                {
+                  model: this.db.models.User,
+                  as: 'user',
+                  attributes: ['id', 'name'],
+                },
+              ],
+            },
+          ],
+        },
+      ],
     });
   }
 }

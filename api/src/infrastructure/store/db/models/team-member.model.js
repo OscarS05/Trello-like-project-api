@@ -10,9 +10,9 @@ const TeamMemberSchema = {
     allowNull: false,
     primaryKey: true,
     defaultValue: DataTypes.UUIDV4,
-    type: DataTypes.UUID
+    type: DataTypes.UUID,
   },
-  workspaceMemberId:{
+  workspaceMemberId: {
     field: 'workspace_member_id',
     allowNull: false,
     type: DataTypes.UUID,
@@ -21,14 +21,14 @@ const TeamMemberSchema = {
       key: 'id',
     },
     onUpdate: 'CASCADE',
-    onDelete: 'CASCADE'
+    onDelete: 'CASCADE',
   },
   role: {
     allowNull: false,
     type: DataTypes.STRING,
     defaultValue: 'member',
   },
-  workspaceId:{
+  workspaceId: {
     field: 'workspace_id',
     allowNull: false,
     type: DataTypes.UUID,
@@ -37,9 +37,9 @@ const TeamMemberSchema = {
       key: 'id',
     },
     onUpdate: 'CASCADE',
-    onDelete: 'CASCADE'
+    onDelete: 'CASCADE',
   },
-  teamId:{
+  teamId: {
     field: 'team_id',
     allowNull: false,
     type: DataTypes.UUID,
@@ -48,21 +48,21 @@ const TeamMemberSchema = {
       key: 'id',
     },
     onUpdate: 'CASCADE',
-    onDelete: 'CASCADE'
+    onDelete: 'CASCADE',
   },
   addedAt: {
     allowNull: false,
     type: DataTypes.DATE,
     field: 'added_at',
-    defaultValue: Sequelize.NOW
-  }
-}
+    defaultValue: Sequelize.NOW,
+  },
+};
 
 class TeamMember extends Model {
   static associate(models) {
     this.belongsTo(models.WorkspaceMember, {
       foreignKey: 'workspaceMemberId',
-      as: 'workspaceMember'
+      as: 'workspaceMember',
     });
   }
 
@@ -71,10 +71,9 @@ class TeamMember extends Model {
       sequelize,
       tableName: TEAM_MEMBER_TABLE,
       modelName: 'TeamMember',
-      timestamps: false
-    }
+      timestamps: false,
+    };
   }
 }
-
 
 module.exports = { TEAM_MEMBER_TABLE, TeamMemberSchema, TeamMember };

@@ -1,12 +1,13 @@
-const CardAttachmentDto = require('../../dtos/card-attachment.dto');
-
 class GetCardAttachmentByIdUseCase {
-  constructor({ cardAttachmentRepository }){
+  constructor({ cardAttachmentRepository }) {
     this.cardAttachmentRepository = cardAttachmentRepository;
   }
 
-  async execute(cardId, cardAttachmentId){
-    const attachment = await this.cardAttachmentRepository.findOne(cardId, cardAttachmentId);
+  async execute(cardId, cardAttachmentId) {
+    const attachment = await this.cardAttachmentRepository.findOne(
+      cardId,
+      cardAttachmentId,
+    );
     return attachment?.id ? attachment.get({ plain: true }) : {};
   }
 }

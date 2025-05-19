@@ -1,4 +1,5 @@
 const express = require('express');
+
 const router = express.Router();
 
 const { validateSession } = require('../middlewares/authentication.handler');
@@ -8,7 +9,6 @@ const {
 } = require('../middlewares/authorization/card.authorization');
 const { cardIdSchema } = require('../schemas/card.schema');
 const {
-  attachLink,
   cardAttachmentSchema,
   updateCardAttachmentSchema,
 } = require('../schemas/card-attachment.schema');
@@ -67,7 +67,7 @@ router.get(
   validateSession,
   validatorHandler(cardIdSchema, 'params'),
   checkProjectMembershipByCard,
-  cardAttachmentControllers.getAllCardAttachments
+  cardAttachmentControllers.getAllCardAttachments,
 );
 
 /**
@@ -161,7 +161,7 @@ router.post(
   validatorHandler(cardIdSchema, 'params'),
   checkProjectMembershipByCard,
   conditionalUploadFileMiddleware,
-  cardAttachmentControllers.saveCardAttachment
+  cardAttachmentControllers.saveCardAttachment,
 );
 
 /**
@@ -243,7 +243,7 @@ router.patch(
   validatorHandler(cardAttachmentSchema, 'params'),
   validatorHandler(updateCardAttachmentSchema, 'body'),
   checkProjectMembershipByCard,
-  cardAttachmentControllers.updateCardAttachment
+  cardAttachmentControllers.updateCardAttachment,
 );
 
 /**
@@ -307,7 +307,7 @@ router.delete(
   validateSession,
   validatorHandler(cardAttachmentSchema, 'params'),
   checkProjectMembershipByCard,
-  cardAttachmentControllers.deleteCardAttachent
+  cardAttachmentControllers.deleteCardAttachent,
 );
 
 /**
@@ -368,7 +368,7 @@ router.get(
   validateSession,
   validatorHandler(cardAttachmentSchema, 'params'),
   checkProjectMembershipByCard,
-  cardAttachmentControllers.downloadCardAttachment
+  cardAttachmentControllers.downloadCardAttachment,
 );
 
 module.exports = router;

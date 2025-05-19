@@ -21,5 +21,4 @@ const updateListSchema = Joi.object({
   newName: name.required(),
 });
 
-
 module.exports = { listNameSchema, listIdSchema, updateListSchema, listSchema };

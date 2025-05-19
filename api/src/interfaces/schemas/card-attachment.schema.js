@@ -19,5 +19,8 @@ const updateCardAttachmentSchema = Joi.object({
   url: url.optional(),
 });
 
-
-module.exports = { attachLink, cardAttachmentSchema, updateCardAttachmentSchema }
+module.exports = {
+  attachLink,
+  cardAttachmentSchema,
+  updateCardAttachmentSchema,
+};

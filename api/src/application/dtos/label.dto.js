@@ -4,15 +4,15 @@ class LabelDto {
     this.name = name;
     this.color = color;
     this.projectId = projectId;
-    this.isVisible = isVisible ? isVisible : CardLabel?.isVisible;
+    this.isVisible = isVisible || CardLabel?.isVisible;
   }
 
-  updateVisibility(updatedLabel){
+  updateVisibility(updatedLabel) {
     return {
       cardId: updatedLabel.cardId,
       labelId: updatedLabel.labelId,
       isVisible: this.isVisible,
-    }
+    };
   }
 }
 

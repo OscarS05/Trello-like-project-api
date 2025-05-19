@@ -10,9 +10,12 @@ class SignUpUseCase {
   }
 
   async execute(userData) {
-    const userAlreadyExists = await this.userRepository.findByEmail(userData.email);
+    const userAlreadyExists = await this.userRepository.findByEmail(
+      userData.email,
+    );
     if (userAlreadyExists) throw boom.conflict('User already exists');
 
+    // eslint-disable-next-line no-param-reassign
     userData.password = await bcrypt.hash(userData.password, 10);
 
     const user = new UserEntity(userData).toPlainObject();

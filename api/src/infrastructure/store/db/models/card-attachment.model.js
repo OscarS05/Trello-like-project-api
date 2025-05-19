@@ -1,4 +1,4 @@
-const { Model, DataTypes, Sequelize } = require('sequelize');
+const { Model, DataTypes } = require('sequelize');
 const { CARD_TABLE } = require('./card.model');
 
 const CARD_ATTACHMENT_TABLE = 'card_attachments';
@@ -8,7 +8,7 @@ const CardAttachmentSchema = {
     allowNull: false,
     primaryKey: true,
     defaultValue: DataTypes.UUIDV4,
-    type: DataTypes.UUID
+    type: DataTypes.UUID,
   },
   filename: {
     allowNull: false,
@@ -16,7 +16,7 @@ const CardAttachmentSchema = {
   },
   url: {
     allowNull: false,
-    type: DataTypes.TEXT
+    type: DataTypes.TEXT,
   },
   type: {
     type: DataTypes.STRING,
@@ -25,7 +25,7 @@ const CardAttachmentSchema = {
   publicId: {
     field: 'public_id',
     allowNull: true,
-    type: DataTypes.STRING
+    type: DataTypes.STRING,
   },
   cardId: {
     field: 'card_id',
@@ -36,15 +36,15 @@ const CardAttachmentSchema = {
       key: 'id',
     },
     onUpdate: 'CASCADE',
-    onDelete: 'CASCADE'
+    onDelete: 'CASCADE',
   },
   createdAt: {
     allowNull: false,
     type: DataTypes.DATE,
     field: 'created_at',
-    defaultValue: DataTypes.NOW
-  }
-}
+    defaultValue: DataTypes.NOW,
+  },
+};
 
 class CardAttachment extends Model {
   static associate(models) {
@@ -56,10 +56,13 @@ class CardAttachment extends Model {
       sequelize,
       tableName: CARD_ATTACHMENT_TABLE,
       modelName: 'CardAttachment',
-      timestamps: false
-    }
+      timestamps: false,
+    };
   }
 }
 
-
-module.exports = { CARD_ATTACHMENT_TABLE, CardAttachmentSchema, CardAttachment }
+module.exports = {
+  CARD_ATTACHMENT_TABLE,
+  CardAttachmentSchema,
+  CardAttachment,
+};

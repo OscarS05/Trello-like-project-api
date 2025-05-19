@@ -1,28 +1,33 @@
+/* eslint-disable class-methods-use-this */
 const boom = require('@hapi/boom');
 
 class IProjectRepository {
-  async create(projectEntity){
+  async create() {
     throw boom.notImplemented('the create() method is not implemented');
   }
 
-  async update(projectEntity){
+  async update() {
     throw boom.notImplemented('the update() method is not implemented');
   }
 
-  async delete(workspaceId){
+  async delete() {
     throw boom.notImplemented('the delete() method is not implemented');
   }
 
-  async findById(workspaceId){
+  async findById() {
     throw boom.notImplemented('the findById() method is not implemented');
   }
 
-  async findAllByWorkspace(){
-    throw boom.notImplemented('the findAllByWorkspace() method is not implemented');
+  async findAllByWorkspace() {
+    throw boom.notImplemented(
+      'the findAllByWorkspace() method is not implemented',
+    );
   }
 
-  async findAllByWorkspaceMember(){
-    throw boom.notImplemented('the findAllByWorkspaceMember() method is not implemented');
+  async findAllByWorkspaceMember() {
+    throw boom.notImplemented(
+      'the findAllByWorkspaceMember() method is not implemented',
+    );
   }
 }
 

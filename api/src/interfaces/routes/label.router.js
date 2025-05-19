@@ -1,13 +1,27 @@
 const express = require('express');
+
 const router = express.Router();
 
 const cardMemberRouter = require('./card-members.router');
 
 const { validateSession } = require('../middlewares/authentication.handler');
 const { validatorHandler } = require('../middlewares/validator.handler');
-const { checkProjectMembershipByUserId } = require('../middlewares/authorization/project.authorization');
-const { checkProjectMembershipByCard } = require('../middlewares/authorization/card.authorization');
-const { createLabelSchema, projectIdSchema, projectLabelScheme, labelIdSchema, cardIdSchema, updateLabelSchema, updateVisibility, labelVisibilitySchema } = require('../schemas/label.schema');
+const {
+  checkProjectMembershipByUserId,
+} = require('../middlewares/authorization/project.authorization');
+const {
+  checkProjectMembershipByCard,
+} = require('../middlewares/authorization/card.authorization');
+const {
+  createLabelSchema,
+  projectIdSchema,
+  projectLabelScheme,
+  labelIdSchema,
+  cardIdSchema,
+  updateLabelSchema,
+  updateVisibility,
+  labelVisibilitySchema,
+} = require('../schemas/label.schema');
 
 const labelControllers = require('../controllers/label.controller');
 
@@ -57,7 +71,8 @@ const labelControllers = require('../controllers/label.controller');
  *       404:
  *         description: Project not found
  */
-router.get('/projects/:projectId/labels',
+router.get(
+  '/projects/:projectId/labels',
   validateSession,
   validatorHandler(projectIdSchema, 'params'),
   checkProjectMembershipByUserId,
@@ -125,12 +140,13 @@ router.get('/projects/:projectId/labels',
  *       404:
  *         description: Project or card not found
  */
-router.post('/projects/:projectId/cards/:cardId/labels',
+router.post(
+  '/projects/:projectId/cards/:cardId/labels',
   validateSession,
   validatorHandler(projectLabelScheme, 'params'),
   validatorHandler(createLabelSchema, 'body'),
   checkProjectMembershipByUserId,
-  labelControllers.createLabel
+  labelControllers.createLabel,
 );
 
 /**
@@ -192,12 +208,13 @@ router.post('/projects/:projectId/cards/:cardId/labels',
  *       404:
  *         description: Label not found
  */
-router.patch('/projects/:projectId/labels/:labelId',
+router.patch(
+  '/projects/:projectId/labels/:labelId',
   validateSession,
   validatorHandler(labelIdSchema, 'params'),
   validatorHandler(updateLabelSchema, 'body'),
   checkProjectMembershipByUserId,
-  labelControllers.updateLabel
+  labelControllers.updateLabel,
 );
 
 /**
@@ -262,12 +279,13 @@ router.patch('/projects/:projectId/labels/:labelId',
  *       404:
  *         description: Label or card not found
  */
-cardMemberRouter.patch('/:cardId/labels/:labelId/visibility',
+cardMemberRouter.patch(
+  '/:cardId/labels/:labelId/visibility',
   validateSession,
   validatorHandler(labelVisibilitySchema, 'params'),
   validatorHandler(updateVisibility, 'body'),
   checkProjectMembershipByCard,
-  labelControllers.updateLabelVisibilityInCard
+  labelControllers.updateLabelVisibilityInCard,
 );
 
 /**
@@ -323,11 +341,12 @@ cardMemberRouter.patch('/:cardId/labels/:labelId/visibility',
  *       404:
  *         description: Label or project not found
  */
-router.delete('/projects/:projectId/labels/:labelId',
+router.delete(
+  '/projects/:projectId/labels/:labelId',
   validateSession,
   validatorHandler(labelIdSchema, 'params'),
   checkProjectMembershipByUserId,
-  labelControllers.deleteLabel
+  labelControllers.deleteLabel,
 );
 
 /**
@@ -375,12 +394,12 @@ router.delete('/projects/:projectId/labels/:labelId',
  *       404:
  *         description: Card not found
  */
-cardMemberRouter.get('/:cardId/labels/',
+cardMemberRouter.get(
+  '/:cardId/labels/',
   validateSession,
   validatorHandler(cardIdSchema, 'params'),
   checkProjectMembershipByCard,
   labelControllers.getLabelsByCard,
 );
-
 
 module.exports = { router, cardMemberRouter };

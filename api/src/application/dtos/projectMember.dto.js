@@ -1,14 +1,22 @@
 class ProjectMemberDto {
-  constructor({ id, workspaceMemberId, workspaceMember, projectId, role, addedAt }) {
+  constructor({
+    id,
+    workspaceMemberId,
+    workspaceMember,
+    projectId,
+    role,
+    addedAt,
+  }) {
     this.id = id;
     this.name = workspaceMember?.user?.name;
     this.workspaceMemberId = workspaceMemberId;
     this.projectId = projectId;
     this.role = role;
-    this.addedAt = addedAt
+    this.addedAt = addedAt;
   }
 
-  static withProject(projectMember){
+  static withProject(projectMember) {
+    // eslint-disable-next-line global-require
     const ProjectDto = require('./project.dto');
 
     return {
@@ -17,10 +25,10 @@ class ProjectMemberDto {
       projectId: projectMember.projectId,
       role: projectMember.role,
       project: new ProjectDto(projectMember.project),
-    }
+    };
   }
 
-  static fromModel(projectMember, teams){
+  static fromModel(projectMember, teams) {
     return {
       id: projectMember.id,
       name: projectMember.workspaceMember.user.name,
@@ -28,11 +36,15 @@ class ProjectMemberDto {
       projectId: projectMember.projectId,
       role: projectMember.role,
       teams: teams
-        .filter(team => team.teamMembers.some(tm => tm.workspaceMemberId === projectMember.workspaceMemberId))
-        .map(team => ({
+        .filter((team) =>
+          team.teamMembers.some(
+            (tm) => tm.workspaceMemberId === projectMember.workspaceMemberId,
+          ),
+        )
+        .map((team) => ({
           id: team.id,
           name: team.name,
-        }))
+        })),
     };
   }
 }

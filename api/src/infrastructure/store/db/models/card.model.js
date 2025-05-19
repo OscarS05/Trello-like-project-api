@@ -1,7 +1,5 @@
 const { Model, DataTypes, Sequelize } = require('sequelize');
 const { LIST_TABLE } = require('./list.model');
-const { allow } = require('joi');
-
 
 const CARD_TABLE = 'cards';
 
@@ -10,7 +8,7 @@ const CardSchema = {
     allowNull: false,
     primaryKey: true,
     defaultValue: DataTypes.UUIDV4,
-    type: DataTypes.UUID
+    type: DataTypes.UUID,
   },
   name: {
     allowNull: false,
@@ -18,7 +16,7 @@ const CardSchema = {
   },
   description: {
     allowNull: true,
-    type: DataTypes.STRING
+    type: DataTypes.STRING,
   },
   listId: {
     field: 'list_id',
@@ -29,15 +27,15 @@ const CardSchema = {
       key: 'id',
     },
     onUpdate: 'CASCADE',
-    onDelete: 'CASCADE'
+    onDelete: 'CASCADE',
   },
   createdAt: {
     allowNull: false,
     type: DataTypes.DATE,
     field: 'created_at',
-    defaultValue: Sequelize.NOW
-  }
-}
+    defaultValue: Sequelize.NOW,
+  },
+};
 
 class Card extends Model {
   static associate(models) {
@@ -53,12 +51,12 @@ class Card extends Model {
       through: models.CardLabel,
       foreignKey: 'cardId',
       otherKey: 'labelId',
-      as: 'labels'
+      as: 'labels',
     });
 
     this.hasMany(models.CardAttachment, {
       foreignKey: 'cardId',
-      as: 'attachments'
+      as: 'attachments',
     });
 
     this.hasMany(models.Checklist, {
@@ -72,10 +70,9 @@ class Card extends Model {
       sequelize,
       tableName: CARD_TABLE,
       modelName: 'Card',
-      timestamps: false
-    }
+      timestamps: false,
+    };
   }
 }
 
-
-module.exports = { CARD_TABLE, CardSchema, Card }
+module.exports = { CARD_TABLE, CardSchema, Card };

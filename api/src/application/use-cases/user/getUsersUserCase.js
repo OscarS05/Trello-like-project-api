@@ -7,9 +7,8 @@ class GetUsersUseCase {
 
   async execute(query) {
     const users = await this.userRepository.findAll(query);
-    return users.map(user => new UserDto(user));
+    return users.map((user) => new UserDto(user));
   }
-
 }
 
 module.exports = GetUsersUseCase;

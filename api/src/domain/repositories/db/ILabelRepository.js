@@ -1,40 +1,51 @@
+/* eslint-disable class-methods-use-this */
 const boom = require('@hapi/boom');
 
 class ILabelRepository {
-  async create(labelEntity){
-    throw boom.notImplemented('the create(labelEntity) method is not implemented');
+  async create() {
+    throw boom.notImplemented(
+      'the create(labelEntity) method is not implemented',
+    );
   }
 
-  async create(labelEntity){
-    throw boom.notImplemented('the create(labelEntity) method is not implemented');
+  async createVisibilityOfLabel() {
+    throw boom.notImplemented(
+      'the createVisibilityOfLabel(cardId, labelId method is not implemented',
+    );
   }
 
-  async createVisibilityOfLabel(cardId, labelId){
-    throw boom.notImplemented('the createVisibilityOfLabel(cardId, labelId method is not implemented');
+  async updateVisibility() {
+    throw boom.notImplemented(
+      'the updateVisibility(ids, updateVisibilityLabelEntity) method is not implemented',
+    );
   }
 
-  async updateVisibility(ids, updateVisibilityLabelEntity){
-    throw boom.notImplemented('the updateVisibility(ids, updateVisibilityLabelEntity) method is not implemented');
+  async findLabelsByCard() {
+    throw boom.notImplemented(
+      'the findLabelsByCard(cardId) method is not implemented',
+    );
   }
 
-  async findLabelsByCard(cardId){
-    throw boom.notImplemented('the findLabelsByCard(cardId) method is not implemented');
+  async update() {
+    throw boom.notImplemented(
+      'the update(labelUpdateEntity) method is not implemented',
+    );
   }
 
-  async update(labelUpdateEntity){
-    throw boom.notImplemented('the update(labelUpdateEntity) method is not implemented');
-  }
-
-  async delete(labelId){
+  async delete() {
     throw boom.notImplemented('the delete(labelId) method is not implemented');
   }
 
-  async findOneById(labelId){
-    throw boom.notImplemented('the findById(labelId) method is not implemented');
+  async findOneById() {
+    throw boom.notImplemented(
+      'the findById(labelId) method is not implemented',
+    );
   }
 
-  async findAll(projectId){
-    throw boom.notImplemented('the findAll(projectId) method is not implemented');
+  async findAll() {
+    throw boom.notImplemented(
+      'the findAll(projectId) method is not implemented',
+    );
   }
 }
 

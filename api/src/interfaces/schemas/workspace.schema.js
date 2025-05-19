@@ -1,15 +1,18 @@
 const Joi = require('joi');
 
 const id = Joi.string().uuid();
-const name = Joi.string().min(3).max(50)
+const name = Joi.string()
+  .min(3)
+  .max(50)
   .pattern(/^[a-zA-Z0-9-_ ]+$/)
   .messages({
-    'string.pattern.base': 'The workspace name contains illegal characters'
+    'string.pattern.base': 'The workspace name contains illegal characters',
   });
-  const description = Joi.string().max(255)
+const description = Joi.string()
+  .max(255)
   .pattern(/^[a-zA-Z0-9-_ ]+$/)
   .messages({
-    'string.pattern.base': 'The description contains illegal characters'
+    'string.pattern.base': 'The description contains illegal characters',
   });
 
 const createWorkspace = Joi.object({
@@ -18,13 +21,12 @@ const createWorkspace = Joi.object({
 });
 
 const updateWorkspace = Joi.object({
-  name: name,
+  name,
   description: description.allow(null, ''),
 });
 
-const workspaceIdSchema =  Joi.object({
-  workspaceId: id.required()
+const workspaceIdSchema = Joi.object({
+  workspaceId: id.required(),
 });
 
-
-module.exports = { createWorkspace, updateWorkspace, workspaceIdSchema }
+module.exports = { createWorkspace, updateWorkspace, workspaceIdSchema };

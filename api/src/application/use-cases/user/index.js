@@ -8,7 +8,9 @@ const UpdateUserUseCase = require('./updateUserUseCase');
 const ChangePasswordUseCase = require('./changePasswordUseCase');
 const DeleteAccountUseCase = require('./DeleteAccountUseCase');
 
-const getUserByEmailToLoginUseCase = new GetUserByEmailToLoginUseCase(dbRepositories);
+const getUserByEmailToLoginUseCase = new GetUserByEmailToLoginUseCase(
+  dbRepositories,
+);
 const getUserByEmailUseCase = new GetUserByEmailUseCase(dbRepositories);
 const getUserUseCase = new GetUserUseCase(dbRepositories);
 const signUpUseCase = new SignUpUseCase(dbRepositories);

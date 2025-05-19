@@ -1,10 +1,14 @@
 class GetProjectMemberByUserUseCase {
-  constructor({ projectMemberRepository }){
+  constructor({ projectMemberRepository }) {
     this.projectMemberRepository = projectMemberRepository;
   }
 
-  async execute(userId, workspaceId, projectId){
-    return await this.projectMemberRepository.findByUser(userId, workspaceId, projectId);
+  async execute(userId, workspaceId, projectId) {
+    return this.projectMemberRepository.findByUser(
+      userId,
+      workspaceId,
+      projectId,
+    );
   }
 }
 

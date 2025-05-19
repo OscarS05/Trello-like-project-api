@@ -1,7 +1,6 @@
 const { Model, DataTypes, Sequelize } = require('sequelize');
 const { CHECKLIST_TABLE } = require('./checklist.model');
 
-
 const CHECKLIST_ITEM_TABLE = 'checklist_items';
 
 const ChecklistItemSchema = {
@@ -9,7 +8,7 @@ const ChecklistItemSchema = {
     allowNull: false,
     primaryKey: true,
     defaultValue: DataTypes.UUIDV4,
-    type: DataTypes.UUID
+    type: DataTypes.UUID,
   },
   name: {
     allowNull: false,
@@ -24,7 +23,7 @@ const ChecklistItemSchema = {
       key: 'id',
     },
     onUpdate: 'CASCADE',
-    onDelete: 'CASCADE'
+    onDelete: 'CASCADE',
   },
   isChecked: {
     field: 'is_checked',
@@ -41,17 +40,16 @@ const ChecklistItemSchema = {
     allowNull: false,
     type: DataTypes.DATE,
     field: 'created_at',
-    defaultValue: Sequelize.NOW
-  }
-}
+    defaultValue: Sequelize.NOW,
+  },
+};
 
 class ChecklistItem extends Model {
   static associate(models) {
     this.belongsTo(models.Checklist, {
       foreignKey: 'checklistId',
-      as: 'checklist'
+      as: 'checklist',
     });
-
 
     this.belongsToMany(models.ProjectMember, {
       through: models.ChecklistItemMember,
@@ -65,9 +63,9 @@ class ChecklistItem extends Model {
       sequelize,
       tableName: CHECKLIST_ITEM_TABLE,
       modelName: 'ChecklistItem',
-      timestamps: false
-    }
+      timestamps: false,
+    };
   }
 }
 
-module.exports = { CHECKLIST_ITEM_TABLE, ChecklistItemSchema, ChecklistItem }
+module.exports = { CHECKLIST_ITEM_TABLE, ChecklistItemSchema, ChecklistItem };

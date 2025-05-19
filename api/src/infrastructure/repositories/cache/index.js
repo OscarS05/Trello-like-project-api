@@ -4,7 +4,7 @@ const AuthRedisRepository = require('./auth.redisRepository');
 
 const config = {
   redisClient,
-}
+};
 
 const AuthRedis = new AuthRedisRepository(config.redisClient);
 

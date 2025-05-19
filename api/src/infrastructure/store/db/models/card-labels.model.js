@@ -41,22 +41,22 @@ class CardLabel extends Model {
   static associate(models) {
     this.belongsTo(models.Card, {
       foreignKey: 'cardId',
-      as: 'card'
+      as: 'card',
     });
 
     this.belongsTo(models.Label, {
       foreignKey: 'labelId',
-      as: 'label'
+      as: 'label',
     });
   }
 
-  static config(sequelize){
+  static config(sequelize) {
     return {
       sequelize,
       tableName: CARD_LABELS_TABLE,
       modelName: 'CardLabel',
-      timestamps: false
-    }
+      timestamps: false,
+    };
   }
 }
 

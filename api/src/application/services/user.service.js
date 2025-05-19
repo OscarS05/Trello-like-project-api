@@ -1,7 +1,10 @@
-const boom = require('@hapi/boom');
-
 class UserService {
-  constructor({ getUserByEmailUseCase, getUserUseCase, signUpUseCase, deleteAccountUseCase }) {
+  constructor({
+    getUserByEmailUseCase,
+    getUserUseCase,
+    signUpUseCase,
+    deleteAccountUseCase,
+  }) {
     this.getUserByEmailUseCase = getUserByEmailUseCase;
     this.getUserUseCase = getUserUseCase;
     this.signUpUseCase = signUpUseCase;
@@ -14,15 +17,15 @@ class UserService {
   }
 
   async getUsers(query = {}) {
-    return await this.getUserUseCase.execute(query);
+    return this.getUserUseCase.execute(query);
   }
 
   async signUp(userData) {
-    return await this.signUpUseCase.execute(userData);
+    return this.signUpUseCase.execute(userData);
   }
 
   async deleteAccount(userId) {
-    return await this.deleteAccountUseCase.execute(userId);
+    return this.deleteAccountUseCase.execute(userId);
   }
 }
 

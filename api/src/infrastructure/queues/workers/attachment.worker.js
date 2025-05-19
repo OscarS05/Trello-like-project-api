@@ -17,6 +17,15 @@ const {
   loadCardAttachmentName,
 } = require('../../../../utils/constants');
 
+function validationImageSize(buffer) {
+  const dimensions = imageSize(buffer);
+  const { width, height } = dimensions;
+
+  if (width < 800 || width < height) {
+    throw new Error('The image must be horizontal and at least 800px wide.');
+  }
+}
+
 const attachmentWorker = new Worker(
   attachmentQueueName,
 
@@ -29,7 +38,7 @@ const attachmentWorker = new Worker(
     }
 
     switch (job.name) {
-      case nameQueueLoadBackgroundImage:
+      case nameQueueLoadBackgroundImage: {
         validationImageSize(realBuffer);
 
         const result = await cloudinaryStorageRepository.uploadStream({
@@ -39,14 +48,14 @@ const attachmentWorker = new Worker(
 
         if (!result.secure_url) {
           throw new Error(
-            'Something went wrong loading the file. File url is null'
+            'Something went wrong loading the file. File url is null',
           );
         }
 
         const projectUpdatedInDb =
           await projectService.updateBackgroundProjectInDb(
             job.projectId,
-            result.secure_url
+            result.secure_url,
           );
 
         if (!projectUpdatedInDb?.id) {
@@ -54,19 +63,20 @@ const attachmentWorker = new Worker(
         }
 
         break;
-      case loadCardAttachmentName:
+      }
+      case loadCardAttachmentName: {
         validationImageSize(realBuffer);
 
         const resultAttachment = await cloudinaryStorageRepository.uploadStream(
           {
             buffer: realBuffer,
             folder,
-          }
+          },
         );
 
         if (!resultAttachment.secure_url || !resultAttachment.public_id) {
           throw new Error(
-            'Something went wrong loading the file. File url or public_id is null'
+            'Something went wrong loading the file. File url or public_id is null',
           );
         }
 
@@ -84,20 +94,22 @@ const attachmentWorker = new Worker(
         }
 
         break;
+      }
       default:
         throw new Error(`Unknown job name: ${job.name}`);
     }
   },
-  { connection: redis }
+  { connection: redis },
 );
 
-const isProd = config.isProd;
+const { isProd } = config;
 
 attachmentWorker.on('completed', (job) => {
   const message = `Job ${job.id} completed successfully`;
   if (isProd) {
     logger.info(message);
   } else {
+    // eslint-disable-next-line no-console
     console.log(message);
   }
 });
@@ -107,18 +119,10 @@ attachmentWorker.on('failed', (job, err) => {
   if (isProd) {
     logger.error(message);
   } else {
+    // eslint-disable-next-line no-console
     console.error(message);
   }
 });
-
-function validationImageSize(buffer) {
-  const dimensions = imageSize(buffer);
-  const { width, height } = dimensions;
-
-  if (width < 800 || width < height) {
-    throw boom.badData('The image must be horizontal and at least 800px wide.');
-  }
-}
 
 module.exports = {
   attachmentWorker,

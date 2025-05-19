@@ -1,19 +1,27 @@
-const Boom = require("@hapi/boom");
+const Boom = require('@hapi/boom');
 const EntityUpdateCardAttachment = require('../../../domain/entities/EntityUpdateCardAttachment');
 const CardAttachmentDto = require('../../dtos/card-attachment.dto');
 
 class UpdateCardAttachmentUseCase {
-  constructor({ cardAttachmentRepository }){
+  constructor({ cardAttachmentRepository }) {
     this.cardAttachmentRepository = cardAttachmentRepository;
   }
 
-  async execute(cardAttachment, cardAttachmentData){
-    if(cardAttachment.type !== 'external-link') delete cardAttachmentData.url || null;
+  async execute(cardAttachment, cardAttachmentData) {
+    if (cardAttachment.type !== 'external-link')
+      // eslint-disable-next-line no-unused-expressions, no-param-reassign
+      delete cardAttachmentData.url || null;
 
-    const entityUpdateCardAttachment = new EntityUpdateCardAttachment(cardAttachmentData);
+    const entityUpdateCardAttachment = new EntityUpdateCardAttachment(
+      cardAttachmentData,
+    );
 
-    const [ updatedRows, [ updatedAttachment ] ] = await this.cardAttachmentRepository.update(cardAttachment.id, entityUpdateCardAttachment);
-    if(!updatedAttachment?.id) throw Boom.badRequest('Something went wrong updating the attachment');
+    const [[updatedAttachment]] = await this.cardAttachmentRepository.update(
+      cardAttachment.id,
+      entityUpdateCardAttachment,
+    );
+    if (!updatedAttachment?.id)
+      throw Boom.badRequest('Something went wrong updating the attachment');
 
     return new CardAttachmentDto(updatedAttachment);
   }

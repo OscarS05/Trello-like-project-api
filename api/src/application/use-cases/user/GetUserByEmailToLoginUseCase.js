@@ -1,10 +1,10 @@
 class GetUserByEmailToLoginUseCase {
-  constructor({ userRepository }){
+  constructor({ userRepository }) {
     this.userRepository = userRepository;
   }
 
-  async execute(email){
-    return await this.userRepository.findByEmailToLogin(email);
+  async execute(email) {
+    return this.userRepository.findByEmailToLogin(email);
   }
 }
 

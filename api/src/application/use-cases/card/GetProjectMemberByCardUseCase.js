@@ -1,4 +1,6 @@
-const ProjectMemberDto = require("../../dtos/projectMember.dto");
+const boom = require('@hapi/boom');
+
+const ProjectMemberDto = require('../../dtos/projectMember.dto');
 
 class GetProjectMemberByCardUseCase {
   constructor({ cardRepository, projectMemberRepository }) {
@@ -8,8 +10,9 @@ class GetProjectMemberByCardUseCase {
 
   async execute(userId, cardId) {
     const card = await this.cardRepository.findOneByIdWithList(cardId);
-    if(!card?.id) throw boom.notFound('Card not found');
-    const projectMember = await this.projectMemberRepository.getProjectMemberByCard(userId, card);
+    if (!card?.id) throw boom.notFound('Card not found');
+    const projectMember =
+      await this.projectMemberRepository.getProjectMemberByCard(userId, card);
     return new ProjectMemberDto(projectMember);
   }
 }

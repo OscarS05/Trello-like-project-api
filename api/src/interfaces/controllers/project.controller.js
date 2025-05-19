@@ -8,12 +8,11 @@ const getAllprojectInformation = async (req, res, next) => {
   try {
     const { projectId } = req.params;
 
-    const projectData = await projectService.getAllProjectInformation(
-      projectId
-    );
+    const projectData =
+      await projectService.getAllProjectInformation(projectId);
     if (!projectData.id)
       throw boom.notFound(
-        'The operation to get all project information returns a null value'
+        'The operation to get all project information returns a null value',
       );
 
     res.status(200).json({ projectData });
@@ -39,7 +38,7 @@ const getProjectsByWorkspace = async (req, res, next) => {
 const createProject = async (req, res, next) => {
   try {
     const { name, visibility, backgroundUrl } = req.body;
-    const workspaceMember = req.workspaceMember;
+    const { workspaceMember } = req;
     const projectData = {
       name,
       visibility,
@@ -61,12 +60,12 @@ const createProject = async (req, res, next) => {
 
 const updateProject = async (req, res, next) => {
   try {
-    const { workspaceId, projectId } = req.params;
+    const { projectId } = req.params;
     const data = req.body;
 
     const updatedProject = await projectService.update(projectId, data);
     if (!updatedProject?.id)
-      return boom.badRequest('Failed to create workspace');
+      throw boom.badRequest('Failed to create workspace');
 
     res
       .status(200)
@@ -87,21 +86,19 @@ const updateBackgroundProject = async (req, res, next) => {
     const addedJob = await projectService.loadBackgroundImage(
       projectId,
       req.file,
-      PROJECT_BACKGROUND_FOLDER
+      PROJECT_BACKGROUND_FOLDER,
     );
 
     if (!addedJob.id || !addedJob.name) {
       throw boom.badRequest(
-        'Something went wrong loading the file in the queue'
+        'Something went wrong loading the file in the queue',
       );
     }
 
-    res
-      .status(200)
-      .json({
-        message: 'Bakground image queued successfully',
-        job: addedJob.id,
-      });
+    res.status(200).json({
+      message: 'Bakground image queued successfully',
+      job: addedJob.id,
+    });
   } catch (error) {
     next(error);
   }
@@ -112,7 +109,7 @@ const deleteProject = async (req, res, next) => {
     const { projectId } = req.params;
 
     const response = await projectService.delete(projectId);
-    if (response === 0) return boom.badRequest('Failed to delete project');
+    if (response === 0) throw boom.badRequest('Failed to delete project');
 
     res.status(200).json({ message: 'Project deleted successfully' });
   } catch (error) {

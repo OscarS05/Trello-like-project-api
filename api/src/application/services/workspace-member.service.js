@@ -1,7 +1,8 @@
 const boom = require('@hapi/boom');
 
 class WorkspaceMemberService {
-  constructor({
+  constructor(
+    {
       getWorkspaceMemberByIdUseCase,
       getWorkspaceMemberByUserIdUseCase,
       addMemberToWorkspaceUseCase,
@@ -9,91 +10,122 @@ class WorkspaceMemberService {
       getWorkspaceMembersUseCase,
       updateRoleUseCase,
       transferOwnershipUseCase,
-      removeWorkspaceMemberUseCase
+      removeWorkspaceMemberUseCase,
     },
     { getProjectsByWorkspaceMemberUseCase },
-    { getTeamsByWorkspaceMemberUseCase }
+    { getTeamsByWorkspaceMemberUseCase },
   ) {
     this.getWorkspaceMemberByIdUseCase = getWorkspaceMemberByIdUseCase;
     this.getWorkspaceMemberByUserIdUseCase = getWorkspaceMemberByUserIdUseCase;
-    this.getWorkspaceMembersWithDataUseCase = getWorkspaceMembersWithDataUseCase;
+    this.getWorkspaceMembersWithDataUseCase =
+      getWorkspaceMembersWithDataUseCase;
     this.getWorkspaceMembersUseCase = getWorkspaceMembersUseCase;
     this.addMemberToWorkspaceUseCase = addMemberToWorkspaceUseCase;
     this.updateRoleUseCase = updateRoleUseCase;
     this.transferOwnershipUseCase = transferOwnershipUseCase;
     this.removeWorkspaceMemberUseCase = removeWorkspaceMemberUseCase;
 
-    //project use cases
-    this.getProjectsByWorkspaceMemberUseCase = getProjectsByWorkspaceMemberUseCase;
+    // project use cases
+    this.getProjectsByWorkspaceMemberUseCase =
+      getProjectsByWorkspaceMemberUseCase;
 
     // team use cases
     this.getTeamsByWorkspaceMemberUseCase = getTeamsByWorkspaceMemberUseCase;
   }
 
-  async addMemberToWorkspace(workspaceId, userIdToAdd){
-    const workspaceMember = await this.getWorkspaceMemberByUserId(workspaceId, userIdToAdd);
-    if(workspaceMember) throw boom.conflict('User is already a member of this workspace');
+  async addMemberToWorkspace(workspaceId, userIdToAdd) {
+    const workspaceMember = await this.getWorkspaceMemberByUserId(
+      workspaceId,
+      userIdToAdd,
+    );
+    if (workspaceMember)
+      throw boom.conflict('User is already a member of this workspace');
 
-    const newMember = await this.addMemberToWorkspaceUseCase.execute(workspaceId, userIdToAdd);
-    if(!newMember.id) throw boom.notFound('Something went wrong while adding the user to the workspace');
+    const newMember = await this.addMemberToWorkspaceUseCase.execute(
+      workspaceId,
+      userIdToAdd,
+    );
+    if (!newMember.id)
+      throw boom.notFound(
+        'Something went wrong while adding the user to the workspace',
+      );
 
-    const workspaceMemberToReturn = await this.getWorkspaceMemberById(newMember.id);
+    const workspaceMemberToReturn = await this.getWorkspaceMemberById(
+      newMember.id,
+    );
     return workspaceMemberToReturn?.id ? workspaceMemberToReturn : {};
   }
 
-  async updateRole(workspaceId, WorkspaceMemberIdToUpdate, newRole){
-    const workspaceMember = await this.getWorkspaceMemberById(WorkspaceMemberIdToUpdate);
-    if(!workspaceMember?.id) throw boom.notFound('The workspace member to update the role does not exist');
+  async updateRole(workspaceId, WorkspaceMemberIdToUpdate, newRole) {
+    const workspaceMember = await this.getWorkspaceMemberById(
+      WorkspaceMemberIdToUpdate,
+    );
+    if (!workspaceMember?.id)
+      throw boom.notFound(
+        'The workspace member to update the role does not exist',
+      );
 
-    const updatedMember = await this.updateRoleUseCase.execute(workspaceId, workspaceMember, newRole);
-    if(!updatedMember?.id) throw boom.notFound('Something went wrong while updating the role of the user');
+    const updatedMember = await this.updateRoleUseCase.execute(
+      workspaceId,
+      workspaceMember,
+      newRole,
+    );
+    if (!updatedMember?.id)
+      throw boom.notFound(
+        'Something went wrong while updating the role of the user',
+      );
 
-    const updatedWorkspaceMember = await this.getWorkspaceMemberById(updatedMember.id);
+    const updatedWorkspaceMember = await this.getWorkspaceMemberById(
+      updatedMember.id,
+    );
     return updatedWorkspaceMember?.id ? updatedWorkspaceMember : {};
   }
 
-  async removeMember(requesterAsWorkspaceMember, workspaceMemberId){
-    const [ workspaceMemberToBeRemoved, workspaceMembers ] = await Promise.all([
+  async removeMember(requesterAsWorkspaceMember, workspaceMemberId) {
+    const [workspaceMemberToBeRemoved, workspaceMembers] = await Promise.all([
       this.getWorkspaceMemberById(workspaceMemberId),
       this.findAll(requesterAsWorkspaceMember.workspaceId),
     ]);
 
-    if(!workspaceMemberToBeRemoved?.id) throw boom.notFound('The workspace member to be removed was not found');
-    const projectsWithMembers = await this.getProjectsByWorkspaceMemberUseCase.execute(
-      workspaceMemberToBeRemoved.workspaceId,
-      workspaceMemberToBeRemoved.id
-    );
+    if (!workspaceMemberToBeRemoved?.id)
+      throw boom.notFound('The workspace member to be removed was not found');
+    const projectsWithMembers =
+      await this.getProjectsByWorkspaceMemberUseCase.execute(
+        workspaceMemberToBeRemoved.workspaceId,
+        workspaceMemberToBeRemoved.id,
+      );
 
-    const teamsOfMemberToBeRemoved = await this.getTeamsByWorkspaceMemberUseCase.execute(workspaceMemberId);
-    return await this.removeWorkspaceMemberUseCase.execute(
+    const teamsOfMemberToBeRemoved =
+      await this.getTeamsByWorkspaceMemberUseCase.execute(workspaceMemberId);
+    return this.removeWorkspaceMemberUseCase.execute(
       requesterAsWorkspaceMember,
       workspaceMemberToBeRemoved,
       workspaceMembers,
       projectsWithMembers,
-      teamsOfMemberToBeRemoved
+      teamsOfMemberToBeRemoved,
     );
   }
 
-  async transferOwnership(currentOwner, newOwnerId){
+  async transferOwnership(currentOwner, newOwnerId) {
     const newOwner = await this.getWorkspaceMemberById(newOwnerId);
-    if(!newOwner?.id) throw boom.notFound('New owner does not exist');
-    return await this.transferOwnershipUseCase.execute(currentOwner, newOwner);
+    if (!newOwner?.id) throw boom.notFound('New owner does not exist');
+    return this.transferOwnershipUseCase.execute(currentOwner, newOwner);
   }
 
-  async findAllWithData(workspaceId){
-    return await this.getWorkspaceMembersWithDataUseCase.execute(workspaceId);
+  async findAllWithData(workspaceId) {
+    return this.getWorkspaceMembersWithDataUseCase.execute(workspaceId);
   }
 
-  async findAll(workspaceId){
-    return await this.getWorkspaceMembersUseCase.execute(workspaceId);
+  async findAll(workspaceId) {
+    return this.getWorkspaceMembersUseCase.execute(workspaceId);
   }
 
-  async getWorkspaceMemberByUserId(workspaceId, userId){
-    return await this.getWorkspaceMemberByUserIdUseCase.execute(workspaceId, userId);
+  async getWorkspaceMemberByUserId(workspaceId, userId) {
+    return this.getWorkspaceMemberByUserIdUseCase.execute(workspaceId, userId);
   }
 
-  async getWorkspaceMemberById(WorkspaceMemberId){
-    return await this.getWorkspaceMemberByIdUseCase.execute(WorkspaceMemberId);
+  async getWorkspaceMemberById(WorkspaceMemberId) {
+    return this.getWorkspaceMemberByIdUseCase.execute(WorkspaceMemberId);
   }
 }
 

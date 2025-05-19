@@ -1,5 +1,3 @@
-const boom = require('@hapi/boom');
-
 const { cardService } = require('../../application/services/index');
 
 const getAllCardInformation = async (req, res, next) => {
@@ -12,7 +10,7 @@ const getAllCardInformation = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-}
+};
 
 const getCards = async (req, res, next) => {
   try {
@@ -24,7 +22,7 @@ const getCards = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-}
+};
 
 const createCard = async (req, res, next) => {
   try {
@@ -37,32 +35,37 @@ const createCard = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-}
+};
 
 const updateCard = async (req, res, next) => {
   try {
-    const { listId, cardId } = req.params;
+    const { cardId } = req.params;
     const { newName, description } = req.body;
 
-    const updatedCard = await cardService.update(cardId, { newName, description });
+    const updatedCard = await cardService.update(cardId, {
+      newName,
+      description,
+    });
 
     res.status(200).json({ updatedCard });
   } catch (error) {
     next(error);
   }
-}
+};
 
 const deleteCard = async (req, res, next) => {
   try {
-    const { listId, cardId } = req.params;
+    const { cardId } = req.params;
 
     const deletedCard = await cardService.delete(cardId);
 
-    res.status(200).json({ message: 'The card was successfully deleted', deletedCard});
+    res
+      .status(200)
+      .json({ message: 'The card was successfully deleted', deletedCard });
   } catch (error) {
     next(error);
   }
-}
+};
 
 module.exports = {
   getAllCardInformation,
@@ -70,4 +73,4 @@ module.exports = {
   createCard,
   updateCard,
   deleteCard,
-}
+};

@@ -25,8 +25,12 @@ const clearCookie = (res, name) => {
     httpOnly: true,
     secure: isProduction,
     sameSite: isProduction ? 'None' : 'lax',
-    expires: new Date(0)
+    expires: new Date(0),
   });
-}
+};
 
-module.exports = { setCookieRefreshToken, setTokenCookieToVerifyEmail, clearCookie };
+module.exports = {
+  setCookieRefreshToken,
+  setTokenCookieToVerifyEmail,
+  clearCookie,
+};

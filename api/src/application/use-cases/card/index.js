@@ -7,16 +7,21 @@ const CheckProjectMemberByCardAndListUseCase = require('./CheckProjectMemberByCa
 const CreateCardUseCase = require('./CreateCardUseCase');
 const UpdateCardUseCase = require('./UpdateCardUseCase');
 const DeleteCardUseCase = require('./DeleteCardUseCase');
-const GetProjectMemberByCardUseCase = require('../card/GetProjectMemberByCardUseCase');
+const GetProjectMemberByCardUseCase = require('./GetProjectMemberByCardUseCase');
 
-const getAllCardInformationUseCase = new GetAllCardInformationUseCase(dbRepositories);
+const getAllCardInformationUseCase = new GetAllCardInformationUseCase(
+  dbRepositories,
+);
 const getAllUseCase = new GetAllUseCase(dbRepositories);
 const getCardUseCase = new GetCardUseCase(dbRepositories);
-const checkProjectMemberByCardAndListUseCase = new CheckProjectMemberByCardAndListUseCase(dbRepositories);
+const checkProjectMemberByCardAndListUseCase =
+  new CheckProjectMemberByCardAndListUseCase(dbRepositories);
 const createCardUseCase = new CreateCardUseCase(dbRepositories);
 const updateCardUseCase = new UpdateCardUseCase(dbRepositories);
 const deleteCardUseCase = new DeleteCardUseCase(dbRepositories);
-const getProjectMemberByCardUseCase = new GetProjectMemberByCardUseCase(dbRepositories);
+const getProjectMemberByCardUseCase = new GetProjectMemberByCardUseCase(
+  dbRepositories,
+);
 
 module.exports = {
   getAllCardInformationUseCase,

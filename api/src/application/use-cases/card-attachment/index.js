@@ -10,22 +10,22 @@ const DeleteCardAttachmentUseCase = require('./DeleteCardAttachmentUseCase');
 const AddJobForAttachmentsUseCase = require('./AddJobForAttachmentsUseCase');
 
 const getAllCardAttachmentsUseCase = new GetAllCardAttachmentsUseCase(
-  dbRepositories
+  dbRepositories,
 );
 const getCardAttachmentByIdUseCase = new GetCardAttachmentByIdUseCase(
-  dbRepositories
+  dbRepositories,
 );
 const saveCardAttachmentUseCase = new SaveCardAttachmentUseCase(dbRepositories);
 const updateCardAttachmentUseCase = new UpdateCardAttachmentUseCase(
-  dbRepositories
+  dbRepositories,
 );
 const deleteCardAttachmentUseCase = new DeleteCardAttachmentUseCase(
   dbRepositories,
-  fileStorageRepositories
+  fileStorageRepositories,
 );
 const addJobForAttachmentsUseCase = new AddJobForAttachmentsUseCase(
   dbRepositories,
-  queues
+  queues,
 );
 
 module.exports = {

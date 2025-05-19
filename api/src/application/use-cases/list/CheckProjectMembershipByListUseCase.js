@@ -1,4 +1,3 @@
-const boom = require('@hapi/boom');
 const ListDto = require('../../dtos/list.dto');
 
 class CheckProjectMembershipByListUseCase {
@@ -7,7 +6,10 @@ class CheckProjectMembershipByListUseCase {
   }
 
   async execute(userId, listId) {
-    const list = await this.listRepository.checkProjectMembershipByList(userId, listId);
+    const list = await this.listRepository.checkProjectMembershipByList(
+      userId,
+      listId,
+    );
     return new ListDto(list);
   }
 }

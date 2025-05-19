@@ -2,14 +2,20 @@ const UpdateVisibilityLabelEntity = require('../../../domain/entities/UpdateVisi
 const LabelDto = require('../../dtos/label.dto');
 
 class UpdateVisibilityUseCase {
-  constructor({ labelRepository }){
+  constructor({ labelRepository }) {
     this.labelRepository = labelRepository;
   }
 
-  async execute(isVisible, { cardId, labelId }){
-    const updateVisibilityLabelEntity = new UpdateVisibilityLabelEntity({ isVisible });
+  async execute(isVisible, { cardId, labelId }) {
+    const updateVisibilityLabelEntity = new UpdateVisibilityLabelEntity({
+      isVisible,
+    });
 
-    const [ updatedRows, [ updatedLabel ] ] = await this.labelRepository.updateVisibility({ cardId, labelId }, updateVisibilityLabelEntity);
+    const [updatedRows, [updatedLabel]] =
+      await this.labelRepository.updateVisibility(
+        { cardId, labelId },
+        updateVisibilityLabelEntity,
+      );
     return updatedLabel?.labelId
       ? new LabelDto(updatedLabel).updateVisibility(updatedLabel)
       : updatedRows;

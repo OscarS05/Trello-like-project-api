@@ -1,11 +1,11 @@
-const TeamDto = require("../../dtos/team.dto");
+const TeamDto = require('../../dtos/team.dto');
 
 class GetTeamUseCase {
-  constructor({ teamRepository }){
+  constructor({ teamRepository }) {
     this.teamRepository = teamRepository;
   }
 
-  async execute(teamId, workspaceId){
+  async execute(teamId, workspaceId) {
     const team = await this.teamRepository.findById(teamId, workspaceId);
     return new TeamDto(team);
   }

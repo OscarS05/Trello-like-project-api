@@ -2,7 +2,6 @@ const { Model, DataTypes, Sequelize } = require('sequelize');
 const { WORKSPACE_MEMBER_TABLE } = require('./workspace-member.model');
 const { WORKSPACE_TABLE } = require('./workspace.model');
 
-
 const TEAM_TABLE = 'teams';
 
 const TeamSchema = {
@@ -10,13 +9,13 @@ const TeamSchema = {
     allowNull: false,
     primaryKey: true,
     defaultValue: DataTypes.UUIDV4,
-    type: DataTypes.UUID
+    type: DataTypes.UUID,
   },
   name: {
     allowNull: false,
     type: DataTypes.STRING,
   },
-  workspaceMemberId:{
+  workspaceMemberId: {
     field: 'workspace_member_id',
     allowNull: false,
     type: DataTypes.UUID,
@@ -25,9 +24,9 @@ const TeamSchema = {
       key: 'id',
     },
     onUpdate: 'CASCADE',
-    onDelete: 'RESTRICT'
+    onDelete: 'RESTRICT',
   },
-  workspaceId:{
+  workspaceId: {
     field: 'workspace_id',
     allowNull: false,
     type: DataTypes.UUID,
@@ -36,15 +35,15 @@ const TeamSchema = {
       key: 'id',
     },
     onUpdate: 'CASCADE',
-    onDelete: 'CASCADE'
+    onDelete: 'CASCADE',
   },
   createdAt: {
     allowNull: false,
     type: DataTypes.DATE,
     field: 'created_at',
-    defaultValue: Sequelize.NOW
-  }
-}
+    defaultValue: Sequelize.NOW,
+  },
+};
 
 class Team extends Model {
   static associate(models) {
@@ -56,18 +55,18 @@ class Team extends Model {
 
     this.hasMany(models.TeamMember, {
       foreignKey: 'teamId',
-      as: 'teamMembers'
+      as: 'teamMembers',
     });
 
     this.belongsTo(models.Workspace, {
       foreignKey: 'workspaceId',
-      as: 'workspace'
+      as: 'workspace',
     });
 
     this.belongsToMany(models.Project, {
       through: models.ProjectTeam,
       foreignKey: 'teamId',
-      as: 'projects'
+      as: 'projects',
     });
   }
 
@@ -76,10 +75,9 @@ class Team extends Model {
       sequelize,
       tableName: TEAM_TABLE,
       modelName: 'Team',
-      timestamps: false
-    }
+      timestamps: false,
+    };
   }
 }
-
 
 module.exports = { TEAM_TABLE, TeamSchema, Team };

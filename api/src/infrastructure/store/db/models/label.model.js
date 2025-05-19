@@ -1,7 +1,6 @@
 const { Model, DataTypes, Sequelize } = require('sequelize');
 const { PROJECT_TABLE } = require('./project.model');
 
-
 const LABEL_TABLE = 'labels';
 
 const LabelSchema = {
@@ -9,7 +8,7 @@ const LabelSchema = {
     allowNull: false,
     primaryKey: true,
     defaultValue: DataTypes.UUIDV4,
-    type: DataTypes.UUID
+    type: DataTypes.UUID,
   },
   name: {
     allowNull: false,
@@ -30,7 +29,7 @@ const LabelSchema = {
     onUpdate: 'CASCADE',
     onDelete: 'CASCADE',
   },
-}
+};
 
 class Label extends Model {
   static associate(models) {
@@ -49,10 +48,9 @@ class Label extends Model {
       sequelize,
       tableName: LABEL_TABLE,
       modelName: 'Label',
-      timestamps: false
-    }
+      timestamps: false,
+    };
   }
 }
 
-
-module.exports = { LABEL_TABLE, LabelSchema, Label }
+module.exports = { LABEL_TABLE, LabelSchema, Label };

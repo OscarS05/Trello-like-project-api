@@ -1,9 +1,9 @@
 class CountWorkspacesByUserUseCase {
-  constructor({ workspaceRepository }){
+  constructor({ workspaceRepository }) {
     this.workspaceRepository = workspaceRepository;
   }
 
-  async execute(userId){
+  async execute(userId) {
     const count = await this.workspaceRepository.countWorkspacesByUser(userId);
     return count;
   }

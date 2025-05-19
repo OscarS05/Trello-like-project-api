@@ -9,12 +9,18 @@ const VerifyEmailByTokenUseCase = require('./verifyEmailByTokenUseCase');
 
 const loginUseCase = new LoginUseCase(dbRepositories, queueServices);
 const generateTokensUsecase = new GenerateTokensUseCase(redisServices);
-const sendEmailConfirmationUseCase = new SendEmailConfirmationUseCase(redisServices, queueServices)
-const verifyEmailByTokenUseCase = new VerifyEmailByTokenUseCase(redisServices, dbRepositories)
+const sendEmailConfirmationUseCase = new SendEmailConfirmationUseCase(
+  redisServices,
+  queueServices,
+);
+const verifyEmailByTokenUseCase = new VerifyEmailByTokenUseCase(
+  redisServices,
+  dbRepositories,
+);
 
 module.exports = {
   loginUseCase,
   generateTokensUsecase,
   sendEmailConfirmationUseCase,
   verifyEmailByTokenUseCase,
-}
+};

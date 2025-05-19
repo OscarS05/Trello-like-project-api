@@ -27,17 +27,17 @@ const emailWorker = new Worker(
         throw new Error(`Unknown job name: ${job.name}`);
     }
   },
-  { connection: redis }
+  { connection: redis },
 );
 
-const isProd = config.isProd;
+const { isProd } = config;
 
 emailWorker.on('completed', (job) => {
   const message = `Job ${job.id} completed successfully`;
   if (isProd) {
     logger.info(message);
   } else {
-    console.log(message);
+    console.info(message);
   }
 });
 

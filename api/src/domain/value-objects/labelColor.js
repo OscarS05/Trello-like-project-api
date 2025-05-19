@@ -29,9 +29,11 @@ class LabelColor {
   constructor(color) {
     if (!Object.keys(LabelColor.VALID_COLORS).includes(color)) {
       throw boom.badRequest(
-        `Invalid label color: ${color}. Allowed colors are: ${Object.entries(LabelColor.VALID_COLORS)
+        `Invalid label color: ${color}. Allowed colors are: ${Object.entries(
+          LabelColor.VALID_COLORS,
+        )
           .map(([hex, name]) => `${hex} (${name})`)
-          .join(', ')}`
+          .join(', ')}`,
       );
     }
     this.#value = color;
@@ -43,7 +45,9 @@ class LabelColor {
 
   equals(otherLabelColor) {
     if (!(otherLabelColor instanceof LabelColor)) {
-      throw boom.badRequest('Cannot compare LabelColor with a non-LabelColor object');
+      throw boom.badRequest(
+        'Cannot compare LabelColor with a non-LabelColor object',
+      );
     }
     return this.#value === otherLabelColor.value;
   }

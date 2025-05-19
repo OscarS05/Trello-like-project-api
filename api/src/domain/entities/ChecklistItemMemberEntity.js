@@ -1,7 +1,7 @@
 const { v4: uuidv4 } = require('uuid');
 
 class ChecklistItemMemberEntity {
-  constructor({ projectMemberId, checklistItemId}) {
+  constructor({ projectMemberId, checklistItemId }) {
     this.id = uuidv4();
     this.projectMemberId = projectMemberId;
     this.checklistItemId = checklistItemId;

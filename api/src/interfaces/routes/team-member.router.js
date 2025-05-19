@@ -3,9 +3,19 @@ const router = require('./team.router');
 const { validatorHandler } = require('../middlewares/validator.handler');
 const { validateSession } = require('../middlewares/authentication.handler');
 const { teamIdScheme } = require('../schemas/team.schema');
-const { roleChangeSchema, teamMemberSchemas, memberToBeAdded } = require('../schemas/team-member.schema');
-const { checkTeamMembership, checkTeamOwnership, checkAdminRole } = require('../middlewares/authorization/team.authorization');
-const { checkWorkspaceMembership } = require('../middlewares/authorization/workspace.authorization');
+const {
+  roleChangeSchema,
+  teamMemberSchemas,
+  memberToBeAdded,
+} = require('../schemas/team-member.schema');
+const {
+  checkTeamMembership,
+  checkTeamOwnership,
+  checkAdminRole,
+} = require('../middlewares/authorization/team.authorization');
+const {
+  checkWorkspaceMembership,
+} = require('../middlewares/authorization/workspace.authorization');
 
 const teamMemberControllers = require('../controllers/team-member.controller');
 
@@ -68,11 +78,12 @@ const teamMemberControllers = require('../controllers/team-member.controller');
  *       500:
  *         description: Internal Server Error
  */
-router.get('/:workspaceId/teams/:teamId/members/:teamMemberId/projects',
+router.get(
+  '/:workspaceId/teams/:teamId/members/:teamMemberId/projects',
   validateSession,
   validatorHandler(teamMemberSchemas, 'params'),
   checkTeamMembership,
-  teamMemberControllers.getTeamProjectsByTeamMember
+  teamMemberControllers.getTeamProjectsByTeamMember,
 );
 
 /**
@@ -126,11 +137,12 @@ router.get('/:workspaceId/teams/:teamId/members/:teamMemberId/projects',
  *       500:
  *         description: Internal Server Error
  */
-router.get('/:workspaceId/teams/:teamId/members',
+router.get(
+  '/:workspaceId/teams/:teamId/members',
   validateSession,
   validatorHandler(teamIdScheme, 'params'),
   checkWorkspaceMembership,
-  teamMemberControllers.getTeamMembers
+  teamMemberControllers.getTeamMembers,
 );
 
 /**
@@ -200,7 +212,8 @@ router.get('/:workspaceId/teams/:teamId/members',
  *       500:
  *         description: Internal Server Error
  */
-router.post('/:workspaceId/teams/:teamId/members',
+router.post(
+  '/:workspaceId/teams/:teamId/members',
   validateSession,
   validatorHandler(teamIdScheme, 'params'),
   validatorHandler(memberToBeAdded, 'body'),
@@ -280,7 +293,8 @@ router.post('/:workspaceId/teams/:teamId/members',
  *       500:
  *         description: Internal Server Error
  */
-router.patch('/:workspaceId/teams/:teamId/members/:teamMemberId',
+router.patch(
+  '/:workspaceId/teams/:teamId/members/:teamMemberId',
   validateSession,
   validatorHandler(teamMemberSchemas, 'params'),
   validatorHandler(roleChangeSchema, 'body'),
@@ -350,7 +364,8 @@ router.patch('/:workspaceId/teams/:teamId/members/:teamMemberId',
  *       500:
  *         description: Internal Server Error
  */
-router.patch('/:workspaceId/teams/:teamId/members/:teamMemberId/ownership',
+router.patch(
+  '/:workspaceId/teams/:teamId/members/:teamMemberId/ownership',
   validateSession,
   validatorHandler(teamMemberSchemas, 'params'),
   checkTeamOwnership,
@@ -419,7 +434,8 @@ router.patch('/:workspaceId/teams/:teamId/members/:teamMemberId/ownership',
  *       500:
  *         description: Internal Server Error
  */
-router.delete('/:workspaceId/teams/:teamId/members/:teamMemberId',
+router.delete(
+  '/:workspaceId/teams/:teamId/members/:teamMemberId',
   validateSession,
   validatorHandler(teamMemberSchemas, 'params'),
   checkTeamMembership,

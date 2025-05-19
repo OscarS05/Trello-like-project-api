@@ -10,13 +10,12 @@ class SaveCardAttachmentUseCase {
   async execute(cardAttachmentData) {
     const cardAttachmentEntity = new CardAttachmentEntity(cardAttachmentData);
 
-    const newCardAttachment = await this.cardAttachmentRepository.create(
-      cardAttachmentEntity
-    );
+    const newCardAttachment =
+      await this.cardAttachmentRepository.create(cardAttachmentEntity);
 
     if (!newCardAttachment?.id) {
       throw Boom.badRequest(
-        'Something went wrong creating the attachment in DB'
+        'Something went wrong creating the attachment in DB',
       );
     }
 

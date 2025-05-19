@@ -6,7 +6,7 @@ const { config } = require('../../config/config');
 
 const logDirectory = path.join(__dirname, 'logs/');
 
-if(!fs.existsSync(logDirectory)){
+if (!fs.existsSync(logDirectory)) {
   fs.mkdirSync(logDirectory, { recursive: true });
 }
 
@@ -28,9 +28,12 @@ const logger = winston.createLogger({
   ),
   transports: [
     fileRotateTransport,
-    new winston.transports.File({ filename: `${logDirectory}/performance.log`, level: 'info'}),
-    !config.isProd && new winston.transports.Console({ level: 'info' })
-  ].filter(Boolean)
+    new winston.transports.File({
+      filename: `${logDirectory}/performance.log`,
+      level: 'info',
+    }),
+    !config.isProd && new winston.transports.Console({ level: 'info' }),
+  ].filter(Boolean),
 });
 
 module.exports = logger;

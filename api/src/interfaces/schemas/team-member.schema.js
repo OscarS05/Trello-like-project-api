@@ -17,7 +17,6 @@ const teamMemberSchemas = Joi.object({
   teamMemberId: id.required(),
 });
 
-
 module.exports = {
   memberToBeAdded,
   teamMemberSchemas,

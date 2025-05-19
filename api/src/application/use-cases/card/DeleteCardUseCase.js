@@ -2,8 +2,9 @@ class DeleteCardUseCase {
   constructor({ cardRepository }) {
     this.cardRepository = cardRepository;
   }
+
   async execute(cardId) {
-    return await this.cardRepository.delete(cardId);
+    return this.cardRepository.delete(cardId);
   }
 }
 

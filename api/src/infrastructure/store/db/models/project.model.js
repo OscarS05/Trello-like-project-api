@@ -2,7 +2,6 @@ const { Model, DataTypes, Sequelize } = require('sequelize');
 const { WORKSPACE_TABLE } = require('./workspace.model');
 const { WORKSPACE_MEMBER_TABLE } = require('./workspace-member.model');
 
-
 const PROJECT_TABLE = 'projects';
 
 const ProjectSchema = {
@@ -10,7 +9,7 @@ const ProjectSchema = {
     allowNull: false,
     primaryKey: true,
     defaultValue: DataTypes.UUIDV4,
-    type: DataTypes.UUID
+    type: DataTypes.UUID,
   },
   name: {
     allowNull: false,
@@ -24,9 +23,9 @@ const ProjectSchema = {
     field: 'background_url',
     allowNull: false,
     type: DataTypes.TEXT,
-    defaultValue: null
+    defaultValue: null,
   },
-  workspaceId:{
+  workspaceId: {
     field: 'workspace_id',
     allowNull: false,
     type: DataTypes.UUID,
@@ -35,9 +34,9 @@ const ProjectSchema = {
       key: 'id',
     },
     onUpdate: 'CASCADE',
-    onDelete: 'CASCADE'
+    onDelete: 'CASCADE',
   },
-  workspaceMemberId:{
+  workspaceMemberId: {
     field: 'workspace_member_id',
     allowNull: false,
     type: DataTypes.UUID,
@@ -46,15 +45,15 @@ const ProjectSchema = {
       key: 'id',
     },
     onUpdate: 'CASCADE',
-    onDelete: 'SET NULL'
+    onDelete: 'SET NULL',
   },
   createdAt: {
     allowNull: false,
     type: DataTypes.DATE,
     field: 'created_at',
-    defaultValue: Sequelize.NOW
-  }
-}
+    defaultValue: Sequelize.NOW,
+  },
+};
 
 class Project extends Model {
   static associate(models) {
@@ -63,12 +62,12 @@ class Project extends Model {
     this.belongsToMany(models.WorkspaceMember, {
       through: models.ProjectMember,
       foreignKey: 'projectId',
-      as: 'members'
+      as: 'members',
     });
 
     this.hasMany(models.ProjectMember, {
       foreignKey: 'projectId',
-      as: 'projectMembers'
+      as: 'projectMembers',
     });
 
     this.hasMany(models.List, {
@@ -79,7 +78,7 @@ class Project extends Model {
     this.belongsToMany(models.Team, {
       through: models.ProjectTeam,
       foreignKey: 'projectId',
-      as: 'teams'
+      as: 'teams',
     });
 
     this.hasMany(models.Label, {
@@ -93,10 +92,9 @@ class Project extends Model {
       sequelize,
       tableName: PROJECT_TABLE,
       modelName: 'Project',
-      timestamps: false
-    }
+      timestamps: false,
+    };
   }
 }
-
 
 module.exports = { PROJECT_TABLE, ProjectSchema, Project };

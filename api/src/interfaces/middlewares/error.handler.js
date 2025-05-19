@@ -39,18 +39,20 @@ function multerErrorHandler(err, req, res, next) {
   }
 }
 
+// eslint-disable-next-line no-unused-vars
 function errorHandler(err, req, res, next) {
-  const isProd = config.isProd;
+  const { isProd } = config;
   if (isProd) {
     logger.warn('error 500:', err);
   } else {
-    console.log('err:', err);
+    console.error('err:', err);
   }
   res.status(500).json({
     message: err,
     stack: err.message,
   });
 }
+
 module.exports = {
   logErrors,
   errorHandler,

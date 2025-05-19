@@ -7,7 +7,9 @@ class CardEntity {
   constructor({ name, description, listId, createdAt }) {
     this.id = uuidv4();
     this.name = new CardName(name).value;
-    this.description = description ? new CardDescription(description).value : null;
+    this.description = description
+      ? new CardDescription(description).value
+      : null;
     this.listId = listId;
     this.createdAt = createdAt || new Date().toISOString();
   }

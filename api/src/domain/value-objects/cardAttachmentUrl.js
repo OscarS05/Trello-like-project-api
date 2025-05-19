@@ -2,21 +2,23 @@ const Boom = require('@hapi/boom');
 
 class CardAttachmentUrl {
   constructor(url) {
-    this._validate(url);
-    this._url = url;
+    this.validate(url);
+    this.url = url;
   }
 
-  _validate(url) {
+  // eslint-disable-next-line class-methods-use-this
+  validate(url) {
     const urlPattern = /^(https?:\/\/)[^\s$.?#].[^\s]*$/;
-    if (!url || typeof url !== 'string' || !urlPattern.test(url)) throw Boom.badData('Invalid card attachment URL');
+    if (!url || typeof url !== 'string' || !urlPattern.test(url))
+      throw Boom.badData('Invalid card attachment URL');
   }
 
   get value() {
-    return this._url;
+    return this.url;
   }
 
   toString() {
-    return this._url;
+    return this.url;
   }
 }
 

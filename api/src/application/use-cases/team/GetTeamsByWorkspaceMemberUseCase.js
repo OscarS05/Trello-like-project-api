@@ -1,13 +1,14 @@
 const TeamDto = require('../../dtos/team.dto');
 
 class GetTeamsByWorkspaceMemberUseCase {
-  constructor({ teamRepository }){
+  constructor({ teamRepository }) {
     this.teamRepository = teamRepository;
   }
 
-  async execute(workspaceMemberId){
-    const teams = await this.teamRepository.findAllByWorkspaceMember(workspaceMemberId);
-    return teams.map(team => TeamDto.withMembers(team));
+  async execute(workspaceMemberId) {
+    const teams =
+      await this.teamRepository.findAllByWorkspaceMember(workspaceMemberId);
+    return teams.map((team) => TeamDto.withMembers(team));
   }
 }
 

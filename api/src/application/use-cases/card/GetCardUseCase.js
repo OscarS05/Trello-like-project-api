@@ -1,4 +1,3 @@
-const boom = require('@hapi/boom');
 const CardDto = require('../../dtos/card.dto');
 
 class GetCardUseCase {

@@ -1,11 +1,20 @@
 const router = require('./workspace.router');
 
 const { workspaceIdSchema } = require('../schemas/workspace.schema');
-const { createWorkspaceMember, updateWorkspaceMember, updateWorkspaceMemberIdParams, removeMember } = require('../schemas/workspace-member.schema');
+const {
+  createWorkspaceMember,
+  updateWorkspaceMember,
+  updateWorkspaceMemberIdParams,
+  removeMember,
+} = require('../schemas/workspace-member.schema');
 
 const { validatorHandler } = require('../middlewares/validator.handler');
 const { validateSession } = require('../middlewares/authentication.handler');
-const { checkAdminRole, checkOwnership, checkWorkspaceMembership } = require('../middlewares/authorization/workspace.authorization');
+const {
+  checkAdminRole,
+  checkOwnership,
+  checkWorkspaceMembership,
+} = require('../middlewares/authorization/workspace.authorization');
 
 const workspaceMemberController = require('../controllers/workspace-member.controller');
 
@@ -58,11 +67,12 @@ const workspaceMemberController = require('../controllers/workspace-member.contr
  *       404:
  *         description: Workspace not found.
  */
-router.get('/:workspaceId/members',
+router.get(
+  '/:workspaceId/members',
   validateSession,
   validatorHandler(workspaceIdSchema, 'params'),
   checkWorkspaceMembership,
-  workspaceMemberController.getworkspaceMembers
+  workspaceMemberController.getworkspaceMembers,
 );
 
 /**
@@ -119,12 +129,13 @@ router.get('/:workspaceId/members',
  *       404:
  *         description: Workspace or user not found.
  */
-router.post('/:workspaceId/members',
+router.post(
+  '/:workspaceId/members',
   validateSession,
   validatorHandler(workspaceIdSchema, 'params'),
   validatorHandler(createWorkspaceMember, 'body'),
   checkAdminRole,
-  workspaceMemberController.addMemberToWorkspace
+  workspaceMemberController.addMemberToWorkspace,
 );
 
 /**
@@ -183,12 +194,13 @@ router.post('/:workspaceId/members',
  *       404:
  *         description: Workspace or member not found
  */
-router.patch('/:workspaceId/members/:workspaceMemberId',
+router.patch(
+  '/:workspaceId/members/:workspaceMemberId',
   validateSession,
   validatorHandler(updateWorkspaceMemberIdParams, 'params'),
   validatorHandler(updateWorkspaceMember, 'body'),
   checkAdminRole,
-  workspaceMemberController.changeRoleToMember
+  workspaceMemberController.changeRoleToMember,
 );
 
 /**
@@ -245,12 +257,13 @@ router.patch('/:workspaceId/members/:workspaceMemberId',
  *       409:
  *         description: The member to be updated as workspace owner already has the owner role
  */
-router.patch('/:workspaceId/members/:workspaceMemberId/ownership',
+router.patch(
+  '/:workspaceId/members/:workspaceMemberId/ownership',
   validateSession,
   validatorHandler(updateWorkspaceMemberIdParams, 'params'),
   checkOwnership,
-  workspaceMemberController.transferOwnership
-)
+  workspaceMemberController.transferOwnership,
+);
 
 /**
  * @swagger
@@ -309,11 +322,12 @@ router.patch('/:workspaceId/members/:workspaceMemberId/ownership',
  *       409:
  *         description: Conflict - cannot delete member because related projects or teams would be left without members
  */
-router.delete('/:workspaceId/members/:workspaceMemberId',
+router.delete(
+  '/:workspaceId/members/:workspaceMemberId',
   validateSession,
   validatorHandler(removeMember, 'params'),
   checkWorkspaceMembership,
-  workspaceMemberController.removeMember
+  workspaceMemberController.removeMember,
 );
 
 module.exports = router;

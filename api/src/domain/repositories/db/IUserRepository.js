@@ -1,27 +1,28 @@
+/* eslint-disable class-methods-use-this */
 const boom = require('@hapi/boom');
 
 class IUserRepository {
-  async create(userEntity){
+  async create() {
     throw boom.notImplemented('the create() method is not implemented');
   }
 
-  async findById(userEntity){
+  async findById() {
     throw boom.notImplemented('the findById() method is not implemented');
   }
 
-  async findByEmail(userEntity){
+  async findByEmail() {
     throw boom.notImplemented('the findByEmail() method is not implemented');
   }
 
-  async update(userEntity){
+  async update() {
     throw boom.notImplemented('the update() method is not implemented');
   }
 
-  async delete(userEntity){
+  async delete() {
     throw boom.notImplemented('the delete() method is not implemented');
   }
 
-  async findAll(){
+  async findAll() {
     throw boom.notImplemented('the findAll() method is not implemented');
   }
 }

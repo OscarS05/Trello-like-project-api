@@ -1,10 +1,20 @@
 const express = require('express');
+
 const router = express.Router();
 
-const { createWorkspace, updateWorkspace, workspaceIdSchema } = require('../schemas/workspace.schema');
+const {
+  createWorkspace,
+  updateWorkspace,
+  workspaceIdSchema,
+} = require('../schemas/workspace.schema');
 const { validatorHandler } = require('../middlewares/validator.handler');
 const { validateSession } = require('../middlewares/authentication.handler');
-const { authorizationToCreateWorkspace, checkAdminRole, checkOwnership, checkWorkspaceMembership } = require('../middlewares/authorization/workspace.authorization');
+const {
+  authorizationToCreateWorkspace,
+  checkAdminRole,
+  checkOwnership,
+  checkWorkspaceMembership,
+} = require('../middlewares/authorization/workspace.authorization');
 
 const workspaceControllers = require('../controllers/workspace.controller');
 
@@ -54,12 +64,13 @@ const workspaceControllers = require('../controllers/workspace.controller');
  *       404:
  *         description: Workspace not found.
  */
-router.get('/:workspaceId',
+router.get(
+  '/:workspaceId',
   validateSession,
   validatorHandler(workspaceIdSchema, 'params'),
   checkWorkspaceMembership,
   workspaceControllers.getWorkspaceAndItsProjects,
-)
+);
 
 /**
  * @swagger
@@ -98,10 +109,7 @@ router.get('/:workspaceId',
  *       404:
  *         description: User not found.
  */
-router.get('/',
-  validateSession,
-  workspaceControllers.getWorkspacesAndProjects,
-)
+router.get('/', validateSession, workspaceControllers.getWorkspacesAndProjects);
 
 /**
  * @swagger
@@ -145,12 +153,13 @@ router.get('/',
  *       404:
  *         description: User not found.
  */
-router.post('/',
+router.post(
+  '/',
   validateSession,
   authorizationToCreateWorkspace,
   validatorHandler(createWorkspace, 'body'),
   workspaceControllers.createWorkspace,
-)
+);
 
 /**
  * @swagger
@@ -199,7 +208,8 @@ router.post('/',
  *       404:
  *         description: Workspace not found.
  */
-router.patch('/:workspaceId',
+router.patch(
+  '/:workspaceId',
   validateSession,
   validatorHandler(workspaceIdSchema, 'params'),
   validatorHandler(updateWorkspace, 'body'),
@@ -246,7 +256,8 @@ router.patch('/:workspaceId',
  *       404:
  *         description: Workspace not found.
  */
-router.delete('/:workspaceId',
+router.delete(
+  '/:workspaceId',
   validateSession,
   validatorHandler(workspaceIdSchema, 'params'),
   checkOwnership,

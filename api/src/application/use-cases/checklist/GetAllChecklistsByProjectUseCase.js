@@ -1,20 +1,21 @@
 const CardDto = require('../../dtos/card.dto');
 
 class GetAllChecklistsByProjectUseCase {
-  constructor({ checklistRepository }){
+  constructor({ checklistRepository }) {
     this.checklistRepository = checklistRepository;
   }
 
-  async execute(projectId){
-    const project = await this.checklistRepository.findChecklistsByProject(projectId);
+  async execute(projectId) {
+    const project =
+      await this.checklistRepository.findChecklistsByProject(projectId);
     if (!project || !project.lists) return [];
 
-    return project.lists.flatMap(list => {
+    return project.lists.flatMap((list) => {
       if (!list.cards) return [];
 
       return list.cards
-        .filter(card => card.checklists && card.checklists.length > 0)
-        .map(card => CardDto.withChecklists(card));
+        .filter((card) => card.checklists && card.checklists.length > 0)
+        .map((card) => CardDto.withChecklists(card));
     });
   }
 }

@@ -1,7 +1,6 @@
 const { Model, DataTypes, Sequelize } = require('sequelize');
 const { USER_TABLE } = require('./user.model');
 
-
 const WORKSPACE_TABLE = 'workspaces';
 
 const WorkspaceSchema = {
@@ -9,7 +8,7 @@ const WorkspaceSchema = {
     allowNull: false,
     primaryKey: true,
     defaultValue: DataTypes.UUIDV4,
-    type: DataTypes.UUID
+    type: DataTypes.UUID,
   },
   name: {
     allowNull: false,
@@ -17,9 +16,9 @@ const WorkspaceSchema = {
   },
   description: {
     allowNull: true,
-    type: Sequelize.DataTypes.STRING
+    type: Sequelize.DataTypes.STRING,
   },
-  userId:{
+  userId: {
     field: 'user_id',
     allowNull: false,
     type: DataTypes.UUID,
@@ -28,22 +27,22 @@ const WorkspaceSchema = {
       key: 'id',
     },
     onUpdate: 'CASCADE',
-    onDelete: 'SET NULL'
+    onDelete: 'SET NULL',
   },
   createdAt: {
     allowNull: false,
     type: DataTypes.DATE,
     field: 'created_at',
-    defaultValue: Sequelize.NOW
-  }
-}
+    defaultValue: Sequelize.NOW,
+  },
+};
 
 class Workspace extends Model {
   static associate(models) {
     this.belongsToMany(models.User, {
       through: models.WorkspaceMember,
       foreignKey: 'workspaceId',
-      as: 'members'
+      as: 'members',
     });
 
     this.hasMany(models.WorkspaceMember, {
@@ -67,10 +66,9 @@ class Workspace extends Model {
       sequelize,
       tableName: WORKSPACE_TABLE,
       modelName: 'Workspace',
-      timestamps: false
-    }
+      timestamps: false,
+    };
   }
 }
 
-
-module.exports = { WORKSPACE_TABLE, WorkspaceSchema, Workspace }
+module.exports = { WORKSPACE_TABLE, WorkspaceSchema, Workspace };

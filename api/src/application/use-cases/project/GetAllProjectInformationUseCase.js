@@ -1,4 +1,4 @@
-const ProjectDto = require("../../dtos/project.dto");
+const ProjectDto = require('../../dtos/project.dto');
 
 class GetAllProjectInformationUseCase {
   constructor({ projectRepository }) {
@@ -6,7 +6,8 @@ class GetAllProjectInformationUseCase {
   }
 
   async execute(projectId) {
-    const project = await this.projectRepository.getAllProjectInformation(projectId);
+    const project =
+      await this.projectRepository.getAllProjectInformation(projectId);
     return new ProjectDto(project);
   }
 }

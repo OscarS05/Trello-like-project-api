@@ -1,4 +1,4 @@
-const CardDto = require("../../dtos/card.dto");
+const CardDto = require('../../dtos/card.dto');
 
 class GetAllCardInformationUseCase {
   constructor({ cardRepository }) {
@@ -6,7 +6,10 @@ class GetAllCardInformationUseCase {
   }
 
   async execute(listId, cardId) {
-    const card = await this.cardRepository.findAllCardInformation(listId, cardId);
+    const card = await this.cardRepository.findAllCardInformation(
+      listId,
+      cardId,
+    );
     return CardDto.withAllCardInformation(card);
   }
 }

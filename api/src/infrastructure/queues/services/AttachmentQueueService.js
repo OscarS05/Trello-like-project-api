@@ -15,7 +15,7 @@ class AttachmentQueueService {
       throw boom.badRequest('Missing required job data');
     }
 
-    return await this.queue.add(
+    return this.queue.add(
       nameQueueLoadBackgroundImage,
       {
         buffer,
@@ -28,7 +28,7 @@ class AttachmentQueueService {
           type: 'exponential',
           delay: 5000,
         },
-      }
+      },
     );
   }
 
@@ -37,7 +37,7 @@ class AttachmentQueueService {
       throw boom.badRequest('Missing required job data');
     }
 
-    return await this.queue.add(loadCardAttachmentName, {
+    return this.queue.add(loadCardAttachmentName, {
       buffer,
       folder,
       cardId,

@@ -3,8 +3,8 @@ class DeleteLabelUseCase {
     this.labelRepository = labelRepository;
   }
 
-  async execute(labelId){
-    return await this.labelRepository.delete(labelId);
+  async execute(labelId) {
+    return this.labelRepository.delete(labelId);
   }
 }
 

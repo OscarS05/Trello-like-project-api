@@ -1,5 +1,3 @@
-'use strict';
-
 const { USER_TABLE } = require('../models/user.model');
 const { WORKSPACE_TABLE } = require('../models/workspace.model');
 const { WORKSPACE_MEMBER_TABLE } = require('../models/workspace-member.model');
@@ -16,17 +14,18 @@ const { LABEL_TABLE } = require('../models/label.model');
 const { CARD_LABELS_TABLE } = require('../models/card-labels.model');
 const { CHECKLIST_TABLE } = require('../models/checklist.model');
 const { CHECKLIST_ITEM_TABLE } = require('../models/checklist-item.model');
-const { CHECKLIST_ITEM_MEMBER_TABLE } = require('../models/checklist-item-members.model');
-
+const {
+  CHECKLIST_ITEM_MEMBER_TABLE,
+} = require('../models/checklist-item-members.model');
 
 module.exports = {
-  async up (queryInterface, Sequelize) {
+  async up(queryInterface, Sequelize) {
     await queryInterface.createTable(USER_TABLE, {
       id: {
         allowNull: false,
         primaryKey: true,
         defaultValue: Sequelize.UUIDV4,
-        type: Sequelize.UUID
+        type: Sequelize.UUID,
       },
       name: {
         allowNull: false,
@@ -39,17 +38,17 @@ module.exports = {
       },
       password: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       recoveryToken: {
         field: 'recovery_token',
         allowNull: true,
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       role: {
         allowNull: false,
         type: Sequelize.STRING,
-        defaultValue: 'basic'
+        defaultValue: 'basic',
       },
       isVerified: {
         allowNull: false,
@@ -61,15 +60,15 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE,
         field: 'created_at',
-        defaultValue: Sequelize.NOW
-      }
+        defaultValue: Sequelize.NOW,
+      },
     });
     await queryInterface.createTable(WORKSPACE_TABLE, {
       id: {
         allowNull: false,
         primaryKey: true,
         defaultValue: Sequelize.UUIDV4,
-        type: Sequelize.UUID
+        type: Sequelize.UUID,
       },
       name: {
         allowNull: false,
@@ -77,9 +76,9 @@ module.exports = {
       },
       description: {
         allowNull: true,
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
-      userId:{
+      userId: {
         field: 'user_id',
         allowNull: false,
         type: Sequelize.UUID,
@@ -88,23 +87,23 @@ module.exports = {
           key: 'id',
         },
         onUpdate: 'CASCADE',
-        onDelete: 'SET NULL'
+        onDelete: 'SET NULL',
       },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
         field: 'created_at',
-        defaultValue: Sequelize.NOW
-      }
+        defaultValue: Sequelize.NOW,
+      },
     });
     await queryInterface.createTable(WORKSPACE_MEMBER_TABLE, {
       id: {
         allowNull: false,
         primaryKey: true,
         defaultValue: Sequelize.UUIDV4,
-        type: Sequelize.UUID
+        type: Sequelize.UUID,
       },
-      userId:{
+      userId: {
         field: 'user_id',
         allowNull: false,
         type: Sequelize.UUID,
@@ -113,14 +112,14 @@ module.exports = {
           key: 'id',
         },
         onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
+        onDelete: 'CASCADE',
       },
       role: {
         allowNull: false,
         type: Sequelize.STRING,
         defaultValue: 'member',
       },
-      workspaceId:{
+      workspaceId: {
         field: 'workspace_id',
         allowNull: false,
         type: Sequelize.UUID,
@@ -129,21 +128,21 @@ module.exports = {
           key: 'id',
         },
         onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
+        onDelete: 'CASCADE',
       },
       addedAt: {
         allowNull: false,
         type: Sequelize.DATE,
         field: 'added_at',
-        defaultValue: Sequelize.NOW
-      }
+        defaultValue: Sequelize.NOW,
+      },
     });
     await queryInterface.createTable(PROJECT_TABLE, {
       id: {
         allowNull: false,
         primaryKey: true,
         defaultValue: Sequelize.UUIDV4,
-        type: Sequelize.UUID
+        type: Sequelize.UUID,
       },
       name: {
         allowNull: false,
@@ -157,9 +156,9 @@ module.exports = {
         field: 'background_url',
         allowNull: false,
         type: Sequelize.TEXT,
-        defaultValue: null
+        defaultValue: null,
       },
-      workspaceId:{
+      workspaceId: {
         field: 'workspace_id',
         allowNull: false,
         type: Sequelize.UUID,
@@ -168,9 +167,9 @@ module.exports = {
           key: 'id',
         },
         onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
+        onDelete: 'CASCADE',
       },
-      workspaceMemberId:{
+      workspaceMemberId: {
         field: 'workspace_member_id',
         allowNull: false,
         type: Sequelize.UUID,
@@ -179,23 +178,23 @@ module.exports = {
           key: 'id',
         },
         onUpdate: 'CASCADE',
-        onDelete: 'SET NULL'
+        onDelete: 'SET NULL',
       },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
         field: 'created_at',
-        defaultValue: Sequelize.NOW
-      }
+        defaultValue: Sequelize.NOW,
+      },
     });
     await queryInterface.createTable(PROJECT_MEMBER_TABLE, {
       id: {
         allowNull: false,
         primaryKey: true,
         defaultValue: Sequelize.UUIDV4,
-        type: Sequelize.UUID
+        type: Sequelize.UUID,
       },
-      workspaceMemberId:{
+      workspaceMemberId: {
         field: 'workspace_member_id',
         allowNull: false,
         type: Sequelize.UUID,
@@ -204,165 +203,14 @@ module.exports = {
           key: 'id',
         },
         onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
-      },
-      role: {
-        allowNull: false,
-        type: Sequelize.STRING,
-        defaultValue: 'member'
-      },
-      projectId:{
-        field: 'project_id',
-        allowNull: false,
-        type: Sequelize.UUID,
-        references: {
-          model: PROJECT_TABLE,
-          key: 'id',
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
-      },
-      addedAt: {
-        allowNull: false,
-        type: Sequelize.DATE,
-        field: 'added_at',
-        defaultValue: Sequelize.NOW
-      }
-    });
-    await queryInterface.createTable(TEAM_TABLE, {
-      id: {
-        allowNull: false,
-        primaryKey: true,
-        defaultValue: Sequelize.UUIDV4,
-        type: Sequelize.UUID
-      },
-      name: {
-        allowNull: false,
-        type: Sequelize.STRING,
-      },
-      workspaceMemberId:{
-        field: 'workspace_member_id',
-        allowNull: false,
-        type: Sequelize.UUID,
-        references: {
-          model: WORKSPACE_MEMBER_TABLE,
-          key: 'id',
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'RESTRICT'
-      },
-      workspaceId:{
-        field: 'workspace_id',
-        allowNull: false,
-        type: Sequelize.UUID,
-        references: {
-          model: WORKSPACE_TABLE,
-          key: 'id',
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
-      },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE,
-        field: 'created_at',
-        defaultValue: Sequelize.NOW
-      }
-    });
-    await queryInterface.createTable(PROJECT_TEAM_TABLE, {
-      teamId:{
-        field: 'team_id',
-        allowNull: false,
-        type: Sequelize.UUID,
-        references: {
-          model: TEAM_TABLE,
-          key: 'id',
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
-      },
-      projectId:{
-        field: 'project_id',
-        allowNull: false,
-        type: Sequelize.UUID,
-        references: {
-          model: PROJECT_TABLE,
-          key: 'id',
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
-      },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE,
-        field: 'created_at',
-        defaultValue: Sequelize.NOW
-      }
-    });
-    await queryInterface.createTable(TEAM_MEMBER_TABLE, {
-      id: {
-        allowNull: false,
-        primaryKey: true,
-        defaultValue: Sequelize.UUIDV4,
-        type: Sequelize.UUID
-      },
-      workspaceMemberId:{
-        field: 'workspace_member_id',
-        allowNull: false,
-        type: Sequelize.UUID,
-        references: {
-          model: WORKSPACE_MEMBER_TABLE,
-          key: 'id',
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
+        onDelete: 'CASCADE',
       },
       role: {
         allowNull: false,
         type: Sequelize.STRING,
         defaultValue: 'member',
       },
-      workspaceId:{
-        field: 'workspace_id',
-        allowNull: false,
-        type: Sequelize.UUID,
-        references: {
-          model: WORKSPACE_TABLE,
-          key: 'id',
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
-      },
-      teamId:{
-        field: 'team_id',
-        allowNull: false,
-        type: Sequelize.UUID,
-        references: {
-          model: TEAM_TABLE,
-          key: 'id',
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
-      },
-      addedAt: {
-        allowNull: false,
-        type: Sequelize.DATE,
-        field: 'added_at',
-        defaultValue: Sequelize.NOW
-      }
-    });
-    await queryInterface.createTable(LIST_TABLE, {
-      id: {
-        allowNull: false,
-        primaryKey: true,
-        defaultValue: Sequelize.UUIDV4,
-        type: Sequelize.UUID
-      },
-      name: {
-        allowNull: false,
-        type: Sequelize.STRING,
-      },
-      projectId:{
+      projectId: {
         field: 'project_id',
         allowNull: false,
         type: Sequelize.UUID,
@@ -371,21 +219,172 @@ module.exports = {
           key: 'id',
         },
         onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
+        onDelete: 'CASCADE',
+      },
+      addedAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+        field: 'added_at',
+        defaultValue: Sequelize.NOW,
+      },
+    });
+    await queryInterface.createTable(TEAM_TABLE, {
+      id: {
+        allowNull: false,
+        primaryKey: true,
+        defaultValue: Sequelize.UUIDV4,
+        type: Sequelize.UUID,
+      },
+      name: {
+        allowNull: false,
+        type: Sequelize.STRING,
+      },
+      workspaceMemberId: {
+        field: 'workspace_member_id',
+        allowNull: false,
+        type: Sequelize.UUID,
+        references: {
+          model: WORKSPACE_MEMBER_TABLE,
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'RESTRICT',
+      },
+      workspaceId: {
+        field: 'workspace_id',
+        allowNull: false,
+        type: Sequelize.UUID,
+        references: {
+          model: WORKSPACE_TABLE,
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
       },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
         field: 'created_at',
-        defaultValue: Sequelize.NOW
-      }
+        defaultValue: Sequelize.NOW,
+      },
+    });
+    await queryInterface.createTable(PROJECT_TEAM_TABLE, {
+      teamId: {
+        field: 'team_id',
+        allowNull: false,
+        type: Sequelize.UUID,
+        references: {
+          model: TEAM_TABLE,
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      },
+      projectId: {
+        field: 'project_id',
+        allowNull: false,
+        type: Sequelize.UUID,
+        references: {
+          model: PROJECT_TABLE,
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+        field: 'created_at',
+        defaultValue: Sequelize.NOW,
+      },
+    });
+    await queryInterface.createTable(TEAM_MEMBER_TABLE, {
+      id: {
+        allowNull: false,
+        primaryKey: true,
+        defaultValue: Sequelize.UUIDV4,
+        type: Sequelize.UUID,
+      },
+      workspaceMemberId: {
+        field: 'workspace_member_id',
+        allowNull: false,
+        type: Sequelize.UUID,
+        references: {
+          model: WORKSPACE_MEMBER_TABLE,
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      },
+      role: {
+        allowNull: false,
+        type: Sequelize.STRING,
+        defaultValue: 'member',
+      },
+      workspaceId: {
+        field: 'workspace_id',
+        allowNull: false,
+        type: Sequelize.UUID,
+        references: {
+          model: WORKSPACE_TABLE,
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      },
+      teamId: {
+        field: 'team_id',
+        allowNull: false,
+        type: Sequelize.UUID,
+        references: {
+          model: TEAM_TABLE,
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      },
+      addedAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+        field: 'added_at',
+        defaultValue: Sequelize.NOW,
+      },
+    });
+    await queryInterface.createTable(LIST_TABLE, {
+      id: {
+        allowNull: false,
+        primaryKey: true,
+        defaultValue: Sequelize.UUIDV4,
+        type: Sequelize.UUID,
+      },
+      name: {
+        allowNull: false,
+        type: Sequelize.STRING,
+      },
+      projectId: {
+        field: 'project_id',
+        allowNull: false,
+        type: Sequelize.UUID,
+        references: {
+          model: PROJECT_TABLE,
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+        field: 'created_at',
+        defaultValue: Sequelize.NOW,
+      },
     });
     await queryInterface.createTable(CARD_TABLE, {
       id: {
         allowNull: false,
         primaryKey: true,
         defaultValue: Sequelize.UUIDV4,
-        type: Sequelize.UUID
+        type: Sequelize.UUID,
       },
       name: {
         allowNull: false,
@@ -393,7 +392,7 @@ module.exports = {
       },
       description: {
         allowNull: true,
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       listId: {
         field: 'list_id',
@@ -404,23 +403,23 @@ module.exports = {
           key: 'id',
         },
         onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
+        onDelete: 'CASCADE',
       },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
         field: 'created_at',
-        defaultValue: Sequelize.NOW
-      }
+        defaultValue: Sequelize.NOW,
+      },
     });
     await queryInterface.createTable(CARD_MEMBER_TABLE, {
       id: {
         allowNull: false,
         primaryKey: true,
         defaultValue: Sequelize.UUIDV4,
-        type: Sequelize.UUID
+        type: Sequelize.UUID,
       },
-      projectMemberId:{
+      projectMemberId: {
         field: 'project_member_id',
         allowNull: true,
         type: Sequelize.UUID,
@@ -429,49 +428,7 @@ module.exports = {
           key: 'id',
         },
         onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
-      },
-      cardId:{
-        field: 'card_id',
-        allowNull: false,
-        type: Sequelize.UUID,
-        references: {
-          model: CARD_TABLE,
-          key: 'id',
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
-      },
-      addedAt: {
-        allowNull: false,
-        type: Sequelize.DATE,
-        field: 'added_at',
-        defaultValue: Sequelize.NOW
-      }
-    });
-    await queryInterface.createTable(CARD_ATTACHMENT_TABLE, {
-      id: {
-        allowNull: false,
-        primaryKey: true,
-        defaultValue: Sequelize.UUIDV4,
-        type: Sequelize.UUID
-      },
-      filename: {
-        allowNull: false,
-        type: Sequelize.STRING,
-      },
-      url: {
-        allowNull: false,
-        type: Sequelize.TEXT
-      },
-      type: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      publicId: {
-        field: 'public_id',
-        allowNull: true,
-        type: Sequelize.STRING
+        onDelete: 'CASCADE',
       },
       cardId: {
         field: 'card_id',
@@ -482,21 +439,63 @@ module.exports = {
           key: 'id',
         },
         onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
+        onDelete: 'CASCADE',
+      },
+      addedAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+        field: 'added_at',
+        defaultValue: Sequelize.NOW,
+      },
+    });
+    await queryInterface.createTable(CARD_ATTACHMENT_TABLE, {
+      id: {
+        allowNull: false,
+        primaryKey: true,
+        defaultValue: Sequelize.UUIDV4,
+        type: Sequelize.UUID,
+      },
+      filename: {
+        allowNull: false,
+        type: Sequelize.STRING,
+      },
+      url: {
+        allowNull: false,
+        type: Sequelize.TEXT,
+      },
+      type: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      publicId: {
+        field: 'public_id',
+        allowNull: true,
+        type: Sequelize.STRING,
+      },
+      cardId: {
+        field: 'card_id',
+        allowNull: false,
+        type: Sequelize.UUID,
+        references: {
+          model: CARD_TABLE,
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
       },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
         field: 'created_at',
-        defaultValue: Sequelize.NOW
-      }
+        defaultValue: Sequelize.NOW,
+      },
     });
     await queryInterface.createTable(LABEL_TABLE, {
       id: {
         allowNull: false,
         primaryKey: true,
         defaultValue: Sequelize.UUIDV4,
-        type: Sequelize.UUID
+        type: Sequelize.UUID,
       },
       name: {
         allowNull: false,
@@ -555,7 +554,7 @@ module.exports = {
         allowNull: false,
         primaryKey: true,
         defaultValue: Sequelize.UUIDV4,
-        type: Sequelize.UUID
+        type: Sequelize.UUID,
       },
       name: {
         allowNull: false,
@@ -570,21 +569,21 @@ module.exports = {
           key: 'id',
         },
         onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
+        onDelete: 'CASCADE',
       },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
         field: 'created_at',
-        defaultValue: Sequelize.NOW
-      }
+        defaultValue: Sequelize.NOW,
+      },
     });
     await queryInterface.createTable(CHECKLIST_ITEM_TABLE, {
       id: {
         allowNull: false,
         primaryKey: true,
         defaultValue: Sequelize.UUIDV4,
-        type: Sequelize.UUID
+        type: Sequelize.UUID,
       },
       name: {
         allowNull: false,
@@ -599,7 +598,7 @@ module.exports = {
           key: 'id',
         },
         onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
+        onDelete: 'CASCADE',
       },
       isChecked: {
         field: 'is_checked',
@@ -616,17 +615,17 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE,
         field: 'created_at',
-        defaultValue: Sequelize.NOW
-      }
+        defaultValue: Sequelize.NOW,
+      },
     });
     await queryInterface.createTable(CHECKLIST_ITEM_MEMBER_TABLE, {
       id: {
         allowNull: false,
         primaryKey: true,
         defaultValue: Sequelize.UUIDV4,
-        type: Sequelize.UUID
+        type: Sequelize.UUID,
       },
-      projectMemberId:{
+      projectMemberId: {
         field: 'project_member_id',
         allowNull: true,
         type: Sequelize.UUID,
@@ -635,9 +634,9 @@ module.exports = {
           key: 'id',
         },
         onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
+        onDelete: 'CASCADE',
       },
-      checklistItemId:{
+      checklistItemId: {
         field: 'checklist_item_id',
         allowNull: false,
         type: Sequelize.UUID,
@@ -646,18 +645,18 @@ module.exports = {
           key: 'id',
         },
         onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
+        onDelete: 'CASCADE',
       },
       addedAt: {
         allowNull: false,
         type: Sequelize.DATE,
         field: 'added_at',
-        defaultValue: Sequelize.NOW
-      }
+        defaultValue: Sequelize.NOW,
+      },
     });
   },
 
-  async down (queryInterface, Sequelize) {
+  async down(queryInterface) {
     await queryInterface.dropTable(CHECKLIST_ITEM_MEMBER_TABLE);
     await queryInterface.dropTable(CHECKLIST_ITEM_TABLE);
     await queryInterface.dropTable(CHECKLIST_TABLE);
@@ -675,6 +674,5 @@ module.exports = {
     await queryInterface.dropTable(WORKSPACE_MEMBER_TABLE);
     await queryInterface.dropTable(WORKSPACE_TABLE);
     await queryInterface.dropTable(USER_TABLE);
-  }
-
+  },
 };

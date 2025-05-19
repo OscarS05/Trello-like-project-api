@@ -1,4 +1,3 @@
-const boom = require('@hapi/boom');
 const CardDto = require('../../dtos/card.dto');
 
 class CheckProjectMemberByCardAndListUseCase {
@@ -7,7 +6,11 @@ class CheckProjectMemberByCardAndListUseCase {
   }
 
   async execute(userId, listId, cardId) {
-    const card = await this.cardRepository.checkProjectMemberByCardAndList(userId, listId, cardId);
+    const card = await this.cardRepository.checkProjectMemberByCardAndList(
+      userId,
+      listId,
+      cardId,
+    );
     return new CardDto(card);
   }
 }

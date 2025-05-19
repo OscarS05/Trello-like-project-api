@@ -12,7 +12,10 @@ class UpdateCardUseCase {
     const cardName = new CardName(cardData.newName).value;
     const cardDescription = new CardDescription(cardData.description).value;
 
-    const [ updatedRows, [ updatedCard ] ] = await this.cardRepository.update(cardId, { name: cardName, description: cardDescription });
+    const [updatedRows, [updatedCard]] = await this.cardRepository.update(
+      cardId,
+      { name: cardName, description: cardDescription },
+    );
     if (updatedRows === 0) throw boom.badRequest('Zero rows updated');
     return new CardDto(updatedCard);
   }

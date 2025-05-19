@@ -1,12 +1,13 @@
 {
-  "name": "autumn",
+  "name": "trello-like-api",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
     "pm2": "pm2 start ecosystem.config.js",
     "dev": "nodemon ./api/index.js",
     "start": "pm2-runtime ecosystem.config.js",
-    "lint": "eslint",
+    "lint": "eslint ./api",
+    "lint:fix": "eslint ./api --fix",
     "migrations:generate": "sequelize-cli migration:generate --name",
     "migrations:run": "sequelize-cli db:migrate",
     "migrations:revert": "sequelize-cli db:migrate:undo",
@@ -50,7 +51,13 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^9.3.0",
+    "eslint": "^8.57.1",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-prettier": "^5.4.0",
     "nodemon": "^3.1.7",
+    "prettier": "^3.5.3",
     "sequelize-cli": "^6.6.3"
   }
 }

@@ -1,5 +1,4 @@
 const { Model, DataTypes, Sequelize } = require('sequelize');
-const { TEAM_TABLE } = require('./team.model');
 const { PROJECT_MEMBER_TABLE } = require('./project-member.model');
 const { CARD_TABLE } = require('./card.model');
 
@@ -10,9 +9,9 @@ const CardMemberSchema = {
     allowNull: false,
     primaryKey: true,
     defaultValue: DataTypes.UUIDV4,
-    type: DataTypes.UUID
+    type: DataTypes.UUID,
   },
-  projectMemberId:{
+  projectMemberId: {
     field: 'project_member_id',
     allowNull: true,
     type: DataTypes.UUID,
@@ -21,9 +20,9 @@ const CardMemberSchema = {
       key: 'id',
     },
     onUpdate: 'CASCADE',
-    onDelete: 'CASCADE'
+    onDelete: 'CASCADE',
   },
-  cardId:{
+  cardId: {
     field: 'card_id',
     allowNull: false,
     type: DataTypes.UUID,
@@ -32,25 +31,25 @@ const CardMemberSchema = {
       key: 'id',
     },
     onUpdate: 'CASCADE',
-    onDelete: 'CASCADE'
+    onDelete: 'CASCADE',
   },
   addedAt: {
     allowNull: false,
     type: DataTypes.DATE,
     field: 'added_at',
-    defaultValue: Sequelize.NOW
-  }
-}
+    defaultValue: Sequelize.NOW,
+  },
+};
 
 class CardMember extends Model {
   static associate(models) {
     this.belongsTo(models.ProjectMember, {
       as: 'projectMember',
-      foreignKey: 'projectMemberId'
+      foreignKey: 'projectMemberId',
     });
     this.belongsTo(models.Card, {
       as: 'card',
-      foreignKey: 'cardId'
+      foreignKey: 'cardId',
     });
   }
 
@@ -59,10 +58,9 @@ class CardMember extends Model {
       sequelize,
       tableName: CARD_MEMBER_TABLE,
       modelName: 'CardMember',
-      timestamps: false
-    }
+      timestamps: false,
+    };
   }
 }
-
 
 module.exports = { CARD_MEMBER_TABLE, CardMemberSchema, CardMember };

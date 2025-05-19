@@ -14,28 +14,28 @@ const DeleteProjectUseCase = require('./DeleteProjectUseCase');
 const LoadBackgroundImageUseCase = require('./LoadBackgroundImageUseCase');
 
 const getAllProjectInformationUseCase = new GetAllProjectInformationUseCase(
-  dbRepositories
+  dbRepositories,
 );
 const getProjectUseCase = new GetProjectUseCase(dbRepositories);
 const getProjectsByWorkspaceMemberUseCase =
   new GetProjectsByWorkspaceMemberUseCase(dbRepositories);
 const getProjectsByWorkspaceUseCase = new GetProjectsByWorkspaceUseCase(
-  dbRepositories
+  dbRepositories,
 );
 const countProjectsUseCase = new CountProjectsUseCase(dbRepositories);
 const createProjectUseCase = new CreateProjectUseCase(dbRepositories);
 const updateProjectUseCase = new UpdateProjectUseCase(dbRepositories);
 const updateBackgroundProjectUseCase = new UpdateBackgroundProjectUseCase(
   dbRepositories,
-  fileStorageRepositories
+  fileStorageRepositories,
 );
 const deleteProjecUseCase = new DeleteProjectUseCase(
   dbRepositories,
-  fileStorageRepositories
+  fileStorageRepositories,
 );
 const loadBackgroundImageUseCase = new LoadBackgroundImageUseCase(
   dbRepositories,
-  queues
+  queues,
 );
 
 module.exports = {

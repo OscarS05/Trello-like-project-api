@@ -1,6 +1,5 @@
 const { Model, DataTypes, Sequelize } = require('sequelize');
 
-
 const USER_TABLE = 'users';
 
 const UserSchema = {
@@ -8,7 +7,7 @@ const UserSchema = {
     allowNull: false,
     primaryKey: true,
     defaultValue: DataTypes.UUIDV4,
-    type: DataTypes.UUID
+    type: DataTypes.UUID,
   },
   name: {
     allowNull: false,
@@ -21,17 +20,17 @@ const UserSchema = {
   },
   password: {
     allowNull: false,
-    type: DataTypes.STRING
+    type: DataTypes.STRING,
   },
   recoveryToken: {
     field: 'recovery_token',
     allowNull: true,
-    type: Sequelize.DataTypes.STRING
+    type: Sequelize.DataTypes.STRING,
   },
   role: {
     allowNull: false,
     type: DataTypes.STRING,
-    defaultValue: 'basic'
+    defaultValue: 'basic',
   },
   isVerified: {
     allowNull: false,
@@ -43,16 +42,16 @@ const UserSchema = {
     allowNull: false,
     type: DataTypes.DATE,
     field: 'created_at',
-    defaultValue: Sequelize.NOW
-  }
-}
+    defaultValue: Sequelize.NOW,
+  },
+};
 
 class User extends Model {
   static associate(models) {
     this.belongsToMany(models.Workspace, {
       through: models.WorkspaceMember,
       foreignKey: 'userId',
-      as: 'workspaces'
+      as: 'workspaces',
     });
   }
 
@@ -61,10 +60,9 @@ class User extends Model {
       sequelize,
       tableName: USER_TABLE,
       modelName: 'User',
-      timestamps: false
-    }
+      timestamps: false,
+    };
   }
 }
 
-
-module.exports = { USER_TABLE, UserSchema, User }
+module.exports = { USER_TABLE, UserSchema, User };

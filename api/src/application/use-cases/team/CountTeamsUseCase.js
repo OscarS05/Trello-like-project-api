@@ -1,10 +1,10 @@
-class CountTeamsUseCase{
-  constructor({ teamRepository }){
+class CountTeamsUseCase {
+  constructor({ teamRepository }) {
     this.teamRepository = teamRepository;
   }
 
-  async execute(workspaceMemberId){
-    return await this.teamRepository.countTeams(workspaceMemberId);
+  async execute(workspaceMemberId) {
+    return this.teamRepository.countTeams(workspaceMemberId);
   }
 }
 

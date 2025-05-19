@@ -1,4 +1,5 @@
 const express = require('express');
+
 const router = express.Router();
 
 const { validateSession } = require('../middlewares/authentication.handler');
@@ -32,9 +33,7 @@ const userController = require('../controllers/user.controller');
  *       404:
  *         description: Email not found.
  */
-router.get('/:email',
-  userController.getUserByEmail
-);
+router.get('/:email', userController.getUserByEmail);
 
 /**
  * @swagger
@@ -52,10 +51,7 @@ router.get('/:email',
  *               items:
  *                  $ref: '#/components/schemas/UserResponse'
  */
-router.get('/',
-  userController.getUsers
-);
-
+router.get('/', userController.getUsers);
 
 /**
  * @swagger
@@ -81,9 +77,10 @@ router.get('/',
  *       409:
  *         description: The new user's email already exists
  */
-router.post('/',
+router.post(
+  '/',
   validatorHandler(createUserSchema, 'body'),
-  userController.signUp
+  userController.signUp,
 );
 
 /**
@@ -127,10 +124,11 @@ router.post('/',
  *       404:
  *         description: User not found
  */
-router.delete('/:userId',
+router.delete(
+  '/:userId',
   validateSession,
   validatorHandler(userIdSchema, 'params'),
-  userController.deleteAccount
+  userController.deleteAccount,
 );
 
 module.exports = router;

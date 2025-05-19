@@ -6,16 +6,18 @@ class CardMemberRepository extends ICardMemberRepository {
     this.db = db;
   }
 
-  async create(cardEntity){
-    return await this.db.models.CardMember.create(cardEntity);
+  async create(cardEntity) {
+    return this.db.models.CardMember.create(cardEntity);
   }
 
-  async delete(cardId, projectMemberId){
-    return await this.db.models.CardMember.destroy({ where: { cardId, projectMemberId } });
+  async delete(cardId, projectMemberId) {
+    return this.db.models.CardMember.destroy({
+      where: { cardId, projectMemberId },
+    });
   }
 
-  async findOne(cardId, cardMemberId){
-    return await this.db.models.CardMember.findOne({
+  async findOne(cardId, cardMemberId) {
+    return this.db.models.CardMember.findOne({
       where: { cardId, id: cardMemberId },
       include: [
         {
@@ -41,8 +43,8 @@ class CardMemberRepository extends ICardMemberRepository {
     });
   }
 
-  async findAll(cardId){
-    return await this.db.models.CardMember.findAll({
+  async findAll(cardId) {
+    return this.db.models.CardMember.findAll({
       where: { cardId },
       include: [
         {

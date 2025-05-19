@@ -3,29 +3,39 @@ const ChecklistItemMemberEntity = require('../../../domain/entities/ChecklistIte
 const ChecklistItemDto = require('../../dtos/checklist-item.dto');
 
 class CreateChecklistItemUseCase {
-  constructor({ checklistItemRepository, checklistItemMemberRepository }){
+  constructor({ checklistItemRepository, checklistItemMemberRepository }) {
     this.checklistItemRepository = checklistItemRepository;
     this.checklistItemMemberRepository = checklistItemMemberRepository;
   }
 
-  async execute(checklistItemData){
+  async execute(checklistItemData) {
     const checklistItemEntity = new ChecklistItemEntity(checklistItemData);
 
-    const newChecklistItem = await this.checklistItemRepository.create(checklistItemEntity);
+    const newChecklistItem =
+      await this.checklistItemRepository.create(checklistItemEntity);
     const formattedNewChecklistItem = newChecklistItem.get({ plain: true });
 
     let assignedMembers = [];
 
-    if (checklistItemData.assignedProjectMemberIds?.length > 0){
-      const checklistItemMembersEntity = checklistItemData.assignedProjectMemberIds.map(newMemberId => new ChecklistItemMemberEntity({
-        projectMemberId: newMemberId,
-        checklistItemId: checklistItemEntity.id,
-      }));
+    if (checklistItemData.assignedProjectMemberIds?.length > 0) {
+      const checklistItemMembersEntity =
+        checklistItemData.assignedProjectMemberIds.map(
+          (newMemberId) =>
+            new ChecklistItemMemberEntity({
+              projectMemberId: newMemberId,
+              checklistItemId: checklistItemEntity.id,
+            }),
+        );
 
-      assignedMembers = await this.checklistItemMemberRepository.bulkCreate(checklistItemMembersEntity);
+      assignedMembers = await this.checklistItemMemberRepository.bulkCreate(
+        checklistItemMembersEntity,
+      );
     }
 
-    return new ChecklistItemDto({ ...formattedNewChecklistItem, assignedMembers });
+    return new ChecklistItemDto({
+      ...formattedNewChecklistItem,
+      assignedMembers,
+    });
   }
 }
 

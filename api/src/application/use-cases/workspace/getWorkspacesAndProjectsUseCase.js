@@ -1,36 +1,45 @@
-const WorkspaceDto = require("../../dtos/workspace.dto");
+const WorkspaceDto = require('../../dtos/workspace.dto');
 
 class GetWorkspacesAndProjectsUseCase {
-  constructor({ workspaceRepository }){
+  constructor({ workspaceRepository }) {
     this.workspaceRepository = workspaceRepository;
   }
 
-  async execute(userId){
+  async execute(userId) {
     const workspaceMembers = await this.workspaceRepository.findAll(userId);
-    if(workspaceMembers.length === 0) return [];
+    if (workspaceMembers.length === 0) return [];
 
     return this.structureData(userId, workspaceMembers);
   }
 
-  structureData(userId, workspaceMembers){
-    const workspaceWithProjects = workspaceMembers.map(workspaceMember => workspaceMember.workspace);
-    const workspaceMemberIds = workspaceMembers.map(member => member.id);
+  // eslint-disable-next-line class-methods-use-this
+  structureData(userId, workspaceMembers) {
+    const workspaceWithProjects = workspaceMembers.map(
+      (workspaceMember) => workspaceMember.workspace,
+    );
+    const workspaceMemberIds = workspaceMembers.map((member) => member.id);
 
-    const structuredWorkspaces = workspaceWithProjects.map(workspace => {
-      const relatedProjects = workspace.projects.map(project => {
+    const structuredWorkspaces = workspaceWithProjects.map((workspace) => {
+      const relatedProjects = workspace.projects.map((project) => {
         return {
           ...project.toJSON(),
-          access: project.projectMembers.some(member => workspaceMemberIds.includes(member.workspaceMemberId)),
-        }
+          access: project.projectMembers.some((member) =>
+            workspaceMemberIds.includes(member.workspaceMemberId),
+          ),
+        };
       });
 
       return {
         ...workspace.toJSON(),
         projects: relatedProjects,
-        role: workspaceMembers.find(member => member.userId === userId)?.role || 'member'
+        role:
+          workspaceMembers.find((member) => member.userId === userId)?.role ||
+          'member',
       };
     });
-    return structuredWorkspaces.map(workspace => WorkspaceDto.fromEntity(workspace));
+    return structuredWorkspaces.map((workspace) =>
+      WorkspaceDto.fromEntity(workspace),
+    );
   }
 }
 

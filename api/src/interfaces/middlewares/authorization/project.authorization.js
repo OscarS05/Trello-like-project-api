@@ -9,8 +9,8 @@ const { LIMITS } = require('./workspace.authorization');
 
 async function authorizationToCreateProject(req, res, next) {
   try {
-    const user = req.user;
-    const workspaceMember = req.workspaceMember;
+    const { user } = req;
+    const { workspaceMember } = req;
     const count = await projectService.countProjects(workspaceMember);
 
     if (user.role === 'basic' && count >= LIMITS.BASIC.PROJECTS) {
@@ -28,13 +28,13 @@ async function authorizationToCreateProject(req, res, next) {
 
 async function checkProjectMembership(req, res, next) {
   try {
-    const user = req.user;
+    const { user } = req;
     const { workspaceId, projectId } = req.params;
 
     const projectMember = await projectMemberService.getProjectMemberByUserId(
       user.sub,
       workspaceId,
-      projectId
+      projectId,
     );
     if (!projectMember?.id)
       throw boom.forbidden('You do not belong to the workspace');
@@ -54,7 +54,7 @@ async function checkAdminRole(req, res, next) {
     const projectMember = await projectMemberService.getProjectMemberByUserId(
       userId,
       workspaceId,
-      projectId
+      projectId,
     );
 
     if (!projectMember?.id)
@@ -73,13 +73,13 @@ async function checkAdminRole(req, res, next) {
 
 async function checkOwnership(req, res, next) {
   try {
-    const user = req.user;
+    const { user } = req;
     const { workspaceId, projectId } = req.params;
 
     const projectMember = await projectMemberService.getProjectMemberByUserId(
       user.sub,
       workspaceId,
-      projectId
+      projectId,
     );
     if (!projectMember?.id)
       throw boom.forbidden('You do not belong to the project');
@@ -95,13 +95,13 @@ async function checkOwnership(req, res, next) {
 
 async function checkProjectMembershipByUserId(req, res, next) {
   try {
-    const user = req.user;
+    const { user } = req;
     const { projectId } = req.params;
 
     const projectMember =
       await projectMemberService.checkProjectMembershipByUser(
         user.sub,
-        projectId
+        projectId,
       );
     if (!projectMember?.id)
       throw boom.forbidden('You do not belong to the project');
@@ -115,7 +115,7 @@ async function checkProjectMembershipByUserId(req, res, next) {
 
 async function validateProjectReadPermission(req, res, next) {
   try {
-    const user = req.user;
+    const { user } = req;
     const { projectId } = req.params;
 
     const project = await projectService.getProjectById(projectId);
@@ -125,7 +125,7 @@ async function validateProjectReadPermission(req, res, next) {
       const projectMember =
         await projectMemberService.checkProjectMembershipByUser(
           user.sub,
-          projectId
+          projectId,
         );
       if (!projectMember?.id)
         throw boom.forbidden('You do not belong to the project');
@@ -137,15 +137,17 @@ async function validateProjectReadPermission(req, res, next) {
       const workspaceMember =
         await workspaceMemberService.getWorkspaceMemberByUserId(
           project.workspaceId,
-          user.sub
+          user.sub,
         );
       if (!workspaceMember?.id)
         throw boom.forbidden('You do not belong to the project');
 
       return next();
     }
+
+    throw boom.badRequest('Invalid project visibility');
   } catch (error) {
-    next(error);
+    return next(error);
   }
 }
 

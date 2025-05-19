@@ -4,7 +4,7 @@ const id = Joi.string().uuid();
 const role = Joi.string().valid('member', 'admin');
 
 const addProjectMember = Joi.object({
-  workspaceMemberId: id.required()
+  workspaceMemberId: id.required(),
 });
 
 const roleChangeSchema = Joi.object({
@@ -16,7 +16,6 @@ const projectMemberSchemas = Joi.object({
   projectId: id.required(),
   projectMemberId: id.required(),
 });
-
 
 module.exports = {
   addProjectMember,

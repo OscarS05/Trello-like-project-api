@@ -2,10 +2,12 @@ const Joi = require('joi');
 
 const id = Joi.string().uuid();
 const email = Joi.string().email();
-const name = Joi.string().min(3).max(50)
+const name = Joi.string()
+  .min(3)
+  .max(50)
   .pattern(/^[a-zA-Z0-9-_ ]+$/)
   .messages({
-    'string.pattern.base': 'The user name contains illegal characters'
+    'string.pattern.base': 'The user name contains illegal characters',
   });
 const password = Joi.string().min(8);
 
@@ -31,5 +33,4 @@ const userIdSchema = Joi.object({
   userId: id.required(),
 });
 
-
-module.exports = { createUserSchema, changePasswordSchema, userIdSchema }
+module.exports = { createUserSchema, changePasswordSchema, userIdSchema };

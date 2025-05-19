@@ -9,12 +9,18 @@ const CreateChecklistByCopyingItemsUseCase = require('./CreateChecklistByCopying
 const UpdateChecklistUseCase = require('./UpdateChecklistUseCase');
 const DeleteChecklistUseCase = require('./DeleteChecklistUseCase');
 
-const getAllChecklistsByCardUseCase = new GetAllChecklistsByCardUseCase(dbRepositories);
-const getProjectMemberByChecklistUseCase = new GetProjectMemberByChecklistUseCase(dbRepositories);
-const getAllChecklistsByProjectUseCase = new GetAllChecklistsByProjectUseCase(dbRepositories);
+const getAllChecklistsByCardUseCase = new GetAllChecklistsByCardUseCase(
+  dbRepositories,
+);
+const getProjectMemberByChecklistUseCase =
+  new GetProjectMemberByChecklistUseCase(dbRepositories);
+const getAllChecklistsByProjectUseCase = new GetAllChecklistsByProjectUseCase(
+  dbRepositories,
+);
 const getChecklistUseCase = new GetChecklistUseCase(dbRepositories);
 const createChecklistUseCase = new CreateChecklistUseCase(dbRepositories);
-const createChecklistByCopyingItemsUseCase = new CreateChecklistByCopyingItemsUseCase(dbRepositories);
+const createChecklistByCopyingItemsUseCase =
+  new CreateChecklistByCopyingItemsUseCase(dbRepositories);
 const updateChecklistUseCase = new UpdateChecklistUseCase(dbRepositories);
 const deleteChecklistUseCase = new DeleteChecklistUseCase(dbRepositories);
 
@@ -27,4 +33,4 @@ module.exports = {
   createChecklistByCopyingItemsUseCase,
   updateChecklistUseCase,
   deleteChecklistUseCase,
-}
+};

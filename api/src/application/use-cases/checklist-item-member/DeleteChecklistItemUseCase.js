@@ -1,10 +1,13 @@
 class DeleteChecklistItemUseCase {
-  constructor({ checklistItemMemberRepository }){
+  constructor({ checklistItemMemberRepository }) {
     this.checklistItemMemberRepository = checklistItemMemberRepository;
   }
 
-  async execute(checklistItemId, projectMemberId){
-    return await this.checklistItemMemberRepository.delete(checklistItemId, projectMemberId);
+  async execute(checklistItemId, projectMemberId) {
+    return this.checklistItemMemberRepository.delete(
+      checklistItemId,
+      projectMemberId,
+    );
   }
 }
 

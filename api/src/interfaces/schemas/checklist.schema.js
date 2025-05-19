@@ -16,5 +16,4 @@ const updateCardSchema = Joi.object({
   newName: name.required(),
 });
 
-
-module.exports = { checklistSchema, createChecklistSchema, updateCardSchema }
+module.exports = { checklistSchema, createChecklistSchema, updateCardSchema };

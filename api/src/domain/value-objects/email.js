@@ -8,6 +8,7 @@ class Email {
     this.value = value;
   }
 
+  // eslint-disable-next-line class-methods-use-this
   validate(email) {
     return /\S+@\S+\.\S+/.test(email);
   }

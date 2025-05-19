@@ -10,9 +10,15 @@ const CountWorkspacesByUserUseCase = require('./countWorkspacesByUserUseCase');
 const createWorkspaceUseCase = new CreateWorkspaceUseCase(dbRepositories);
 const updateWorkspaceUseCase = new UpdateWorkspaceUseCase(dbRepositories);
 const deleteWorkspaceUseCase = new DeleteWorkspaceUseCase(dbRepositories);
-const getWorkspacesAndProjectsUseCase = new GetWorkspacesAndProjectsUseCase(dbRepositories);
-const getWorkspaceAndItsProjectsUseCase = new GetWorkspaceAndItsProjectsUseCase(dbRepositories);
-const countWorkspacesByUserUseCase = new CountWorkspacesByUserUseCase(dbRepositories);
+const getWorkspacesAndProjectsUseCase = new GetWorkspacesAndProjectsUseCase(
+  dbRepositories,
+);
+const getWorkspaceAndItsProjectsUseCase = new GetWorkspaceAndItsProjectsUseCase(
+  dbRepositories,
+);
+const countWorkspacesByUserUseCase = new CountWorkspacesByUserUseCase(
+  dbRepositories,
+);
 
 module.exports = {
   createWorkspaceUseCase,

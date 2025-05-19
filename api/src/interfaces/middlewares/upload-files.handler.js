@@ -6,14 +6,6 @@ const { attachLink } = require('../schemas/card-attachment.schema');
 
 const { allowedFormatsForImage } = require('../../../utils/constants');
 
-const storage = multer.memoryStorage();
-const uploadSingle = (allowedFormats, inputName = 'file') => {
-  return multer({
-    storage,
-    fileFilter: fileFilterByExtension(allowedFormats),
-  }).single(inputName);
-};
-
 const fileFilterByExtension = (allowedFormats) => {
   return (req, file, cb) => {
     const ext = path.extname(file.originalname).toLowerCase().slice(1);
@@ -23,6 +15,14 @@ const fileFilterByExtension = (allowedFormats) => {
       cb(new Error(`Invalid file type: ${ext}`), false);
     }
   };
+};
+
+const storage = multer.memoryStorage();
+const uploadSingle = (allowedFormats, inputName = 'file') => {
+  return multer({
+    storage,
+    fileFilter: fileFilterByExtension(allowedFormats),
+  }).single(inputName);
 };
 
 const conditionalUploadFileMiddleware = (req, res, next) => {
@@ -36,7 +36,7 @@ const conditionalUploadFileMiddleware = (req, res, next) => {
 
 const uploadProjectBackgroundImage = uploadSingle(
   allowedFormatsForImage,
-  'background-image'
+  'background-image',
 );
 
 module.exports = {

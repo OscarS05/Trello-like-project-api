@@ -6,8 +6,13 @@ class GetItemMembersByIdsUseCase {
   }
 
   async execute(checklistItemId, checklistItemMemberIds) {
-    const members = await this.checklistItemMemberRepository.getByIds(checklistItemId, checklistItemMemberIds);
-    return members.length === 0 ? [] : members.map((member) => new ChecklistItemMemberDto(member));
+    const members = await this.checklistItemMemberRepository.getByIds(
+      checklistItemId,
+      checklistItemMemberIds,
+    );
+    return members.length === 0
+      ? []
+      : members.map((member) => new ChecklistItemMemberDto(member));
   }
 }
 

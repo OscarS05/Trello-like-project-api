@@ -5,7 +5,9 @@ class ProjectVisibility {
 
   constructor(value) {
     if (!ProjectVisibility.#VALID_VISIBILITIES.includes(value)) {
-      throw boom.badData(`Invalid visibility value: ${value}. Allowed values are: ${ProjectVisibility.#VALID_VISIBILITIES.join(', ')}`);
+      throw boom.badData(
+        `Invalid visibility value: ${value}. Allowed values are: ${ProjectVisibility.#VALID_VISIBILITIES.join(', ')}`,
+      );
     }
     this.value = value;
   }

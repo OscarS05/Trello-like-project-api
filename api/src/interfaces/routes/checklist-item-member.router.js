@@ -1,10 +1,17 @@
 const express = require('express');
+
 const router = express.Router();
 
 const { validateSession } = require('../middlewares/authentication.handler');
 const { validatorHandler } = require('../middlewares/validator.handler');
-const { checkProjectMembershipByChecklist } = require('../middlewares/authorization/card.authorization');
-const { checklistItemMemberSchema, checklistItemSchema, addMemberToItemSchema } = require('../schemas/checklist-item-member.schema');
+const {
+  checkProjectMembershipByChecklist,
+} = require('../middlewares/authorization/card.authorization');
+const {
+  checklistItemMemberSchema,
+  checklistItemSchema,
+  addMemberToItemSchema,
+} = require('../schemas/checklist-item-member.schema');
 
 const checklistItemControllers = require('../controllers/checklist-item-member.controller');
 
@@ -60,11 +67,12 @@ const checklistItemControllers = require('../controllers/checklist-item-member.c
  *       404:
  *         description: Checklist item not found
  */
-router.get('/:checklistId/checklist-items/:checklistItemId/members',
+router.get(
+  '/:checklistId/checklist-items/:checklistItemId/members',
   validateSession,
   validatorHandler(checklistItemSchema, 'params'),
   checkProjectMembershipByChecklist,
-  checklistItemControllers.getAllChecklistItemMembers
+  checklistItemControllers.getAllChecklistItemMembers,
 );
 
 /**
@@ -137,12 +145,13 @@ router.get('/:checklistId/checklist-items/:checklistItemId/members',
  *       404:
  *         description: Checklist item not found
  */
-router.post('/:checklistId/checklist-items/:checklistItemId/members',
+router.post(
+  '/:checklistId/checklist-items/:checklistItemId/members',
   validateSession,
   validatorHandler(checklistItemSchema, 'params'),
   validatorHandler(addMemberToItemSchema, 'body'),
   checkProjectMembershipByChecklist,
-  checklistItemControllers.addMemberToChecklistItem
+  checklistItemControllers.addMemberToChecklistItem,
 );
 
 /**
@@ -205,11 +214,12 @@ router.post('/:checklistId/checklist-items/:checklistItemId/members',
  *       404:
  *         description: Checklist item member not found
  */
-router.delete('/:checklistId/checklist-items/:checklistItemId/members/:projectMemberId',
+router.delete(
+  '/:checklistId/checklist-items/:checklistItemId/members/:projectMemberId',
   validateSession,
   validatorHandler(checklistItemMemberSchema, 'params'),
   checkProjectMembershipByChecklist,
-  checklistItemControllers.deleteChecklistItemMember
+  checklistItemControllers.deleteChecklistItemMember,
 );
 
 module.exports = router;

@@ -1,16 +1,18 @@
 const Joi = require('joi');
 
 const id = Joi.string().uuid();
-const name = Joi.string().min(3).max(50)
+const name = Joi.string()
+  .min(3)
+  .max(50)
   .pattern(/^[a-zA-Z0-9-_ ]+$/)
   .messages({
-    'string.pattern.base': 'The team name contains illegal characters'
+    'string.pattern.base': 'The team name contains illegal characters',
   });
 const boolean = Joi.boolean();
 
 const teamIdScheme = Joi.object({
   workspaceId: id.required(),
-  teamId: id.required()
+  teamId: id.required(),
 });
 
 const createTeamScheme = Joi.object({
@@ -28,14 +30,13 @@ const asignProjectScheme = Joi.object({
 });
 
 const unasignProjectScheme = Joi.object({
-  removeTeamMembersFromProject: boolean.required()
+  removeTeamMembersFromProject: boolean.required(),
 });
-
 
 module.exports = {
   teamIdScheme,
   createTeamScheme,
   updateTeamScheme,
   asignProjectScheme,
-  unasignProjectScheme
-}
+  unasignProjectScheme,
+};

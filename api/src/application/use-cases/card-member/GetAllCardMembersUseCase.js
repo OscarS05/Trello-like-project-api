@@ -7,7 +7,7 @@ class GetAllCardMembersUseCase {
 
   async execute(cardId) {
     const cardMembers = await this.cardMemberRepository.findAll(cardId);
-    return cardMembers.map(member => new CardMemberDto(member));
+    return cardMembers.map((member) => new CardMemberDto(member));
   }
 }
 

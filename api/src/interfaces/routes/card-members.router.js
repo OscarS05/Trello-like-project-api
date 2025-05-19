@@ -2,8 +2,14 @@ const router = require('./card-attachments.router');
 
 const { validateSession } = require('../middlewares/authentication.handler');
 const { validatorHandler } = require('../middlewares/validator.handler');
-const { checkAdminRoleInProjectByCard, checkProjectMembershipByCard } = require('../middlewares/authorization/card.authorization');
-const { cardIdSchema, cardMemberSchema } = require('../schemas/card-member.schema');
+const {
+  checkAdminRoleInProjectByCard,
+  checkProjectMembershipByCard,
+} = require('../middlewares/authorization/card.authorization');
+const {
+  cardIdSchema,
+  cardMemberSchema,
+} = require('../schemas/card-member.schema');
 
 const cardMemberControllers = require('../controllers/card-member.controller');
 
@@ -53,11 +59,12 @@ const cardMemberControllers = require('../controllers/card-member.controller');
  *       404:
  *         description: Card not found
  */
-router.get('/:cardId/members',
+router.get(
+  '/:cardId/members',
   validateSession,
   validatorHandler(cardIdSchema, 'params'),
   checkProjectMembershipByCard,
-  cardMemberControllers.getAllCardMembers
+  cardMemberControllers.getAllCardMembers,
 );
 
 /**
@@ -114,11 +121,12 @@ router.get('/:cardId/members',
  *       409:
  *         description: Member is already assigned to the card
  */
-router.post('/:cardId/members/:projectMemberId',
+router.post(
+  '/:cardId/members/:projectMemberId',
   validateSession,
   validatorHandler(cardMemberSchema, 'params'),
   checkAdminRoleInProjectByCard,
-  cardMemberControllers.addMemberToCard
+  cardMemberControllers.addMemberToCard,
 );
 
 /**
@@ -176,11 +184,12 @@ router.post('/:cardId/members/:projectMemberId',
  *       404:
  *         description: Card or project member not found
  */
-router.delete('/:cardId/members/:projectMemberId',
+router.delete(
+  '/:cardId/members/:projectMemberId',
   validateSession,
   validatorHandler(cardMemberSchema, 'params'),
   checkAdminRoleInProjectByCard,
-  cardMemberControllers.deleteCardMember
+  cardMemberControllers.deleteCardMember,
 );
 
 module.exports = router;

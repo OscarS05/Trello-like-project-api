@@ -6,7 +6,7 @@ class ListDto {
     this.name = name;
     this.projectId = projectId;
     this.createdAt = createdAt;
-    this.cards = cards?.map(card => new CardDto(card));
+    this.cards = cards?.map((card) => new CardDto(card));
   }
 
   static withCards(list) {
@@ -15,8 +15,8 @@ class ListDto {
       name: list.name,
       projectId: list.projectId,
       createdAt: list.createdAt,
-      cards: list.cards?.map(card => CardDto.withAllCardInformation(card)),
-    }
+      cards: list.cards?.map((card) => CardDto.withAllCardInformation(card)),
+    };
   }
 }
 

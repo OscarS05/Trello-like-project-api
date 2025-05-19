@@ -4,7 +4,7 @@ class GetAllUseCase {
   }
 
   async execute(listId) {
-    return await this.cardRepository.findAll(listId);
+    return this.cardRepository.findAll(listId);
   }
 }
 

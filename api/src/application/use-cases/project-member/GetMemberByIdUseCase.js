@@ -1,12 +1,13 @@
-const ProjectMemberDto = require("../../dtos/projectMember.dto");
+const ProjectMemberDto = require('../../dtos/projectMember.dto');
 
 class GetMemberByIdUseCase {
-  constructor({ projectMemberRepository }){
+  constructor({ projectMemberRepository }) {
     this.projectMemberRepository = projectMemberRepository;
   }
 
-  async execute(projectMemberId){
-    const projectMember = await this.projectMemberRepository.findProjectMemberById(projectMemberId);
+  async execute(projectMemberId) {
+    const projectMember =
+      await this.projectMemberRepository.findProjectMemberById(projectMemberId);
     return !projectMember?.id ? {} : new ProjectMemberDto(projectMember);
   }
 }

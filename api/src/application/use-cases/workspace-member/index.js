@@ -9,14 +9,25 @@ const UpdateRoleUseCase = require('./UpdateRoleUseCase');
 const TransferOwnershipUseCase = require('./TransferOwnershipUseCase');
 const RemoveWorkspaceMemberUseCase = require('./RemoveWorkspaceMemberUseCase');
 
-const getWorkspaceMemberByIdUseCase = new GetWorkspaceMemberByIdUseCase(dbRepositories);
-const getWorkspaceMemberByUserIdUseCase = new GetWorkspaceMemberByUserIdUseCase(dbRepositories);
-const getWorkspaceMembersWithDataUseCase = new GetWorkspaceMembersWithDataUseCase(dbRepositories);
-const getWorkspaceMembersUseCase = new GetWorkspaceMembersUseCase(dbRepositories);
-const addMemberToWorkspaceUseCase = new AddMemberToWorkspaceUseCase(dbRepositories);
+const getWorkspaceMemberByIdUseCase = new GetWorkspaceMemberByIdUseCase(
+  dbRepositories,
+);
+const getWorkspaceMemberByUserIdUseCase = new GetWorkspaceMemberByUserIdUseCase(
+  dbRepositories,
+);
+const getWorkspaceMembersWithDataUseCase =
+  new GetWorkspaceMembersWithDataUseCase(dbRepositories);
+const getWorkspaceMembersUseCase = new GetWorkspaceMembersUseCase(
+  dbRepositories,
+);
+const addMemberToWorkspaceUseCase = new AddMemberToWorkspaceUseCase(
+  dbRepositories,
+);
 const updateRoleUseCase = new UpdateRoleUseCase(dbRepositories);
 const transferOwnershipUseCase = new TransferOwnershipUseCase(dbRepositories);
-const removeWorkspaceMemberUseCase = new RemoveWorkspaceMemberUseCase(dbRepositories);
+const removeWorkspaceMemberUseCase = new RemoveWorkspaceMemberUseCase(
+  dbRepositories,
+);
 
 module.exports = {
   getWorkspaceMemberByIdUseCase,
@@ -27,4 +38,4 @@ module.exports = {
   updateRoleUseCase,
   transferOwnershipUseCase,
   removeWorkspaceMemberUseCase,
-}
+};

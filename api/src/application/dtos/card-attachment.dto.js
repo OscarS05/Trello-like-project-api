@@ -1,4 +1,4 @@
-class CardMemberEntity {
+class CardAttachmentDto {
   constructor({ id, filename, url, cardId, type, createdAt }) {
     this.id = id;
     this.filename = filename;
@@ -9,4 +9,4 @@ class CardMemberEntity {
   }
 }
 
-module.exports = CardMemberEntity;
+module.exports = CardAttachmentDto;

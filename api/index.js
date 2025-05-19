@@ -1,7 +1,11 @@
 const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
+const swaggerUI = require('swagger-ui-express');
 
+const { config } = require('./config/config');
+const routerApi = require('./src/interfaces/routes');
+const specs = require('./utils/docs/swagger');
 const {
   logErrors,
   errorHandler,
@@ -9,11 +13,6 @@ const {
   ormErrorHandler,
   multerErrorHandler,
 } = require('./src/interfaces/middlewares/error.handler');
-
-const { config } = require('./config/config');
-const routerApi = require('./src/interfaces/routes');
-const swaggerUI = require('swagger-ui-express');
-const specs = require('./utils/docs/swagger');
 
 const morganMiddleware = require('./utils/logger/morgan');
 
@@ -23,14 +22,14 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 
-const whiteList = [config.frontUrl];
+// const whiteList = [config.frontUrl];
 
 app.use(
   cors({
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
-  })
+  }),
 );
 
 require('./utils/auth');
@@ -50,9 +49,10 @@ app.use((err, req, res, next) => {
   if (err instanceof Error && err.message === 'Not authorized by CORS') {
     return res.status(403).json({ message: 'Domain not allowed by CORS' });
   }
-  next(err);
+  return next(err);
 });
 
 app.listen(port, () => {
+  // eslint-disable-next-line no-console
   console.log(`Server run in PORT: ${port}`);
 });

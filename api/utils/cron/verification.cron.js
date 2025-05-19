@@ -3,12 +3,12 @@ const logger = require('../logger/logger');
 const { config } = require('../../config/config');
 const { userService } = require('../../src/application/services/index');
 
-const isProd = config.isProd;
+const { isProd } = config;
 
-function isVerificationExpired(createdAt, expirationTime){
+function isVerificationExpired(createdAt, expirationTime) {
   const expirationDate = new Date(createdAt).getTime() + expirationTime;
   return Date.now() > expirationDate;
-};
+}
 
 const deleteUnverifiedUsersJob = cron.schedule('0 0 * * *', async () => {
   try {
@@ -16,27 +16,27 @@ const deleteUnverifiedUsersJob = cron.schedule('0 0 * * *', async () => {
 
     let deletedUsersCount = 0;
 
-    for(const user of users){
-      if(isVerificationExpired(user.createdAt, 7 * 24 * 60 * 60 * 1000)) {
+    users.forEach(async (user) => {
+      if (isVerificationExpired(user.createdAt, 7 * 24 * 60 * 60 * 1000)) {
         await userService.deleteAccount(user.id);
-        deletedUsersCount++;
+        deletedUsersCount += 1;
       }
-    }
+    });
 
     const message =
       deletedUsersCount > 0
         ? `${deletedUsersCount} unverified accounts removed.`
         : `No unverified accounts found for removal.`;
 
-    if(isProd) logger.info(message);
-    console.log(message)
+    if (isProd) logger.info(message);
+    console.info(message);
   } catch (error) {
     const messageError = `Error in cron job ${error.message}`;
-    if(isProd) logger.error(messageError);
-    if(!isProd) console.error(error)
+    if (isProd) logger.error(messageError);
+    if (!isProd) console.error(error);
   }
 });
 
 deleteUnverifiedUsersJob.start();
 
-module.exports = { deleteUnverifiedUsersJob }
+module.exports = { deleteUnverifiedUsersJob };

@@ -17,12 +17,11 @@ class UpdateBackgroundProjectUseCase {
       const publicIdWithExtension = urlParts.slice(-2).join('/');
       const publicId = publicIdWithExtension.replace(
         path.extname(publicIdWithExtension),
-        ''
+        '',
       );
 
-      const deletedFromStorage = await this.cloudinaryStorageRepository.destroy(
-        publicId
-      );
+      const deletedFromStorage =
+        await this.cloudinaryStorageRepository.destroy(publicId);
       if (deletedFromStorage?.result !== 'ok')
         throw Boom.badRequest('Failed to delete file from Cloudinary');
 
@@ -31,17 +30,17 @@ class UpdateBackgroundProjectUseCase {
       });
       if (deletedFromDb[0] === 0)
         throw Boom.badRequest(
-          'Something went wrong while deleting the project background image. The operation returns 0 rows affected'
+          'Something went wrong while deleting the project background image. The operation returns 0 rows affected',
         );
     }
 
     const [updatedRows, [updatedProject]] = await this.projectRepository.update(
       project.id,
-      { backgroundUrl: url }
+      { backgroundUrl: url },
     );
     if (updatedRows === 0)
       throw Boom.badRequest(
-        'Something went wrong while updating the project background image. The operation returns 0 rows affected'
+        'Something went wrong while updating the project background image. The operation returns 0 rows affected',
       );
     return new ProjectDto(updatedProject);
   }

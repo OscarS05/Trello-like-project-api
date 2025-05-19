@@ -9,9 +9,9 @@ const ProjectMemberSchema = {
     allowNull: false,
     primaryKey: true,
     defaultValue: DataTypes.UUIDV4,
-    type: DataTypes.UUID
+    type: DataTypes.UUID,
   },
-  workspaceMemberId:{
+  workspaceMemberId: {
     field: 'workspace_member_id',
     allowNull: false,
     type: DataTypes.UUID,
@@ -20,14 +20,14 @@ const ProjectMemberSchema = {
       key: 'id',
     },
     onUpdate: 'CASCADE',
-    onDelete: 'CASCADE'
+    onDelete: 'CASCADE',
   },
   role: {
     allowNull: false,
     type: DataTypes.STRING,
-    defaultValue: 'member'
+    defaultValue: 'member',
   },
-  projectId:{
+  projectId: {
     field: 'project_id',
     allowNull: false,
     type: DataTypes.UUID,
@@ -36,15 +36,15 @@ const ProjectMemberSchema = {
       key: 'id',
     },
     onUpdate: 'CASCADE',
-    onDelete: 'CASCADE'
+    onDelete: 'CASCADE',
   },
   addedAt: {
     allowNull: false,
     type: DataTypes.DATE,
     field: 'added_at',
-    defaultValue: Sequelize.NOW
-  }
-}
+    defaultValue: Sequelize.NOW,
+  },
+};
 
 class ProjectMember extends Model {
   static associate(models) {
@@ -62,12 +62,12 @@ class ProjectMember extends Model {
 
     this.belongsTo(models.Project, {
       as: 'project',
-      foreignKey: 'projectId'
+      foreignKey: 'projectId',
     });
 
     this.belongsTo(models.WorkspaceMember, {
       as: 'workspaceMember',
-      foreignKey: 'workspaceMemberId'
+      foreignKey: 'workspaceMemberId',
     });
   }
 
@@ -76,10 +76,9 @@ class ProjectMember extends Model {
       sequelize,
       tableName: PROJECT_MEMBER_TABLE,
       modelName: 'ProjectMember',
-      timestamps: false
-    }
+      timestamps: false,
+    };
   }
 }
-
 
 module.exports = { PROJECT_MEMBER_TABLE, ProjectMemberSchema, ProjectMember };

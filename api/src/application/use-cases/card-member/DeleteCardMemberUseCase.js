@@ -1,10 +1,10 @@
 class DeleteCardMemberUseCase {
-  constructor({ cardMemberRepository }){
+  constructor({ cardMemberRepository }) {
     this.cardMemberRepository = cardMemberRepository;
   }
 
-  async execute(cardId, projectMemberId){
-    return await this.cardMemberRepository.delete(cardId, projectMemberId);
+  async execute(cardId, projectMemberId) {
+    return this.cardMemberRepository.delete(cardId, projectMemberId);
   }
 }
 

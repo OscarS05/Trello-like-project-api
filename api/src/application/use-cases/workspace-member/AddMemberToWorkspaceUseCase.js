@@ -2,13 +2,18 @@ const WorkspaceMemberEntity = require('../../../domain/entities/WorkspaceMemberE
 const WorkspaceMemberDto = require('../../dtos/workspaceMember.dto');
 
 class AddMemberToWorkspaceUseCase {
-  constructor({ workspaceMemberRepository }){
+  constructor({ workspaceMemberRepository }) {
     this.workspaceMemberRepository = workspaceMemberRepository;
   }
 
-  async execute(workspaceId, memberIdToAdd){
-    const workspaceMemberEntity = new WorkspaceMemberEntity({ workspaceId, userId: memberIdToAdd });
-    const addedWorkspaceMember = await this.workspaceMemberRepository.create(workspaceMemberEntity);
+  async execute(workspaceId, memberIdToAdd) {
+    const workspaceMemberEntity = new WorkspaceMemberEntity({
+      workspaceId,
+      userId: memberIdToAdd,
+    });
+    const addedWorkspaceMember = await this.workspaceMemberRepository.create(
+      workspaceMemberEntity,
+    );
     return new WorkspaceMemberDto(addedWorkspaceMember);
   }
 }

@@ -8,8 +8,8 @@ class CloudinaryStorageRepository extends IStorageRepository {
   }
 
   async upload(file, folder) {
-    return await this.cloudinary.uploader.upload(file.path, {
-      folder: folder,
+    return this.cloudinary.uploader.upload(file.path, {
+      folder,
       use_filename: true,
       unique_filename: true,
     });
@@ -19,14 +19,14 @@ class CloudinaryStorageRepository extends IStorageRepository {
     return new Promise((resolve, reject) => {
       const stream = this.cloudinary.uploader.upload_stream(
         {
-          folder: folder,
+          folder,
           use_filename: true,
           unique_filename: true,
         },
         (error, result) => {
           if (error) return reject(error);
-          resolve(result);
-        }
+          return resolve(result);
+        },
       );
 
       Readable.from(buffer).pipe(stream);
@@ -39,14 +39,14 @@ class CloudinaryStorageRepository extends IStorageRepository {
 
   async getMetadata(publicId, folder) {
     const fullId = folder ? `${folder}/${publicId}` : publicId;
-    return await this.cloudinary.api.resource(fullId, {
+    return this.cloudinary.api.resource(fullId, {
       resource_type: 'auto',
     });
   }
 
   async getUrl(publicId, folder) {
     const fullId = folder ? `${folder}/${publicId}` : publicId;
-    return await this.cloudinary.url(fullId, {
+    return this.cloudinary.url(fullId, {
       secure: true,
       resource_type: 'auto',
     });

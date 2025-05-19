@@ -9,9 +9,9 @@ const WorkspaceMemberSchema = {
     allowNull: false,
     primaryKey: true,
     defaultValue: DataTypes.UUIDV4,
-    type: DataTypes.UUID
+    type: DataTypes.UUID,
   },
-  userId:{
+  userId: {
     field: 'user_id',
     allowNull: false,
     type: Sequelize.DataTypes.UUID,
@@ -20,14 +20,14 @@ const WorkspaceMemberSchema = {
       key: 'id',
     },
     onUpdate: 'CASCADE',
-    onDelete: 'CASCADE'
+    onDelete: 'CASCADE',
   },
   role: {
     allowNull: false,
     type: Sequelize.DataTypes.STRING,
     defaultValue: 'member',
   },
-  workspaceId:{
+  workspaceId: {
     field: 'workspace_id',
     allowNull: false,
     type: Sequelize.DataTypes.UUID,
@@ -36,28 +36,28 @@ const WorkspaceMemberSchema = {
       key: 'id',
     },
     onUpdate: 'CASCADE',
-    onDelete: 'CASCADE'
+    onDelete: 'CASCADE',
   },
   addedAt: {
     allowNull: false,
     type: Sequelize.DataTypes.DATE,
     field: 'added_at',
-    defaultValue: Sequelize.NOW
-  }
-}
+    defaultValue: Sequelize.NOW,
+  },
+};
 
 class WorkspaceMember extends Model {
   static associate(models) {
     this.belongsToMany(models.Project, {
       through: models.ProjectMember,
       foreignKey: 'workspaceMemberId',
-      as: 'projects'
+      as: 'projects',
     });
 
     this.belongsToMany(models.Team, {
       through: models.TeamMember,
       foreignKey: 'workspaceMemberId',
-      as: 'teams'
+      as: 'teams',
     });
 
     this.hasMany(models.Team, {
@@ -67,12 +67,12 @@ class WorkspaceMember extends Model {
 
     this.belongsTo(models.Workspace, {
       foreignKey: 'workspaceId',
-      as: 'workspace'
+      as: 'workspace',
     });
 
     this.belongsTo(models.User, {
       foreignKey: 'userId',
-      as: 'user'
+      as: 'user',
     });
   }
 
@@ -81,10 +81,13 @@ class WorkspaceMember extends Model {
       sequelize,
       tableName: WORKSPACE_MEMBER_TABLE,
       modelName: 'WorkspaceMember',
-      timestamps: false
-    }
+      timestamps: false,
+    };
   }
 }
 
-
-module.exports = { WORKSPACE_MEMBER_TABLE, WorkspaceMemberSchema, WorkspaceMember };
+module.exports = {
+  WORKSPACE_MEMBER_TABLE,
+  WorkspaceMemberSchema,
+  WorkspaceMember,
+};

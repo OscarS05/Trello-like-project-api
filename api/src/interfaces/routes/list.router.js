@@ -1,8 +1,14 @@
 const router = require('./team-member.router');
 
 const { projectIdSchema } = require('../schemas/project.schema');
-const { listNameSchema, updateListSchema, listSchema } = require('../schemas/list.schema');
-const { checkProjectMembership } = require('../middlewares/authorization/project.authorization');
+const {
+  listNameSchema,
+  updateListSchema,
+  listSchema,
+} = require('../schemas/list.schema');
+const {
+  checkProjectMembership,
+} = require('../middlewares/authorization/project.authorization');
 const { validatorHandler } = require('../middlewares/validator.handler');
 const { validateSession } = require('../middlewares/authentication.handler');
 
@@ -57,11 +63,12 @@ const listControllers = require('../controllers/list.controller');
  *       500:
  *         description: Internal Server Error
  */
-router.get('/:workspaceId/projects/:projectId/lists',
+router.get(
+  '/:workspaceId/projects/:projectId/lists',
   validateSession,
   validatorHandler(projectIdSchema, 'params'),
   checkProjectMembership,
-  listControllers.getLists
+  listControllers.getLists,
 );
 
 /**
@@ -112,12 +119,13 @@ router.get('/:workspaceId/projects/:projectId/lists',
  *       403:
  *         description: Forbidden
  */
-router.post('/:workspaceId/projects/:projectId/lists',
+router.post(
+  '/:workspaceId/projects/:projectId/lists',
   validateSession,
   validatorHandler(projectIdSchema, 'params'),
   validatorHandler(listNameSchema, 'body'),
   checkProjectMembership,
-  listControllers.createList
+  listControllers.createList,
 );
 
 /**
@@ -176,12 +184,13 @@ router.post('/:workspaceId/projects/:projectId/lists',
  *       403:
  *         description: Forbidden – requester is not a member of the project
  */
-router.patch('/:workspaceId/projects/:projectId/lists/:listId',
+router.patch(
+  '/:workspaceId/projects/:projectId/lists/:listId',
   validateSession,
   validatorHandler(listSchema, 'params'),
   validatorHandler(updateListSchema, 'body'),
   checkProjectMembership,
-  listControllers.updateList
+  listControllers.updateList,
 );
 
 /**
@@ -238,11 +247,12 @@ router.patch('/:workspaceId/projects/:projectId/lists/:listId',
  *       403:
  *         description: Forbidden – requester is not a member of the project
  */
-router.delete('/:workspaceId/projects/:projectId/lists/:listId',
+router.delete(
+  '/:workspaceId/projects/:projectId/lists/:listId',
   validateSession,
   validatorHandler(listSchema, 'params'),
   checkProjectMembership,
-  listControllers.deleteList
+  listControllers.deleteList,
 );
 
 module.exports = router;

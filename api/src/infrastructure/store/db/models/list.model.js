@@ -1,7 +1,6 @@
 const { Model, DataTypes, Sequelize } = require('sequelize');
 const { PROJECT_TABLE } = require('./project.model');
 
-
 const LIST_TABLE = 'lists';
 
 const ListSchema = {
@@ -9,13 +8,13 @@ const ListSchema = {
     allowNull: false,
     primaryKey: true,
     defaultValue: DataTypes.UUIDV4,
-    type: DataTypes.UUID
+    type: DataTypes.UUID,
   },
   name: {
     allowNull: false,
     type: DataTypes.STRING,
   },
-  projectId:{
+  projectId: {
     field: 'project_id',
     allowNull: false,
     type: DataTypes.UUID,
@@ -24,15 +23,15 @@ const ListSchema = {
       key: 'id',
     },
     onUpdate: 'CASCADE',
-    onDelete: 'CASCADE'
+    onDelete: 'CASCADE',
   },
   createdAt: {
     allowNull: false,
     type: DataTypes.DATE,
     field: 'created_at',
-    defaultValue: Sequelize.NOW
-  }
-}
+    defaultValue: Sequelize.NOW,
+  },
+};
 
 class List extends Model {
   static associate(models) {
@@ -49,10 +48,9 @@ class List extends Model {
       sequelize,
       tableName: LIST_TABLE,
       modelName: 'List',
-      timestamps: false
-    }
+      timestamps: false,
+    };
   }
 }
 
-
-module.exports = { LIST_TABLE, ListSchema, List }
+module.exports = { LIST_TABLE, ListSchema, List };

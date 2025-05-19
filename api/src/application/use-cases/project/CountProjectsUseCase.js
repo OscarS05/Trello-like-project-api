@@ -1,10 +1,10 @@
 class CountProjectsUseCase {
-  constructor({ projectRepository }){
+  constructor({ projectRepository }) {
     this.projectRepository = projectRepository;
   }
 
-  async execute(workspaceMemberId){
-    return await this.projectRepository.countProjects(workspaceMemberId);
+  async execute(workspaceMemberId) {
+    return this.projectRepository.countProjects(workspaceMemberId);
   }
 }
 

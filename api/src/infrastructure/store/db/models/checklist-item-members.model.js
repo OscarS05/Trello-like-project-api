@@ -9,9 +9,9 @@ const ChecklistItemMemberSchema = {
     allowNull: false,
     primaryKey: true,
     defaultValue: DataTypes.UUIDV4,
-    type: DataTypes.UUID
+    type: DataTypes.UUID,
   },
-  projectMemberId:{
+  projectMemberId: {
     field: 'project_member_id',
     allowNull: true,
     type: DataTypes.UUID,
@@ -20,9 +20,9 @@ const ChecklistItemMemberSchema = {
       key: 'id',
     },
     onUpdate: 'CASCADE',
-    onDelete: 'CASCADE'
+    onDelete: 'CASCADE',
   },
-  checklistItemId:{
+  checklistItemId: {
     field: 'checklist_item_id',
     allowNull: false,
     type: DataTypes.UUID,
@@ -31,26 +31,26 @@ const ChecklistItemMemberSchema = {
       key: 'id',
     },
     onUpdate: 'CASCADE',
-    onDelete: 'CASCADE'
+    onDelete: 'CASCADE',
   },
   addedAt: {
     allowNull: false,
     type: DataTypes.DATE,
     field: 'added_at',
-    defaultValue: Sequelize.NOW
-  }
-}
+    defaultValue: Sequelize.NOW,
+  },
+};
 
 class ChecklistItemMember extends Model {
   static associate(models) {
     this.belongsTo(models.ProjectMember, {
       foreignKey: 'projectMemberId',
-      as: 'projectMember'
+      as: 'projectMember',
     });
 
     this.belongsTo(models.ChecklistItem, {
       foreignKey: 'checklistItemId',
-      as: 'checklistItem'
+      as: 'checklistItem',
     });
   }
 
@@ -59,10 +59,13 @@ class ChecklistItemMember extends Model {
       sequelize,
       tableName: CHECKLIST_ITEM_MEMBER_TABLE,
       modelName: 'ChecklistItemMember',
-      timestamps: false
-    }
+      timestamps: false,
+    };
   }
 }
 
-
-module.exports = { CHECKLIST_ITEM_MEMBER_TABLE, ChecklistItemMemberSchema, ChecklistItemMember };
+module.exports = {
+  CHECKLIST_ITEM_MEMBER_TABLE,
+  ChecklistItemMemberSchema,
+  ChecklistItemMember,
+};

@@ -10,13 +10,18 @@ cloudinary.config({
 
 cloudinary.api.ping((error, result) => {
   if (error) {
-    logger.error('❌ Error connecting to Cloudinary:', error);
-  } else {
     if (config.isProd) {
-      logger.info('Cloudinary successfully connected');
+      logger.error('❌ Error connecting to Cloudinary:', error);
     } else {
-      console.log('Connection to Cloudinary established: status:', result.status);
+      console.error('Connection to Cloudinary failed:', error);
     }
+  } else if (config.isProd) {
+    logger.info('Cloudinary successfully connected');
+  } else {
+    console.info(
+      'Connection to Cloudinary established: status:',
+      result.status,
+    );
   }
 });
 

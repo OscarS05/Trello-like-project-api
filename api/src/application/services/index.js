@@ -15,7 +15,6 @@ const checklistUseCases = require('../use-cases/checklist/index');
 const checklistItemUseCases = require('../use-cases/checklist-item/index');
 const checklistItemMemberUseCases = require('../use-cases/checklist-item-member/index');
 
-
 const UserService = require('./user.service');
 const AuthService = require('./auth.service');
 const WorkspaceService = require('./workspace.service');
@@ -33,23 +32,47 @@ const ChecklistService = require('./checklist.service');
 const ChecklistItemService = require('./checklist-item.service');
 const ChecklistItemMemberService = require('./checklist-item-member.service');
 
-
 const userService = new UserService(userUseCases);
 const authService = new AuthService(authUseCases, userUseCases);
 const workspaceService = new WorkspaceService(workspaceUseCases);
-const workspaceMemberService = new WorkspaceMemberService(workspaceMemberUseCases, projectUseCases, teamUseCases);
-const projectService = new ProjectService(projectUseCases, projectMemberUseCases);
+const workspaceMemberService = new WorkspaceMemberService(
+  workspaceMemberUseCases,
+  projectUseCases,
+  teamUseCases,
+);
+const projectService = new ProjectService(
+  projectUseCases,
+  projectMemberUseCases,
+);
 const projectMemberService = new ProjectMemberService(projectMemberUseCases);
-const teamService = new TeamService(teamUseCases, teamMemberUseCases, projectMemberUseCases, projectUseCases);
-const teamMemberService = new TeamMemberService(teamMemberUseCases, teamService);
+const teamService = new TeamService(
+  teamUseCases,
+  teamMemberUseCases,
+  projectMemberUseCases,
+  projectUseCases,
+);
+const teamMemberService = new TeamMemberService(
+  teamMemberUseCases,
+  teamService,
+);
 const listService = new ListService(listUseCases);
 const cardService = new CardService(cardUseCases);
-const cardMemberService = new CardMemberService(cardMemberUseCases, projectMemberUseCases);
+const cardMemberService = new CardMemberService(
+  cardMemberUseCases,
+  projectMemberUseCases,
+);
 const cardAttachmentService = new CardAttachmentService(cardAttachmentUseCases);
 const labelService = new LabelService(labelUseCases);
 const checklistService = new ChecklistService(checklistUseCases);
-const checklistItemService = new ChecklistItemService(checklistItemUseCases, checklistItemMemberUseCases, projectMemberUseCases);
-const checklistItemMemberService = new ChecklistItemMemberService(checklistItemMemberUseCases, checklistItemUseCases);
+const checklistItemService = new ChecklistItemService(
+  checklistItemUseCases,
+  checklistItemMemberUseCases,
+  projectMemberUseCases,
+);
+const checklistItemMemberService = new ChecklistItemMemberService(
+  checklistItemMemberUseCases,
+  checklistItemUseCases,
+);
 
 module.exports = {
   userService,

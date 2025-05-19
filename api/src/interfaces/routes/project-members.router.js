@@ -2,9 +2,17 @@ const router = require('./project.router');
 
 const { validatorHandler } = require('../middlewares/validator.handler');
 const { validateSession } = require('../middlewares/authentication.handler');
-const { checkProjectMembership, checkAdminRole, checkOwnership } = require('../middlewares/authorization/project.authorization');
+const {
+  checkProjectMembership,
+  checkAdminRole,
+  checkOwnership,
+} = require('../middlewares/authorization/project.authorization');
 const { projectIdSchema } = require('../schemas/project.schema');
-const {addProjectMember, roleChangeSchema, projectMemberSchemas, transferOwnership } = require('../schemas/project-members.schema');
+const {
+  addProjectMember,
+  roleChangeSchema,
+  projectMemberSchemas,
+} = require('../schemas/project-members.schema');
 
 const projectMemberController = require('../controllers/project-member.controller');
 
@@ -51,7 +59,8 @@ const projectMemberController = require('../controllers/project-member.controlle
  *       404:
  *         $ref: '#/components/responses/NotFound'
  */
-router.get('/:workspaceId/projects/:projectId/members',
+router.get(
+  '/:workspaceId/projects/:projectId/members',
   validateSession,
   validatorHandler(projectIdSchema, 'params'),
   checkProjectMembership,
@@ -105,7 +114,8 @@ router.get('/:workspaceId/projects/:projectId/members',
  *       404:
  *         $ref: '#/components/responses/NotFound'
  */
-router.post('/:workspaceId/projects/:projectId/members',
+router.post(
+  '/:workspaceId/projects/:projectId/members',
   validateSession,
   validatorHandler(projectIdSchema, 'params'),
   checkAdminRole,
@@ -168,7 +178,8 @@ router.post('/:workspaceId/projects/:projectId/members',
  *       404:
  *         $ref: '#/components/responses/NotFound'
  */
-router.patch('/:workspaceId/projects/:projectId/members/:projectMemberId',
+router.patch(
+  '/:workspaceId/projects/:projectId/members/:projectMemberId',
   validateSession,
   validatorHandler(projectMemberSchemas, 'params'),
   validatorHandler(roleChangeSchema, 'body'),
@@ -224,11 +235,12 @@ router.patch('/:workspaceId/projects/:projectId/members/:projectMemberId',
  *       404:
  *         $ref: '#/components/responses/NotFound'
  */
-router.patch('/:workspaceId/projects/:projectId/members/:projectMemberId/ownership',
+router.patch(
+  '/:workspaceId/projects/:projectId/members/:projectMemberId/ownership',
   validateSession,
   validatorHandler(projectMemberSchemas, 'params'),
   checkOwnership,
-  projectMemberController.transferOwnership
+  projectMemberController.transferOwnership,
 );
 
 /**
@@ -283,7 +295,8 @@ router.patch('/:workspaceId/projects/:projectId/members/:projectMemberId/ownersh
  *       404:
  *         $ref: '#/components/responses/NotFound'
  */
-router.delete('/:workspaceId/projects/:projectId/members/:projectMemberId',
+router.delete(
+  '/:workspaceId/projects/:projectId/members/:projectMemberId',
   validateSession,
   validatorHandler(projectMemberSchemas, 'params'),
   checkAdminRole,

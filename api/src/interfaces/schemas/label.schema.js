@@ -20,12 +20,12 @@ const labelVisibilitySchema = Joi.object({
 
 const projectLabelScheme = Joi.object({
   projectId: id.required(),
-  cardId: id.required()
+  cardId: id.required(),
 });
 
 const labelIdSchema = Joi.object({
   projectId: id.required(),
-  labelId: id.required()
+  labelId: id.required(),
 });
 
 const createLabelSchema = Joi.object({
@@ -34,13 +34,21 @@ const createLabelSchema = Joi.object({
 });
 
 const updateLabelSchema = Joi.object({
-  name: name,
-  color: color,
+  name,
+  color,
 });
 
 const updateVisibility = Joi.object({
   isVisible: boolean.required(),
 });
 
-
-module.exports = { projectLabelScheme, labelIdSchema, projectIdSchema, createLabelSchema, cardIdSchema, updateLabelSchema, updateVisibility, labelVisibilitySchema }
+module.exports = {
+  projectLabelScheme,
+  labelIdSchema,
+  projectIdSchema,
+  createLabelSchema,
+  cardIdSchema,
+  updateLabelSchema,
+  updateVisibility,
+  labelVisibilitySchema,
+};

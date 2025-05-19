@@ -6,23 +6,27 @@ const description = Joi.string().max(255);
 const newName = Joi.string().min(3).max(50);
 
 const cardIdSchema = Joi.object({
-  cardId: id.required()
+  cardId: id.required(),
 });
 
 const cardSchemas = Joi.object({
   listId: id.required(),
-  cardId: id.required()
+  cardId: id.required(),
 });
 
 const createCardSchema = Joi.object({
   name: name.required(),
-  description: description,
+  description,
 });
 
 const updateCardSchema = Joi.object({
   newName: newName.required(),
-  description: description,
+  description,
 });
 
-
-module.exports = { cardSchemas, createCardSchema, updateCardSchema, cardIdSchema }
+module.exports = {
+  cardSchemas,
+  createCardSchema,
+  updateCardSchema,
+  cardIdSchema,
+};

@@ -21,4 +21,4 @@ module.exports = {
   updateVisibilityUseCase,
   updateLabelUseCase,
   deleteLabelUseCase,
-}
+};

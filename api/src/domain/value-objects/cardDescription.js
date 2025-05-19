@@ -2,11 +2,12 @@ const boom = require('@hapi/boom');
 
 class CardDescription {
   constructor(value) {
-    this._ensureIsValid(value);
-    this._value = value;
+    this.ensureIsValid(value);
+    this.value = value;
   }
 
-  _ensureIsValid(value) {
+  // eslint-disable-next-line class-methods-use-this
+  ensureIsValid(value) {
     if (typeof value !== 'string' || value.trim() === '') {
       throw boom.badData('CardDescription must be a non-empty string.');
     }
@@ -16,11 +17,11 @@ class CardDescription {
   }
 
   get value() {
-    return this._value;
+    return this.value;
   }
 
   toString() {
-    return this._value;
+    return this.value;
   }
 }
 

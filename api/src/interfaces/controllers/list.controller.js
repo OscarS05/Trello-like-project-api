@@ -1,5 +1,3 @@
-const boom = require('@hapi/boom');
-
 const { listService } = require('../../application/services/index');
 
 const getLists = async (req, res, next) => {
@@ -12,7 +10,7 @@ const getLists = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-}
+};
 
 const createList = async (req, res, next) => {
   try {
@@ -25,7 +23,7 @@ const createList = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-}
+};
 
 const updateList = async (req, res, next) => {
   try {
@@ -38,7 +36,7 @@ const updateList = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-}
+};
 
 const deleteList = async (req, res, next) => {
   try {
@@ -46,15 +44,17 @@ const deleteList = async (req, res, next) => {
 
     const deletedList = await listService.delete(projectId, listId);
 
-    res.status(200).json({ message: 'The list was deleted successfully', deletedList });
+    res
+      .status(200)
+      .json({ message: 'The list was deleted successfully', deletedList });
   } catch (error) {
     next(error);
   }
-}
+};
 
 module.exports = {
   getLists,
   createList,
   updateList,
-  deleteList
-}
+  deleteList,
+};

@@ -1,9 +1,18 @@
-const ListDto = require("./list.dto");
-const ProjectMemberDto = require("./projectMember.dto");
-const TeamDto = require("./team.dto");
+const ListDto = require('./list.dto');
+const ProjectMemberDto = require('./projectMember.dto');
+const TeamDto = require('./team.dto');
 
 class ProjectDto {
-  constructor({ id, name, visibility, backgroundUrl, workspaceId, workspaceMemberId, createdAt, lists }) {
+  constructor({
+    id,
+    name,
+    visibility,
+    backgroundUrl,
+    workspaceId,
+    workspaceMemberId,
+    createdAt,
+    lists,
+  }) {
     this.id = id;
     this.name = name;
     this.visibility = visibility;
@@ -12,12 +21,13 @@ class ProjectDto {
     this.workspaceMemberId = workspaceMemberId;
     this.createdAt = createdAt;
 
-    if(Array.isArray(lists)){
-      this.lists = lists.length > 0 ? lists.map(list =>  new ListDto(list)) : [];
+    if (Array.isArray(lists)) {
+      this.lists =
+        lists.length > 0 ? lists.map((list) => new ListDto(list)) : [];
     }
   }
 
-  static withTeams(project){
+  static withTeams(project) {
     return {
       id: project.id,
       name: project.name,
@@ -26,22 +36,22 @@ class ProjectDto {
       workspaceMemberId: project.workspaceMemberId,
       backgroundUrl: project.backgroundUrl || null,
       createdAt: project.createdAt,
-      teams: project.teams.map(team => new TeamDto(team)),
-    }
+      teams: project.teams.map((team) => new TeamDto(team)),
+    };
   }
 
-  static data(project){
+  static data(project) {
     return {
       id: project.id,
       name: project.name,
       visibility: project.visibility,
       workspaceId: project.workspaceId,
       backgroundUrl: project.backgroundUrl || null,
-      workspaceMemberId: project.workspaceMemberId
-    }
+      workspaceMemberId: project.workspaceMemberId,
+    };
   }
 
-  static withProjectMembers(project){
+  static withProjectMembers(project) {
     return {
       id: project.id,
       name: project.name,
@@ -50,11 +60,13 @@ class ProjectDto {
       workspaceMemberId: project.workspaceMemberId,
       backgroundUrl: project.backgroundUrl || null,
       createdAt: project.createdAt,
-      projectMembers: project.projectMembers.map(member => new ProjectMemberDto(member)),
-    }
+      projectMembers: project.projectMembers.map(
+        (member) => new ProjectMemberDto(member),
+      ),
+    };
   }
 
-  static fromEntity(project){
+  static fromEntity(project) {
     return {
       id: project.id,
       name: project.name,
@@ -62,7 +74,7 @@ class ProjectDto {
       workspaceId: project.workspaceId,
       backgroundUrl: project.backgroundUrl,
       access: project.access || false,
-    }
+    };
   }
 }
 

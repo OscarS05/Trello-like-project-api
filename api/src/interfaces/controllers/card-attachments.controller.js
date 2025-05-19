@@ -7,9 +7,8 @@ const getAllCardAttachments = async (req, res, next) => {
   try {
     const { cardId } = req.params;
 
-    const cardAttachments = await cardAttachmentService.getAllCardAttachments(
-      cardId
-    );
+    const cardAttachments =
+      await cardAttachmentService.getAllCardAttachments(cardId);
 
     res.status(200).json({ cardAttachments });
   } catch (error) {
@@ -35,7 +34,8 @@ const saveCardAttachment = async (req, res, next) => {
           name: addedJob.name,
         },
       });
-    } else if (req.body) {
+    }
+    if (req.body) {
       const { url, filename } = req.body;
 
       const newAttachment = await cardAttachmentService.saveCardAttachment({
@@ -56,9 +56,9 @@ const saveCardAttachment = async (req, res, next) => {
       });
     }
 
-    res.status(400).json({ message: 'You must send a file or a URL' });
+    return res.status(400).json({ message: 'You must send a file or a URL' });
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 
@@ -70,7 +70,7 @@ const updateCardAttachment = async (req, res, next) => {
     const upadedCard = await cardAttachmentService.updateCardAttachment(
       cardId,
       attachmentId,
-      cardAttachmentData
+      cardAttachmentData,
     );
 
     res.status(200).json({
@@ -88,7 +88,7 @@ const deleteCardAttachent = async (req, res, next) => {
 
     const deletedCard = await cardAttachmentService.deleteCardAttachment(
       cardId,
-      attachmentId
+      attachmentId,
     );
 
     res.status(200).json({
@@ -106,24 +106,25 @@ const downloadCardAttachment = async (req, res, next) => {
 
     const attachment = await cardAttachmentService.getCardAttachmentById(
       cardId,
-      attachmentId
+      attachmentId,
     );
     if (!attachment?.id)
       throw boom.notFound(
-        'Attachment not found or does not belong to the card'
+        'Attachment not found or does not belong to the card',
       );
     if (attachment.type === 'external-link')
       throw boom.badRequest('Cannot download external links');
 
     const fileUrl = attachment.url;
 
+    // eslint-disable-next-line global-require
     const https = require('https');
     https
       .get(fileUrl, (fileRes) => {
         res.setHeader('Content-Type', attachment.type);
         res.setHeader(
           'Content-Disposition',
-          `attachment; filename="${attachment.filename}"`
+          `attachment; filename="${attachment.filename}"`,
         );
 
         fileRes.pipe(res);

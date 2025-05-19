@@ -1,13 +1,13 @@
-const ListDto = require("../../dtos/list.dto");
+const ListDto = require('../../dtos/list.dto');
 
 class GetListUseCase {
-  constructor({ listRepository }){
+  constructor({ listRepository }) {
     this.listRepository = listRepository;
   }
 
-  async execute(projectId, listId){
+  async execute(projectId, listId) {
     const list = await this.listRepository.findOneById(projectId, listId);
-    if(!list?.id) return {};
+    if (!list?.id) return {};
     return new ListDto(list);
   }
 }

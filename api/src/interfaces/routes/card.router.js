@@ -1,12 +1,22 @@
 const express = require('express');
+
 const router = express.Router();
 
 const { validateSession } = require('../middlewares/authentication.handler');
 const { validatorHandler } = require('../middlewares/validator.handler');
-const { validateListAuthorization, validateProjectReadPermission } = require('../middlewares/authorization/list.authorization');
-const { validateCardAuthorization } = require('../middlewares/authorization/card.authorization');
+const {
+  validateListAuthorization,
+  validateProjectReadPermission,
+} = require('../middlewares/authorization/list.authorization');
+const {
+  validateCardAuthorization,
+} = require('../middlewares/authorization/card.authorization');
 const { listIdSchema } = require('../schemas/list.schema');
-const { cardSchemas, createCardSchema, updateCardSchema } = require('../schemas/card.schema');
+const {
+  cardSchemas,
+  createCardSchema,
+  updateCardSchema,
+} = require('../schemas/card.schema');
 
 const cardControllers = require('../controllers/card.controller');
 
@@ -62,11 +72,12 @@ const cardControllers = require('../controllers/card.controller');
  *       404:
  *         description: List or card not found
  */
-router.get('/lists/:listId/cards/:cardId/information',
+router.get(
+  '/lists/:listId/cards/:cardId/information',
   validateSession,
   validatorHandler(cardSchemas, 'params'),
   validateProjectReadPermission,
-  cardControllers.getAllCardInformation
+  cardControllers.getAllCardInformation,
 );
 
 /**
@@ -115,11 +126,12 @@ router.get('/lists/:listId/cards/:cardId/information',
  *       404:
  *         description: List not found
  */
-router.get('/lists/:listId/cards',
+router.get(
+  '/lists/:listId/cards',
   validateSession,
   validatorHandler(listIdSchema, 'params'),
   validateListAuthorization,
-  cardControllers.getCards
+  cardControllers.getCards,
 );
 
 /**
@@ -174,12 +186,13 @@ router.get('/lists/:listId/cards',
  *       404:
  *         description: List not found
  */
-router.post('/lists/:listId/cards',
+router.post(
+  '/lists/:listId/cards',
   validateSession,
   validatorHandler(listIdSchema, 'params'),
   validatorHandler(createCardSchema, 'body'),
   validateListAuthorization,
-  cardControllers.createCard
+  cardControllers.createCard,
 );
 
 /**
@@ -241,12 +254,13 @@ router.post('/lists/:listId/cards',
  *       404:
  *         description: List or card not found
  */
-router.patch('/lists/:listId/cards/:cardId',
+router.patch(
+  '/lists/:listId/cards/:cardId',
   validateSession,
   validatorHandler(cardSchemas, 'params'),
   validatorHandler(updateCardSchema, 'body'),
   validateCardAuthorization,
-  cardControllers.updateCard
+  cardControllers.updateCard,
 );
 
 /**
@@ -301,12 +315,12 @@ router.patch('/lists/:listId/cards/:cardId',
  *       404:
  *         description: List or card not found
  */
-router.delete('/lists/:listId/cards/:cardId',
+router.delete(
+  '/lists/:listId/cards/:cardId',
   validateSession,
   validatorHandler(cardSchemas, 'params'),
   validateCardAuthorization,
-  cardControllers.deleteCard
+  cardControllers.deleteCard,
 );
-
 
 module.exports = router;

@@ -2,19 +2,20 @@ const { Sequelize } = require('sequelize');
 
 const { config } = require('../../../../config/config');
 const logger = require('../../../../utils/logger/logger');
-const setupModels = require('../db/models');
+const setupModels = require('./models');
 
 const options = {
   dialect: 'postgres',
+  // eslint-disable-next-line no-console
   logging: config.isProd ? (msg) => logger.info(msg) : console.log,
-}
+};
 
 if (config.isProd) {
   options.dialectOptions = {
     ssl: {
-      rejectUnauthorized: false
-    }
-  }
+      rejectUnauthorized: false,
+    },
+  };
 }
 
 const sequelize = new Sequelize(config.dbUrl, options);
@@ -26,11 +27,10 @@ const sequelize = new Sequelize(config.dbUrl, options);
     console.info('Database connected!');
   } catch (error) {
     logger.error(`❌ Database connection failed: ${error.message}`);
-    console.log(`❌ Database connection failed: ${error.message}`)
+    console.error(`❌ Database connection failed: ${error.message}`);
     process.exit(1);
   }
 })();
-
 
 setupModels(sequelize);
 

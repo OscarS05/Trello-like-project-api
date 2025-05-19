@@ -4,7 +4,7 @@ const id = Joi.string().uuid();
 const role = Joi.string().valid('member', 'admin');
 
 const createWorkspaceMember = Joi.object({
-  userId: id.required()
+  userId: id.required(),
 });
 
 const updateWorkspaceMember = Joi.object({
@@ -16,9 +16,14 @@ const updateWorkspaceMemberIdParams = Joi.object({
   workspaceMemberId: id.required(),
 });
 
-const removeMember =  Joi.object({
+const removeMember = Joi.object({
   workspaceId: id.required(),
-  workspaceMemberId: id.required()
+  workspaceMemberId: id.required(),
 });
 
-module.exports = { createWorkspaceMember, updateWorkspaceMember, updateWorkspaceMemberIdParams, removeMember }
+module.exports = {
+  createWorkspaceMember,
+  updateWorkspaceMember,
+  updateWorkspaceMemberIdParams,
+  removeMember,
+};

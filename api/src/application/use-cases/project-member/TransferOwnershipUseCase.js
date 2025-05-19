@@ -1,19 +1,27 @@
-const boom = require("@hapi/boom");
+const boom = require('@hapi/boom');
 
 class TransferOwnershipUseCase {
-  constructor({ projectMemberRepository }){
+  constructor({ projectMemberRepository }) {
     this.projectMemberRepository = projectMemberRepository;
   }
 
-  async execute(projectId, currentProjectOwner, newProjectOwner){
-    if(currentProjectOwner.id === newProjectOwner.id){
-      throw boom.conflict('You cannot transfer of ownership of the project to yourself');
+  async execute(projectId, currentProjectOwner, newProjectOwner) {
+    if (currentProjectOwner.id === newProjectOwner.id) {
+      throw boom.conflict(
+        'You cannot transfer of ownership of the project to yourself',
+      );
     }
-    if(newProjectOwner.role === 'owner'){
-      throw boom.conflict('The project member to be updated as owner already has the owner role');
+    if (newProjectOwner.role === 'owner') {
+      throw boom.conflict(
+        'The project member to be updated as owner already has the owner role',
+      );
     }
 
-    return await this.projectMemberRepository.transferOwnership(projectId, currentProjectOwner, newProjectOwner);
+    return this.projectMemberRepository.transferOwnership(
+      projectId,
+      currentProjectOwner,
+      newProjectOwner,
+    );
   }
 }
 

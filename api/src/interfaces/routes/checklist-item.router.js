@@ -2,9 +2,16 @@ const { cardRouter } = require('./checklist.router');
 
 const { validateSession } = require('../middlewares/authentication.handler');
 const { validatorHandler } = require('../middlewares/validator.handler');
-const { checkProjectMembershipByCard } = require('../middlewares/authorization/card.authorization');
+const {
+  checkProjectMembershipByCard,
+} = require('../middlewares/authorization/card.authorization');
 const { checklistSchema } = require('../schemas/checklist.schema');
-const { checklistItemSchema, createChecklistItemSchema, schemaUpdateCheck, updateChecklistItemSchema } = require('../schemas/checklist-item.schema');
+const {
+  checklistItemSchema,
+  createChecklistItemSchema,
+  schemaUpdateCheck,
+  updateChecklistItemSchema,
+} = require('../schemas/checklist-item.schema');
 
 const checklistItemControllers = require('../controllers/checklist-item.controller');
 
@@ -59,11 +66,12 @@ const checklistItemControllers = require('../controllers/checklist-item.controll
  *       404:
  *         description: Card or checklist not found
  */
-cardRouter.get('/:cardId/checklists/:checklistId/checklist-items',
+cardRouter.get(
+  '/:cardId/checklists/:checklistId/checklist-items',
   validateSession,
   validatorHandler(checklistSchema, 'params'),
   checkProjectMembershipByCard,
-  checklistItemControllers.getAllChecklistItems
+  checklistItemControllers.getAllChecklistItems,
 );
 
 /**
@@ -124,12 +132,13 @@ cardRouter.get('/:cardId/checklists/:checklistId/checklist-items',
  *       404:
  *         description: Card or checklist not found
  */
-cardRouter.post('/:cardId/checklists/:checklistId/checklist-items',
+cardRouter.post(
+  '/:cardId/checklists/:checklistId/checklist-items',
   validateSession,
   validatorHandler(checklistSchema, 'params'),
   validatorHandler(createChecklistItemSchema, 'body'),
   checkProjectMembershipByCard,
-  checklistItemControllers.createChecklistItem
+  checklistItemControllers.createChecklistItem,
 );
 
 /**
@@ -202,12 +211,13 @@ cardRouter.post('/:cardId/checklists/:checklistId/checklist-items',
  *       404:
  *         description: Checklist item not found
  */
-cardRouter.patch('/:cardId/checklists/:checklistId/checklist-items/:checklistItemId',
+cardRouter.patch(
+  '/:cardId/checklists/:checklistId/checklist-items/:checklistItemId',
   validateSession,
   validatorHandler(checklistItemSchema, 'params'),
   validatorHandler(updateChecklistItemSchema, 'body'),
   checkProjectMembershipByCard,
-  checklistItemControllers.updateChecklistItem
+  checklistItemControllers.updateChecklistItem,
 );
 
 /**
@@ -282,12 +292,13 @@ cardRouter.patch('/:cardId/checklists/:checklistId/checklist-items/:checklistIte
  *       404:
  *         description: Checklist item not found
  */
-cardRouter.patch('/:cardId/checklists/:checklistId/checklist-items/:checklistItemId/check',
+cardRouter.patch(
+  '/:cardId/checklists/:checklistId/checklist-items/:checklistItemId/check',
   validateSession,
   validatorHandler(checklistItemSchema, 'params'),
   validatorHandler(schemaUpdateCheck, 'body'),
   checkProjectMembershipByCard,
-  checklistItemControllers.updateTheCheckOfItem
+  checklistItemControllers.updateTheCheckOfItem,
 );
 
 /**
@@ -350,11 +361,12 @@ cardRouter.patch('/:cardId/checklists/:checklistId/checklist-items/:checklistIte
  *       404:
  *         description: Checklist item not found
  */
-cardRouter.delete('/:cardId/checklists/:checklistId/checklist-items/:checklistItemId',
+cardRouter.delete(
+  '/:cardId/checklists/:checklistId/checklist-items/:checklistItemId',
   validateSession,
   validatorHandler(checklistItemSchema, 'params'),
   checkProjectMembershipByCard,
-  checklistItemControllers.deleteChecklistItem
+  checklistItemControllers.deleteChecklistItem,
 );
 
 module.exports = cardRouter;

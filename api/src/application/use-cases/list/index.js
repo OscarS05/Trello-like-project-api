@@ -8,7 +8,8 @@ const CreateListUseCase = require('./CreateListUseCase');
 const UpdateListUseCase = require('./UpdateListUseCase');
 const DeleteListUseCase = require('./DeleteListUseCase');
 
-const checkProjectMembershipByListUseCase = new CheckProjectMembershipByListUseCase(dbRepositories);
+const checkProjectMembershipByListUseCase =
+  new CheckProjectMembershipByListUseCase(dbRepositories);
 const getProjectByListUseCase = new GetProjectByListUseCase(dbRepositories);
 const getListUseCase = new GetListUseCase(dbRepositories);
 const getAllListsUseCase = new GetAllListsUseCase(dbRepositories);
@@ -24,4 +25,4 @@ module.exports = {
   createListUseCase,
   updateListUseCase,
   deleteListUseCase,
-}
+};

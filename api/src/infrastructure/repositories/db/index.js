@@ -30,7 +30,9 @@ const cardMemberRepository = new CardMemberRepository(sequelize);
 const labelRepository = new LabelRepository(sequelize);
 const checklistRepository = new ChecklistRepository(sequelize);
 const checklistItemRepository = new ChecklistItemRepository(sequelize);
-const checklistItemMemberRepository = new ChecklistItemMemberRepository(sequelize);
+const checklistItemMemberRepository = new ChecklistItemMemberRepository(
+  sequelize,
+);
 
 module.exports = {
   userRepository,
@@ -47,5 +49,5 @@ module.exports = {
   labelRepository,
   checklistRepository,
   checklistItemRepository,
-  checklistItemMemberRepository
+  checklistItemMemberRepository,
 };

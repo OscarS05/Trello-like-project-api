@@ -1,10 +1,10 @@
 class GetAllProjectsAssignedUseCase {
-  constructor({ teamRepository }){
+  constructor({ teamRepository }) {
     this.teamRepository = teamRepository;
   }
 
-  async execute(teamId){
-    return await this.teamRepository.findAllProjectsAssigned(teamId);
+  async execute(teamId) {
+    return this.teamRepository.findAllProjectsAssigned(teamId);
   }
 }
 

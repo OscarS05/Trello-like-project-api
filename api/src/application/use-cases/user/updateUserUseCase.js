@@ -1,15 +1,15 @@
 const boom = require('@hapi/boom');
 
 class UpdateUserUseCase {
-  constructor({ userRepository }){
+  constructor({ userRepository }) {
     this.userRepository = userRepository;
   }
 
-  async execute(userId, changes){
+  async execute(userId, changes) {
     const user = await this.userRepository.findById(userId);
-    if(!user) throw boom.notFound('User not found');
+    if (!user) throw boom.notFound('User not found');
 
-    return await this.userRepository.update(userId, changes);
+    return this.userRepository.update(userId, changes);
   }
 }
 

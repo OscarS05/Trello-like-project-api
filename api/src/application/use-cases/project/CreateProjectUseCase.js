@@ -3,11 +3,11 @@ const ProjectMemberEntity = require('../../../domain/entities/projectMemberEntit
 const ProjectDto = require('../../dtos/project.dto');
 
 class CreateProjectUseCase {
-  constructor({ projectRepository }){
+  constructor({ projectRepository }) {
     this.projectRepository = projectRepository;
   }
 
-  async execute(projectData){
+  async execute(projectData) {
     const projectEntity = new ProjectEntity(projectData);
     projectEntity.role = 'owner';
     const { id: projectId, ...rest } = projectEntity;
@@ -15,7 +15,10 @@ class CreateProjectUseCase {
 
     const projectMemberEntity = new ProjectMemberEntity(updatedProject);
 
-    const projectCreated = await this.projectRepository.create(projectEntity, projectMemberEntity);
+    const projectCreated = await this.projectRepository.create(
+      projectEntity,
+      projectMemberEntity,
+    );
     return new ProjectDto(projectCreated);
   }
 }

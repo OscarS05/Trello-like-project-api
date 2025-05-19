@@ -8,6 +8,7 @@ class TeamName {
     this.#value = value;
   }
 
+  // eslint-disable-next-line class-methods-use-this
   #validate(value) {
     if (!value || typeof value !== 'string') {
       throw boom.badData('Team name must be a non-empty string.');

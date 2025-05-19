@@ -13,11 +13,17 @@ const UnassignProjectUseCase = require('./UnassignProjectUseCase');
 const DeleteTeamUseCase = require('./DeleteTeamUseCase');
 
 const countTeamsUseCase = new CountTeamsUseCase(dbRepositories);
-const getTeamsByWorkspaceMemberUseCase = new GetTeamsByWorkspaceMemberUseCase(dbRepositories);
-const getAllProjectsAssignedUseCase = new GetAllProjectsAssignedUseCase(dbRepositories);
+const getTeamsByWorkspaceMemberUseCase = new GetTeamsByWorkspaceMemberUseCase(
+  dbRepositories,
+);
+const getAllProjectsAssignedUseCase = new GetAllProjectsAssignedUseCase(
+  dbRepositories,
+);
 const getProjectAssignedUseCase = new GetProjectAssignedUseCase(dbRepositories);
 const getTeamUseCase = new GetTeamUseCase(dbRepositories);
-const getTeamsByWorkspaceUseCase = new GetTeamsByWorkspaceUseCase(dbRepositories);
+const getTeamsByWorkspaceUseCase = new GetTeamsByWorkspaceUseCase(
+  dbRepositories,
+);
 const createTeamUseCase = new CreateTeamUseCase(dbRepositories);
 const assignProjectUseCase = new AssignProjectUseCase(dbRepositories);
 const updateTeamUseCase = new UpdateTeamUseCase(dbRepositories);
@@ -35,5 +41,5 @@ module.exports = {
   getTeamsByWorkspaceUseCase,
   updateTeamUseCase,
   unassignProjectUseCase,
-  deleteTeamUseCase
-}
+  deleteTeamUseCase,
+};

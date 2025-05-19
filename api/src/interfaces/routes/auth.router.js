@@ -1,15 +1,20 @@
 const express = require('express');
+
 const router = express.Router();
 
 const { changePasswordSchema } = require('../schemas/user.schema');
 
-const { validatorHandler } = require('../middlewares/validator.handler')
-const { limiter, validateSession, refreshTokens } = require('../middlewares/authentication.handler');
+const { validatorHandler } = require('../middlewares/validator.handler');
+const {
+  limiter,
+  refreshTokens,
+} = require('../middlewares/authentication.handler');
 
-const EMAIL_LIMITER_MESSAGE = 'Too many email requests, please try again after an 15 minutes';
+const EMAIL_LIMITER_MESSAGE =
+  'Too many email requests, please try again after an 15 minutes';
 const LOGIN_LIMITER_MESSAGE = {
   error: 'Too many login attempts',
-  message: 'Please wait 15 minutes and try again.'
+  message: 'Please wait 15 minutes and try again.',
 };
 
 const {
@@ -20,9 +25,7 @@ const {
   sendVerificationEmail,
   resendVerificationEmail,
   validateSessionController,
-  validateTokenToVerifyEmail,
 } = require('../controllers/auth.contoller');
-
 
 /**
  * @swagger
@@ -55,10 +58,7 @@ const {
  *       429:
  *         description: Too many login attempts, please try again later.
  */
-router.post('/login',
-  limiter(5, 15 * 60 * 100, LOGIN_LIMITER_MESSAGE),
-  login,
-);
+router.post('/login', limiter(5, 15 * 60 * 100, LOGIN_LIMITER_MESSAGE), login);
 
 /**
  * @swagger
@@ -93,9 +93,10 @@ router.post('/login',
  *       429:
  *         description: Too many requests. Please try again later.
  */
-router.post('/send-verification-email',
+router.post(
+  '/send-verification-email',
   limiter(3, 15 * 60 * 100, EMAIL_LIMITER_MESSAGE),
-  sendVerificationEmail
+  sendVerificationEmail,
 );
 
 /**
@@ -120,9 +121,10 @@ router.post('/send-verification-email',
  *       429:
  *         description: Too many requests. Please try again later.
  */
-router.post('/resend-verification-email',
+router.post(
+  '/resend-verification-email',
   limiter(3, 15 * 60 * 100, EMAIL_LIMITER_MESSAGE),
-  resendVerificationEmail
+  resendVerificationEmail,
 );
 
 /**
@@ -155,9 +157,7 @@ router.post('/resend-verification-email',
  *       404:
  *         description: Not found.
  */
-router.post('/verify-email',
-  verifyEmailToActivateAccount
-);
+router.post('/verify-email', verifyEmailToActivateAccount);
 
 /**
  * @swagger
@@ -187,9 +187,7 @@ router.post('/verify-email',
  *       401:
  *         description: Unauthorized. Token is invalid or expired.
  */
-router.post('/verify-email-to-recover-password',
-  verifyEmailToRecoveryPassword
-);
+router.post('/verify-email-to-recover-password', verifyEmailToRecoveryPassword);
 
 /**
  * @swagger
@@ -222,9 +220,10 @@ router.post('/verify-email-to-recover-password',
  *       401:
  *         description: Unauthorized. Missing or invalid verifyEmail cookie.
  */
-router.patch('/password',
+router.patch(
+  '/password',
   validatorHandler(changePasswordSchema, 'body'),
-  changePassword
+  changePassword,
 );
 
 /**
@@ -252,13 +251,10 @@ router.patch('/password',
  *         content:
  *           application/json:
  *             schema:
-  *               $ref: '#/components/schemas/loginResponse'
+ *               $ref: '#/components/schemas/loginResponse'
  *       401:
  *         description: Unauthorized. Invalid or missing access or refresh token.
  */
-router.post('/refresh-tokens',
-  refreshTokens,
-  validateSessionController,
-)
+router.post('/refresh-tokens', refreshTokens, validateSessionController);
 
 module.exports = router;

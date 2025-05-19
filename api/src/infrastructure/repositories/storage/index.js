@@ -6,4 +6,4 @@ const cloudinaryStorageRepository = new CloudinaryStorageRepository(Cloudinary);
 
 module.exports = {
   cloudinaryStorageRepository,
-}
+};

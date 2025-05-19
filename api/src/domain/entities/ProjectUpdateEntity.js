@@ -5,11 +5,15 @@ const ProjectName = require('../value-objects/projectName');
 class ProjectUpdateEntity {
   constructor({ name, visibility }) {
     if (!name || !visibility) {
-      throw boom.badData("At least one of 'name' or 'visibility' must be provided.");
+      throw boom.badData(
+        "At least one of 'name' or 'visibility' must be provided.",
+      );
     }
 
     this.name = name ? new ProjectName(name).getValue() : null;
-    this.visibility = visibility ? new ProjectVisibility(visibility).toString() : null;
+    this.visibility = visibility
+      ? new ProjectVisibility(visibility).toString()
+      : null;
   }
 }
 

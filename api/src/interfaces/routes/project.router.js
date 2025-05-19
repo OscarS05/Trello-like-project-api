@@ -11,7 +11,6 @@ const {
   checkWorkspaceMembership,
 } = require('../middlewares/authorization/workspace.authorization');
 const {
-  checkProjectMembershipByUserId,
   validateProjectReadPermission,
 } = require('../middlewares/authorization/project.authorization');
 
@@ -69,7 +68,7 @@ router.get(
   validateSession,
   validatorHandler(projectId, 'params'),
   validateProjectReadPermission,
-  projectControllers.getAllprojectInformation
+  projectControllers.getAllprojectInformation,
 );
 
 /**
@@ -114,7 +113,7 @@ router.get(
   validateSession,
   validatorHandler(workspaceIdSchema, 'params'),
   checkWorkspaceMembership,
-  projectControllers.getProjectsByWorkspace
+  projectControllers.getProjectsByWorkspace,
 );
 
 /**
@@ -167,7 +166,7 @@ router.post(
   validatorHandler(createProject, 'body'),
   checkWorkspaceMembership,
   authorizationToCreateProject,
-  projectControllers.createProject
+  projectControllers.createProject,
 );
 
 /**
@@ -229,7 +228,7 @@ router.patch(
   validatorHandler(projectIdSchema, 'params'),
   validatorHandler(updateProject, 'body'),
   checkAdminRole,
-  projectControllers.updateProject
+  projectControllers.updateProject,
 );
 
 /**
@@ -301,7 +300,7 @@ router.patch(
   validatorHandler(projectIdSchema, 'params'),
   checkAdminRole,
   uploadProjectBackgroundImage,
-  projectControllers.updateBackgroundProject
+  projectControllers.updateBackgroundProject,
 );
 
 /**
@@ -353,7 +352,7 @@ router.delete(
   validateSession,
   validatorHandler(projectIdSchema, 'params'),
   checkOwnership,
-  projectControllers.deleteProject
+  projectControllers.deleteProject,
 );
 
 module.exports = router;

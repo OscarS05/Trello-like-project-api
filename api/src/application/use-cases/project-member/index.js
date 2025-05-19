@@ -14,17 +14,25 @@ const RemoveMemberUseCase = require('./RemoveMemberUseCase');
 const CheckProjectMembershipByUserUseCase = require('./CheckProjectMembershipByUserUseCase');
 
 const getAllMembersByIdUseCase = new GetAllMembersByIdUseCase(dbRepositories);
-const getProjectMembersOfWorkspaceMemberUseCase = new GetProjectMembersOfWorkspaceMemberUseCase(dbRepositories);
-const getProjectMembersByProjectUseCase = new GetProjectMembersByProjectUseCase(dbRepositories);
-const getProjectMemberByUserUseCase = new GetProjectMemberByUserUseCase(dbRepositories);
-const getProjectMemberByWorkspaceMemberUseCase = new GetProjectMemberByWorkspaceMemberUseCase(dbRepositories);
-const getProjectWithItsMembersAndTeamsUseCase = new GetProjectWithItsMembersAndTeamsUseCase(dbRepositories);
+const getProjectMembersOfWorkspaceMemberUseCase =
+  new GetProjectMembersOfWorkspaceMemberUseCase(dbRepositories);
+const getProjectMembersByProjectUseCase = new GetProjectMembersByProjectUseCase(
+  dbRepositories,
+);
+const getProjectMemberByUserUseCase = new GetProjectMemberByUserUseCase(
+  dbRepositories,
+);
+const getProjectMemberByWorkspaceMemberUseCase =
+  new GetProjectMemberByWorkspaceMemberUseCase(dbRepositories);
+const getProjectWithItsMembersAndTeamsUseCase =
+  new GetProjectWithItsMembersAndTeamsUseCase(dbRepositories);
 const getMemberByIdUseCase = new GetMemberByIdUseCase(dbRepositories);
 const addMemberToProjectUseCase = new AddMemberToProjectUseCase(dbRepositories);
 const updateRoleUseCase = new UpdateRoleUseCase(dbRepositories);
 const transferOwnershipUseCase = new TransferOwnershipUseCase(dbRepositories);
 const removeMemberUseCase = new RemoveMemberUseCase(dbRepositories);
-const checkProjectMembershipByUserUseCase = new CheckProjectMembershipByUserUseCase(dbRepositories);
+const checkProjectMembershipByUserUseCase =
+  new CheckProjectMembershipByUserUseCase(dbRepositories);
 
 module.exports = {
   getAllMembersByIdUseCase,
@@ -32,7 +40,6 @@ module.exports = {
   getProjectMemberByWorkspaceMemberUseCase,
   getProjectMembersByProjectUseCase,
   getProjectMemberByUserUseCase,
-  getProjectMemberByWorkspaceMemberUseCase,
   getProjectWithItsMembersAndTeamsUseCase,
   getMemberByIdUseCase,
   addMemberToProjectUseCase,
@@ -40,4 +47,4 @@ module.exports = {
   transferOwnershipUseCase,
   removeMemberUseCase,
   checkProjectMembershipByUserUseCase,
-}
+};

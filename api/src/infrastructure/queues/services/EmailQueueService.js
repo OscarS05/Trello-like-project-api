@@ -6,7 +6,7 @@ class EmailQueueService {
   }
 
   async sendVerificationEmail({ email, name, token }) {
-    return await this.queue.add(sendVerificationEmailName, {
+    return this.queue.add(sendVerificationEmailName, {
       email,
       name,
       token,

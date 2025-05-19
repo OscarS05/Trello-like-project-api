@@ -3,11 +3,11 @@ const TeamMemberEntity = require('../../../domain/entities/TeamMemberEntity');
 const TeamDto = require('../../dtos/team.dto');
 
 class CreateTeamUseCase {
-  constructor({ teamRepository }){
+  constructor({ teamRepository }) {
     this.teamRepository = teamRepository;
   }
 
-  async execute(teamData){
+  async execute(teamData) {
     const teamEntity = new TeamEntity(teamData);
     teamEntity.role = 'owner';
 
@@ -16,7 +16,10 @@ class CreateTeamUseCase {
 
     const teamMemberEntity = new TeamMemberEntity(formattedTeam);
 
-    const teamCreated = await this.teamRepository.create(teamEntity, teamMemberEntity);
+    const teamCreated = await this.teamRepository.create(
+      teamEntity,
+      teamMemberEntity,
+    );
     return new TeamDto(teamCreated);
   }
 }

@@ -7,9 +7,11 @@ const dueDate = Joi.date().iso().greater('now').messages({
   'date.greater': 'Due date must be in the future',
 });
 const isChecked = Joi.boolean();
-const assignedProjectMemberIds = Joi.array().items( Joi.string().uuid() ).messages({
-  'array.includes': 'All member IDs must be uuids',
-});
+const assignedProjectMemberIds = Joi.array()
+  .items(Joi.string().uuid())
+  .messages({
+    'array.includes': 'All member IDs must be uuids',
+  });
 
 const checklistItemSchema = Joi.object({
   cardId: id.required(),
@@ -30,8 +32,12 @@ const updateChecklistItemSchema = Joi.object({
 });
 
 const schemaUpdateCheck = Joi.object({
-  isChecked: isChecked.required()
+  isChecked: isChecked.required(),
 });
 
-
-module.exports = { checklistItemSchema, createChecklistItemSchema, updateChecklistItemSchema, schemaUpdateCheck }
+module.exports = {
+  checklistItemSchema,
+  createChecklistItemSchema,
+  updateChecklistItemSchema,
+  schemaUpdateCheck,
+};

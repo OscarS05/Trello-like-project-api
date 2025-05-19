@@ -3,7 +3,7 @@ const Joi = require('joi');
 const id = Joi.string().uuid();
 
 const cardIdSchema = Joi.object({
-  cardId: id.required()
+  cardId: id.required(),
 });
 
 const cardMemberSchema = Joi.object({
@@ -11,5 +11,4 @@ const cardMemberSchema = Joi.object({
   projectMemberId: id.required(),
 });
 
-
-module.exports = { cardIdSchema, cardMemberSchema }
+module.exports = { cardIdSchema, cardMemberSchema };

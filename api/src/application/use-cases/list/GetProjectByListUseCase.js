@@ -4,7 +4,8 @@ class GetProjectByListUseCase {
   }
 
   async execute(listId) {
-    const listIWithItsProject = await this.listRepository.getProjectByList(listId);
+    const listIWithItsProject =
+      await this.listRepository.getProjectByList(listId);
     return listIWithItsProject?.id ? listIWithItsProject : {};
   }
 }
