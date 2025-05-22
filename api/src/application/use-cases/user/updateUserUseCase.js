@@ -7,7 +7,7 @@ class UpdateUserUseCase {
 
   async execute(userId, changes) {
     const user = await this.userRepository.findById(userId);
-    if (!user) throw boom.notFound('User not found');
+    if (!user?.id) throw boom.notFound('User not found');
 
     return this.userRepository.update(userId, changes);
   }

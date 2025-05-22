@@ -15,11 +15,14 @@ class SignUpUseCase {
     );
     if (userAlreadyExists) throw boom.conflict('User already exists');
 
-    // eslint-disable-next-line no-param-reassign
-    userData.password = await bcrypt.hash(userData.password, 10);
-
     const user = new UserEntity(userData).toPlainObject();
-    const userCreated = await this.userRepository.create(user);
+
+    const hashedPassword = await bcrypt.hash(userData.password, 10);
+
+    const userCreated = await this.userRepository.create({
+      ...user,
+      password: hashedPassword,
+    });
 
     return new UserDto(userCreated);
   }

@@ -1,3 +1,5 @@
+const Boom = require('@hapi/boom');
+const EmailVO = require('../../../domain/value-objects/email');
 const UserDto = require('../../dtos/user.dto');
 
 class GetUserByEmailUseCase {
@@ -6,7 +8,9 @@ class GetUserByEmailUseCase {
   }
 
   async execute(email) {
-    const user = await this.userRepository.findByEmail(email);
+    const emailVO = new EmailVO(email).value;
+    const user = await this.userRepository.findByEmail(emailVO);
+    if (!user?.id) throw Boom.notFound('User not found');
     return new UserDto(user);
   }
 }

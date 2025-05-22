@@ -10,7 +10,6 @@ class Password {
     this.value = value;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   validate(password) {
     if (password.length < 8) {
       throw boom.badData('Password must be at least 8 characters long');

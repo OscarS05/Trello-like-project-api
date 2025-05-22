@@ -17,19 +17,19 @@ class DeleteAccountUseCase {
 
   async execute(userId) {
     const user = await this.userRepository.findAllWorkspacesByUserId(userId);
-    if (!user.id) throw boom.notFound('User not found');
+    if (!user?.id) throw boom.notFound('User not found');
 
-    if (!user.workspaces?.length === 0) return this.deleteUser(userId);
+    if (user.workspaces?.length === 0) return this.deleteUser(userId);
 
-    if (user.workspaces?.length > 0)
+    if (user.workspaces?.length > 0) {
       await this.leaveWorkspacesHandler(user.workspaces, user);
+    }
 
-    await this.deleteUser(userId);
-    return 1;
+    return this.deleteUser(userId);
   }
 
-  async leaveProjectsHandler(workspacesWithMembers, userAsWorkspaceMembersIds) {
-    const projectsWithOneMemberWhichUserBelongs = workspacesWithMembers
+  groupUserProjectsByCase(workspacesWithMembers, userAsWorkspaceMembersIds) {
+    const projectsWithOneMember = workspacesWithMembers
       .map((w) => w.projects)
       .flat()
       .filter(
@@ -40,17 +40,7 @@ class DeleteAccountUseCase {
           ),
       );
 
-    if (projectsWithOneMemberWhichUserBelongs.length > 0) {
-      throw boom.badRequest(
-        `You are the only member of the following projects: ${projectsWithOneMemberWhichUserBelongs
-          .map((p) => p.name)
-          .join(
-            ', ',
-          )}. Please remove them before deleting your account, or add a member if you do not want to delete a project.`,
-      );
-    }
-
-    const projectsWithMembersWhichUserBelongs = workspacesWithMembers
+    const projectsWithMembers = workspacesWithMembers
       .map((w) => w.projects)
       .flat()
       .filter(
@@ -61,24 +51,106 @@ class DeleteAccountUseCase {
           ),
       );
 
-    if (projectsWithMembersWhichUserBelongs.length === 0) return 1;
-
-    const projectsWhichUserIsOwner = projectsWithMembersWhichUserBelongs.filter(
-      (p) =>
-        p.projectMembers.find(
-          (pm) =>
-            pm.role === 'owner' &&
-            userAsWorkspaceMembersIds.includes(pm.workspaceMemberId),
-        ),
+    const projectsWhichUserIsOwner = projectsWithMembers.filter((p) =>
+      p.projectMembers.find(
+        (pm) =>
+          pm.role === 'owner' &&
+          userAsWorkspaceMembersIds.includes(pm.workspaceMemberId),
+      ),
     );
-    const projectsWhichUserIsNotOwner =
-      projectsWithMembersWhichUserBelongs.filter((p) =>
-        p.projectMembers.find(
-          (pm) =>
-            pm.role !== 'owner' &&
-            userAsWorkspaceMembersIds.includes(pm.workspaceMemberId),
-        ),
+    const projectsWhichUserIsNotOwner = projectsWithMembers.filter((p) =>
+      p.projectMembers.find(
+        (pm) =>
+          pm.role !== 'owner' &&
+          userAsWorkspaceMembersIds.includes(pm.workspaceMemberId),
+      ),
+    );
+
+    return {
+      projectsWithOneMember,
+      projectsWithMembers,
+      projectsWhichUserIsOwner,
+      projectsWhichUserIsNotOwner,
+    };
+  }
+
+  findNewOwnerForProject(project, userAsWorkspaceMembersIds) {
+    const currentOwner = project.projectMembers.find(
+      (pm) =>
+        pm.role === 'owner' &&
+        userAsWorkspaceMembersIds.includes(pm.workspaceMemberId),
+    );
+
+    if (!currentOwner?.id)
+      throw boom.notFound(`No current owner found for project ${project.name}`);
+
+    const candidates = project.projectMembers.filter(
+      (pm) =>
+        !userAsWorkspaceMembersIds.includes(pm.workspaceMemberId) &&
+        pm.role !== 'owner' &&
+        pm.role !== 'viewer',
+    );
+
+    const newOwner =
+      candidates.find((pm) => pm.role === 'admin') ||
+      candidates.find((pm) => pm.role === 'member');
+
+    if (!newOwner?.id)
+      throw boom.notFound(`No new owner found for project ${project.name}`);
+
+    if (currentOwner.id === newOwner.id)
+      throw boom.badRequest(
+        `Current owner and new owner are the same in the project ${
+          project.name
+        }`,
       );
+
+    return { currentOwner, newOwner };
+  }
+
+  async transferOwnershipForProjects(
+    newOwnerByProject,
+    userAsCurrentOwnerByProject,
+    userAsWorkspaceMembersIds,
+  ) {
+    return Promise.all(
+      newOwnerByProject.map(async (newOwner) => {
+        const currentOwner = userAsCurrentOwnerByProject.find(
+          (co) =>
+            co.projectId === newOwner.projectId &&
+            userAsWorkspaceMembersIds.includes(co.workspaceMemberId),
+        );
+        return this.projectMemberRepository.transferOwnership(
+          newOwner.projectId,
+          currentOwner,
+          newOwner,
+        );
+      }),
+    );
+  }
+
+  async leaveProjectsHandler(workspacesWithMembers, userAsWorkspaceMembersIds) {
+    const {
+      projectsWithMembers,
+      projectsWithOneMember,
+      projectsWhichUserIsNotOwner,
+      projectsWhichUserIsOwner,
+    } = this.groupUserProjectsByCase(
+      workspacesWithMembers,
+      userAsWorkspaceMembersIds,
+    );
+
+    if (projectsWithOneMember.length > 0) {
+      throw boom.badRequest(
+        `You are the only member of the following projects: ${projectsWithOneMember
+          .map((p) => p.name)
+          .join(
+            ', ',
+          )}. Please remove them before deleting your account, or add a member if you do not want to delete a project.`,
+      );
+    }
+
+    if (projectsWithMembers.length === 0) return 1;
 
     const userAsProjectMemberIds = [];
 
@@ -87,53 +159,22 @@ class DeleteAccountUseCase {
       const newOwnerByProject = [];
 
       projectsWhichUserIsOwner.forEach((project) => {
-        const currentOwner = project.projectMembers.find(
-          (pm) =>
-            pm.role === 'owner' &&
-            userAsWorkspaceMembersIds.includes(pm.workspaceMemberId),
+        const { currentOwner, newOwner } = this.findNewOwnerForProject(
+          project,
+          userAsWorkspaceMembersIds,
         );
-        if (!currentOwner?.id)
-          throw boom.notFound(
-            `No current owner found for project ${project.name}`,
-          );
-
-        const candidates = project.projectMembers.filter(
-          (pm) =>
-            !userAsWorkspaceMembersIds.includes(pm.workspaceMemberId) &&
-            pm.role !== 'owner' &&
-            pm.role !== 'viewer',
-        );
-        const newOwner =
-          candidates.find((pm) => pm.role === 'admin') ||
-          candidates.find((pm) => pm.role === 'member');
-
-        if (!newOwner?.id)
-          throw boom.notFound(`No new owner found for project ${project.name}`);
-        if (currentOwner.id === newOwner.id)
-          throw boom.badRequest(
-            `Current owner and new owner are the same in the project ${
-              project.name
-            }`,
-          );
 
         userAsCurrentOwnerByProject.push(currentOwner);
         newOwnerByProject.push(newOwner);
       });
 
-      await Promise.all(
-        newOwnerByProject.map(async (newOwner) => {
-          const currentOwner = userAsCurrentOwnerByProject.find(
-            (co) =>
-              co.projectId === newOwner.projectId &&
-              userAsWorkspaceMembersIds.includes(co.workspaceMemberId),
-          );
-          return this.projectMemberRepository.transferOwnership(
-            newOwner.projectId,
-            currentOwner,
-            newOwner,
-          );
-        }),
-      );
+      if (newOwnerByProject.length >= 1) {
+        await this.transferOwnershipForProjects(
+          newOwnerByProject,
+          userAsCurrentOwnerByProject,
+          userAsWorkspaceMembersIds,
+        );
+      }
 
       userAsProjectMemberIds.push(
         userAsCurrentOwnerByProject.map((co) => co.id),
@@ -153,8 +194,8 @@ class DeleteAccountUseCase {
     return this.deleteUserFromProjects(userAsProjectMemberIds.flat());
   }
 
-  async leaveTeamsHandler(workspacesWithMembers, userAsWorkspaceMembersIds) {
-    const teamsWithOneMemberWhichUserBelongs = workspacesWithMembers
+  groupUserTeamsByCase(workspacesWithMembers, userAsWorkspaceMembersIds) {
+    const teamsWithOneMember = workspacesWithMembers
       .map((w) => w.teams)
       .flat()
       .filter(
@@ -165,17 +206,7 @@ class DeleteAccountUseCase {
           ),
       );
 
-    if (teamsWithOneMemberWhichUserBelongs.length > 0) {
-      throw boom.badRequest(
-        `You are the only member of the following teams: ${teamsWithOneMemberWhichUserBelongs
-          .map((t) => t.name)
-          .join(
-            ', ',
-          )}. Please remove them before deleting your account, or add a member if you do not want to delete a team.`,
-      );
-    }
-
-    const teamsWithMembersWhichUserBelongs = workspacesWithMembers
+    const teamsWithMembers = workspacesWithMembers
       .map((w) => w.teams)
       .flat()
       .filter(
@@ -186,23 +217,101 @@ class DeleteAccountUseCase {
           ),
       );
 
-    if (teamsWithMembersWhichUserBelongs.length === 0) return 1;
-
-    const teamsWhichUserIsOwner = teamsWithMembersWhichUserBelongs.filter((t) =>
+    const teamsWhichUserIsOwner = teamsWithMembers.filter((t) =>
       t.teamMembers.find(
         (tm) =>
           tm.role === 'owner' &&
           userAsWorkspaceMembersIds.includes(tm.workspaceMemberId),
       ),
     );
-    const teamsWhichUserIsNotOwner = teamsWithMembersWhichUserBelongs.filter(
-      (t) =>
-        t.teamMembers.find(
-          (tm) =>
-            tm.role !== 'owner' &&
-            userAsWorkspaceMembersIds.includes(tm.workspaceMemberId),
-        ),
+    const teamsWhichUserIsNotOwner = teamsWithMembers.filter((t) =>
+      t.teamMembers.find(
+        (tm) =>
+          tm.role !== 'owner' &&
+          userAsWorkspaceMembersIds.includes(tm.workspaceMemberId),
+      ),
     );
+
+    return {
+      teamsWithOneMember,
+      teamsWithMembers,
+      teamsWhichUserIsOwner,
+      teamsWhichUserIsNotOwner,
+    };
+  }
+
+  findNewOwnerForTeams(team, userAsWorkspaceMembersIds) {
+    const currentOwner = team.teamMembers.find(
+      (tm) =>
+        tm.role === 'owner' &&
+        userAsWorkspaceMembersIds.includes(tm.workspaceMemberId),
+    );
+    if (!currentOwner?.id)
+      throw boom.notFound(`No current owner found for team ${team.name}`);
+
+    const candidates = team.teamMembers.filter(
+      (tm) =>
+        !userAsWorkspaceMembersIds.includes(tm.workspaceMemberId) &&
+        tm.role !== 'owner' &&
+        tm.role !== 'viewer',
+    );
+    const newOwner =
+      candidates.find((tm) => tm.role === 'admin') ||
+      candidates.find((tm) => tm.role === 'member');
+
+    if (!newOwner?.id)
+      throw boom.notFound(`No new owner found for team ${team.name}`);
+    if (currentOwner.id === newOwner.id)
+      throw boom.badRequest(
+        `Current owner and new owner are the same in the team ${team.name}`,
+      );
+
+    return { currentOwner, newOwner };
+  }
+
+  async transferOwnershipForTeams(
+    newOwnerByTeam,
+    userAsCurrentOwnerByTeam,
+    userAsWorkspaceMembersIds,
+  ) {
+    return Promise.all(
+      newOwnerByTeam.map(async (newOwner) => {
+        const currentOwner = userAsCurrentOwnerByTeam.find(
+          (co) =>
+            co.teamId === newOwner.teamId &&
+            userAsWorkspaceMembersIds.includes(co.workspaceMemberId),
+        );
+        return this.teamMemberRepository.transferOwnership(
+          newOwner.teamId,
+          currentOwner,
+          newOwner,
+        );
+      }),
+    );
+  }
+
+  async leaveTeamsHandler(workspacesWithMembers, userAsWorkspaceMembersIds) {
+    const {
+      teamsWithOneMember,
+      teamsWithMembers,
+      teamsWhichUserIsNotOwner,
+      teamsWhichUserIsOwner,
+    } = this.groupUserTeamsByCase(
+      workspacesWithMembers,
+      userAsWorkspaceMembersIds,
+    );
+
+    if (teamsWithOneMember.length > 0) {
+      throw boom.badRequest(
+        `You are the only member of the following teams: ${teamsWithOneMember
+          .map((t) => t.name)
+          .join(
+            ', ',
+          )}. Please remove them before deleting your account, or add a member if you do not want to delete a team.`,
+      );
+    }
+
+    if (teamsWithMembers.length === 0) return 1;
 
     const userAsTeamMemberIds = [];
 
@@ -211,49 +320,22 @@ class DeleteAccountUseCase {
       const newOwnerByTeam = [];
 
       teamsWhichUserIsOwner.forEach((team) => {
-        const currentOwner = team.teamMembers.find(
-          (tm) =>
-            tm.role === 'owner' &&
-            userAsWorkspaceMembersIds.includes(tm.workspaceMemberId),
+        const { currentOwner, newOwner } = this.findNewOwnerForTeams(
+          team,
+          userAsWorkspaceMembersIds,
         );
-        if (!currentOwner?.id)
-          throw boom.notFound(`No current owner found for team ${team.name}`);
-
-        const candidates = team.teamMembers.filter(
-          (tm) =>
-            !userAsWorkspaceMembersIds.includes(tm.workspaceMemberId) &&
-            tm.role !== 'owner' &&
-            tm.role !== 'viewer',
-        );
-        const newOwner =
-          candidates.find((tm) => tm.role === 'admin') ||
-          candidates.find((tm) => tm.role === 'member');
-
-        if (!newOwner?.id)
-          throw boom.notFound(`No new owner found for team ${team.name}`);
-        if (currentOwner.id === newOwner.id)
-          throw boom.badRequest(
-            `Current owner and new owner are the same in the team ${team.name}`,
-          );
 
         userAsCurrentOwnerByTeam.push(currentOwner);
         newOwnerByTeam.push(newOwner);
       });
 
-      await Promise.all(
-        newOwnerByTeam.map(async (newOwner) => {
-          const currentOwner = userAsCurrentOwnerByTeam.find(
-            (co) =>
-              co.teamId === newOwner.teamId &&
-              userAsWorkspaceMembersIds.includes(co.workspaceMemberId),
-          );
-          return this.teamMemberRepository.transferOwnership(
-            newOwner.teamId,
-            currentOwner,
-            newOwner,
-          );
-        }),
-      );
+      if (newOwnerByTeam.length > 0) {
+        await this.transferOwnershipForTeams(
+          newOwnerByTeam,
+          userAsCurrentOwnerByTeam,
+          userAsWorkspaceMembersIds,
+        );
+      }
 
       userAsTeamMemberIds.push(userAsCurrentOwnerByTeam.map((co) => co.id));
     }
@@ -272,61 +354,130 @@ class DeleteAccountUseCase {
     return this.deleteUserFromTeams(userAsTeamMemberIds.flat());
   }
 
-  async leaveWorkspacesHandler(workspaces, user) {
-    const workspacesWithOneMemberWhichUserBelongs = workspaces?.filter(
+  groupUserWorkspacesByCase(workspaces, user) {
+    const workspacesWithOneMember = workspaces?.filter(
       (w) =>
         w.workspaceMembers.length === 1 &&
         w.workspaceMembers[0].userId === user.id,
     );
-    if (workspacesWithOneMemberWhichUserBelongs.length > 0) {
-      const workspacesWithOneMemberIds =
-        workspacesWithOneMemberWhichUserBelongs.map((w) => w.id);
-      await this.deleteWorkspaces(workspacesWithOneMemberIds);
-    }
 
-    const workspacesWithMembersWhichUserBelongs = workspaces?.filter(
+    const workspacesWithMultiMembers = workspaces?.filter(
       (w) => w.workspaceMembers.length > 1,
     );
-    if (workspacesWithMembersWhichUserBelongs.length === 0) return 1;
 
-    if (workspacesWithMembersWhichUserBelongs.length > 0) {
-      const userAsWorkspaceMembersIds = workspacesWithMembersWhichUserBelongs
-        .map((w) => w.workspaceMembers)
-        .flat()
-        .filter((wm) => wm.userId === user.id)
-        .map((wm) => wm.id);
+    const workspacesWhichUserIsOwner = workspacesWithMultiMembers.filter((w) =>
+      w.workspaceMembers.find(
+        (wm) => wm.role === 'owner' && wm.userId === user.id,
+      ),
+    );
 
-      if (
-        workspacesWithMembersWhichUserBelongs.map((w) => w.projects?.length > 0)
-      ) {
-        await this.leaveProjectsHandler(
-          workspacesWithMembersWhichUserBelongs,
-          userAsWorkspaceMembersIds,
-        );
-      }
-
-      if (
-        workspacesWithMembersWhichUserBelongs.map((w) => w.teams?.length > 0)
-      ) {
-        await this.leaveTeamsHandler(
-          workspacesWithMembersWhichUserBelongs,
-          userAsWorkspaceMembersIds,
-        );
-      }
-    }
-
-    const workspacesWhichUserIsOwner =
-      workspacesWithMembersWhichUserBelongs.filter((w) =>
-        w.workspaceMembers.find(
-          (wm) => wm.role === 'owner' && wm.userId === user.id,
-        ),
-      );
-    const workspacesWhichUserIsNotOwner =
-      workspacesWithMembersWhichUserBelongs.filter((w) =>
+    const workspacesWhichUserIsNotOwner = workspacesWithMultiMembers.filter(
+      (w) =>
         w.workspaceMembers.find(
           (wm) => wm.role !== 'owner' && wm.userId === user.id,
         ),
+    );
+
+    return {
+      workspacesWithOneMember,
+      workspacesWithMultiMembers,
+      workspacesWhichUserIsOwner,
+      workspacesWhichUserIsNotOwner,
+    };
+  }
+
+  findNewOwnerForWorkspace(workspace, user) {
+    const currentOwner = workspace.workspaceMembers.find(
+      (wm) => wm.role === 'owner' && wm.userId === user.id,
+    );
+    if (!currentOwner?.id)
+      throw boom.notFound(
+        `No current owner found for workspace ${workspace.name}`,
       );
+
+    const candidates = workspace.workspaceMembers.filter(
+      (wm) =>
+        wm.userId !== user.id && wm.role !== 'owner' && wm.role !== 'viewer',
+    );
+    const newOwner =
+      candidates.find((wm) => wm.role === 'admin') ||
+      candidates.find((wm) => wm.role === 'member');
+
+    if (!newOwner?.id)
+      throw boom.notFound(`No new owner found for workspace ${workspace.name}`);
+
+    if (currentOwner.id === newOwner.id)
+      throw boom.badRequest(
+        `Current owner and new owner are the same in the workspace ${
+          workspace.name
+        }`,
+      );
+
+    return { currentOwner, newOwner };
+  }
+
+  getUserAsWorkspaceMemberIds(workspaces, user) {
+    return workspaces
+      .map((w) => w.workspaceMembers)
+      .flat()
+      .filter((wm) => wm.userId === user.id)
+      .map((wm) => wm.id);
+  }
+
+  async transferOwnershipForWorkspaces(
+    newOwnerByWorkspace,
+    userAsCurrentOwnerByWorkspace,
+    user,
+  ) {
+    return Promise.all(
+      newOwnerByWorkspace.map(async (newOwner) => {
+        const currentOwner = userAsCurrentOwnerByWorkspace.find(
+          (co) =>
+            co.workspaceId === newOwner.workspaceId && co.userId === user.id,
+        );
+        return this.workspaceMemberRepository.transferOwnership(
+          currentOwner,
+          newOwner,
+        );
+      }),
+    );
+  }
+
+  async leaveWorkspacesHandler(workspaces, user) {
+    const {
+      workspacesWithOneMember,
+      workspacesWithMultiMembers,
+      workspacesWhichUserIsOwner,
+      workspacesWhichUserIsNotOwner,
+    } = this.groupUserWorkspacesByCase(workspaces, user);
+
+    if (workspacesWithOneMember.length > 0) {
+      const workspacesWithOneMemberIds = workspacesWithOneMember.map(
+        (w) => w.id,
+      );
+      await this.deleteWorkspaces(workspacesWithOneMemberIds);
+    }
+
+    if (workspacesWithMultiMembers.length === 0) return 1;
+
+    const userAsWorkspaceMembersIds = this.getUserAsWorkspaceMemberIds(
+      workspacesWithMultiMembers,
+      user,
+    );
+
+    if (workspacesWithMultiMembers.some((w) => w.projects?.length > 0)) {
+      await this.leaveProjectsHandler(
+        workspacesWithMultiMembers,
+        userAsWorkspaceMembersIds,
+      );
+    }
+
+    if (workspacesWithMultiMembers.some((w) => w.teams?.length > 0)) {
+      await this.leaveTeamsHandler(
+        workspacesWithMultiMembers,
+        userAsWorkspaceMembersIds,
+      );
+    }
 
     const userAsWorkspaceMemberIds = [];
 
@@ -335,51 +486,22 @@ class DeleteAccountUseCase {
       const newOwnerByWorkspace = [];
 
       workspacesWhichUserIsOwner.forEach((workspace) => {
-        const currentOwner = workspace.workspaceMembers.find(
-          (wm) => wm.role === 'owner' && wm.userId === user.id,
+        const { currentOwner, newOwner } = this.findNewOwnerForWorkspace(
+          workspace,
+          user,
         );
-        if (!currentOwner?.id)
-          throw boom.notFound(
-            `No current owner found for workspace ${workspace.name}`,
-          );
-
-        const candidates = workspace.workspaceMembers.filter(
-          (wm) =>
-            wm.userId !== user.id &&
-            wm.role !== 'owner' &&
-            wm.role !== 'viewer',
-        );
-        const newOwner =
-          candidates.find((wm) => wm.role === 'admin') ||
-          candidates.find((wm) => wm.role === 'member');
-
-        if (!newOwner?.id)
-          throw boom.notFound(
-            `No new owner found for workspace ${workspace.name}`,
-          );
-        if (currentOwner.id === newOwner.id)
-          throw boom.badRequest(
-            `Current owner and new owner are the same in the workspace ${
-              workspace.name
-            }`,
-          );
 
         userAsCurrentOwnerByWorkspace.push(currentOwner);
         newOwnerByWorkspace.push(newOwner);
       });
 
-      await Promise.all(
-        newOwnerByWorkspace.map(async (newOwner) => {
-          const currentOwner = userAsCurrentOwnerByWorkspace.find(
-            (co) =>
-              co.workspaceId === newOwner.workspaceId && co.userId === user.id,
-          );
-          return this.workspaceMemberRepository.transferOwnership(
-            currentOwner,
-            newOwner,
-          );
-        }),
-      );
+      if (newOwnerByWorkspace.length >= 1) {
+        await this.transferOwnershipForWorkspaces(
+          newOwnerByWorkspace,
+          userAsCurrentOwnerByWorkspace,
+          user,
+        );
+      }
 
       userAsWorkspaceMemberIds.push(
         userAsCurrentOwnerByWorkspace.map((co) => co.id),

@@ -1,3 +1,4 @@
+const QueryVO = require('../../../domain/value-objects/queries');
 const UserDto = require('../../dtos/user.dto');
 
 class GetUsersUseCase {
@@ -6,7 +7,8 @@ class GetUsersUseCase {
   }
 
   async execute(query) {
-    const users = await this.userRepository.findAll(query);
+    const queryVO = new QueryVO(query);
+    const users = await this.userRepository.findAll(queryVO);
     return users.map((user) => new UserDto(user));
   }
 }

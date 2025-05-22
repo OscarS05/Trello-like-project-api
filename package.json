@@ -8,6 +8,7 @@
     "start": "pm2-runtime ecosystem.config.js",
     "lint": "eslint ./api",
     "lint:fix": "eslint ./api --fix",
+    "test": "jest",
     "migrations:generate": "sequelize-cli migration:generate --name",
     "migrations:run": "sequelize-cli db:migrate",
     "migrations:revert": "sequelize-cli db:migrate:undo",
@@ -56,6 +57,7 @@
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-prettier": "^5.4.0",
+    "jest": "^29.7.0",
     "nodemon": "^3.1.7",
     "prettier": "^3.5.3",
     "sequelize-cli": "^6.6.3"
