@@ -1,3 +1,12 @@
+const mockJobWithBullMQ = (options = {}) => {
+  const { overrides = {}, jobName = 'sendVerificationEmail' } = options;
+  return {
+    id: '1',
+    name: jobName,
+    ...overrides,
+  };
+};
+
 const createUser = (overrides = {}) => ({
   id: `f81625ba-cee1-4b48-92a8-3f3065d219fb`,
   email: 'John@email.com',
@@ -107,4 +116,5 @@ module.exports = {
   createTeam,
   createTeamMember,
   createAnotherTeamMember,
+  mockJobWithBullMQ,
 };

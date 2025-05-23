@@ -70,13 +70,11 @@ class AuthService {
     return this.changePasswordUseCase.execute(user.id, newPassword);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   validateAccessToken(accessToken) {
     const decodedAccessToken = jwt.verify(accessToken, config.jwtAccessSecret);
     return decodedAccessToken;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   validateRefreshToken(refreshToken) {
     const decodedRefreshToken = jwt.verify(
       refreshToken,

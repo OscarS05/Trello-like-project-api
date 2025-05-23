@@ -13,13 +13,16 @@ class VerifyEmailByTokenUseCase {
     const payload = jwt.verify(token, config.jwtSecretVerifyEmail);
 
     const user = await this.userRepository.findById(payload.sub);
-    if (!user) throw boom.notFound('User not found');
+    if (!user?.id) throw boom.notFound('User not found');
 
     const tokenInRedis = await this.AuthRedis.verifyTokenInRedis(
       user.id,
       token,
     );
-    if (tokenInRedis !== token) throw boom.unauthorized('Invalid token');
+    if (tokenInRedis !== token)
+      throw boom.unauthorized(
+        'Invalid token. The provided token does not match the stored token.',
+      );
 
     return { message: 'Email verified', user };
   }
