@@ -55,10 +55,10 @@ jobs:
           cache-dependency-path: package-lock.json
       - name: Setup environment variables
         run: |
-          echo "JWT_SECRET_VERIFY_EMAIL=test-EMAIL-secret" >> .env
-          echo "JWT_ACCESS_SECRET=test-ACCESS-secret" >> .env
-          echo "JWT_REFRESH_SECRET=test-REFRESH-secret" >> .env
-          echo "NODE_ENV=development" >> .env
+          echo "JWT_SECRET_VERIFY_EMAIL=test-EMAIL-secret" >> $GITHUB_ENV
+          echo "JWT_ACCESS_SECRET=test-ACCESS-secret" >> $GITHUB_ENV
+          echo "JWT_REFRESH_SECRET=test-REFRESH-secret" >> $GITHUB_ENV
+          echo "NODE_ENV=development" >> $GITHUB_ENV
       - name: install dependencies
         run: npm ci
       - name: run unit tests

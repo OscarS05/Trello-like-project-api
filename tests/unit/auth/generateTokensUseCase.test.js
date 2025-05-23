@@ -47,8 +47,8 @@ describe('GenerateTokensUseCase', () => {
     jwt.sign
       .mockReturnValueOnce(fakeAccessToken)
       .mockReturnValueOnce(fakeRefreshToken);
-    mockAuthRedis.saveAccessToken.mockResolvedValue('OK');
-    mockAuthRedis.saveRefreshToken.mockResolvedValue('OK');
+    mockAuthRedis.saveAccessToken.mockResolvedValueOnce('OK');
+    mockAuthRedis.saveRefreshToken.mockResolvedValueOnce('OK');
 
     const { accessToken, refreshToken } =
       await generateTokensUseCase.execute(userData);
@@ -121,10 +121,10 @@ describe('GenerateTokensUseCase', () => {
       .mockReturnValueOnce(fakeAccessToken)
       .mockReturnValueOnce(fakeRefreshToken);
     mockAuthRedis.saveAccessToken.mockResolvedValue(
-      messageErrorBySaveAccessTokenInRedis,
+      new Error(messageErrorBySaveAccessTokenInRedis),
     );
     mockAuthRedis.saveRefreshToken.mockResolvedValue(
-      messageErrorBySaveRefreshTokenInRedis,
+      new Error(messageErrorBySaveRefreshTokenInRedis),
     );
     logger.warn
       .mockReturnValueOnce(messageErrorBySaveAccessTokenInRedis)
