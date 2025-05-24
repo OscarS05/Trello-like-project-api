@@ -8,9 +8,10 @@ class UpdateWorkspaceUseCase {
   }
 
   async execute(workspaceId, workspaceData) {
-    const updateWorkspaceEntity = new UpdateWorkspaceEntity(
-      workspaceData,
-    ).toPlainObject();
+    if (!workspaceId) {
+      throw boom.badRequest('WorkspaceId was not provided');
+    }
+    const updateWorkspaceEntity = new UpdateWorkspaceEntity(workspaceData);
 
     const [updatedRows, [updatedWorkspace]] =
       await this.workspaceRepository.update(workspaceId, updateWorkspaceEntity);

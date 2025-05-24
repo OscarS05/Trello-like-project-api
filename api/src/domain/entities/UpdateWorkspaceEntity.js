@@ -3,8 +3,8 @@ const WorkspaceDescription = require('../value-objects/workspaceDescription');
 
 class UpdateWorkspaceEntity {
   constructor({ name, description }) {
-    this.name = new WorkspaceName(name);
-    this.description = new WorkspaceDescription(description);
+    this.name = new WorkspaceName(name).value;
+    this.description = new WorkspaceDescription(description).value;
   }
 
   toPlainObject() {

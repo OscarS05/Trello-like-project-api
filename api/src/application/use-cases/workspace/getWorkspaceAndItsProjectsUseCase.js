@@ -1,3 +1,4 @@
+const Boom = require('@hapi/boom');
 const WorkspaceDto = require('../../dtos/workspace.dto');
 
 class GetWorkspaceAndItsProjectsUseCase {
@@ -6,13 +7,15 @@ class GetWorkspaceAndItsProjectsUseCase {
   }
 
   async execute(workspaceMember) {
+    if (!workspaceMember?.id) {
+      throw Boom.badRequest('WorkspaceMember was not provided');
+    }
     const workspace = await this.workspaceRepository.findById(workspaceMember);
     if (!workspace.id) return [];
 
-    return this.structureData(workspaceMember, workspace.toJSON());
+    return this.structureData(workspaceMember, workspace.get({ plain: true }));
   }
 
-  // eslint-disable-next-line class-methods-use-this
   structureData(workspaceMember, workspace) {
     const structuredProjects = workspace.projects.map((project) => {
       return {

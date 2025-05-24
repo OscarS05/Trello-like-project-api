@@ -445,9 +445,7 @@ describe('deleteAccountUseCase', () => {
           mockUserRepository.findAllWorkspacesByUserId,
         ).toHaveBeenCalledWith(userData.id);
 
-        expect(mockProjectMemberRepository.transferOwnership).rejects.toThrow(
-          /'Transfer failed'/,
-        );
+        expect(error.message).toMatch(/Transfer failed/);
         expect(mockProjectMemberRepository.bulkDelete).not.toHaveBeenCalled();
 
         expect(

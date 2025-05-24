@@ -28,11 +28,19 @@ const createUserWithWorkspaces = ({
   teamData = {},
   teamMemberData = {},
   anotherTeamMemberData = {},
+  howMuchUsers = 1,
   howMuchWorkspaces = 1,
   howMuchProjects = 1,
   howMuchTeams = 1,
 } = {}) => {
-  const user = includeUser ? createUser() : null;
+  let user = null;
+  if (includeUser) {
+    user =
+      howMuchUsers > 1
+        ? Array.from({ length: howMuchUsers }, () => createUser())
+        : createUser();
+  }
+
   const workspace = includeWorkspace ? createWorkspace(workspaceData) : null;
   const workspaceMembers = [
     createWorkspaceMember(workspaceMemberData),

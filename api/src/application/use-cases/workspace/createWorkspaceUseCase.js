@@ -1,3 +1,4 @@
+const Boom = require('@hapi/boom');
 const WorkspaceEntity = require('../../../domain/entities/WorkspaceEntity');
 const WorkspaceDto = require('../../dtos/workspace.dto');
 
@@ -7,7 +8,11 @@ class CreateWorkspaceUseCase {
   }
 
   async execute(workspaceData) {
-    const workspaceEntity = new WorkspaceEntity(workspaceData).toPlainObject();
+    if (!workspaceData?.userId) {
+      throw Boom.badData('UserId was not provided');
+    }
+
+    const workspaceEntity = new WorkspaceEntity(workspaceData);
 
     const { workspace } =
       await this.workspaceRepository.create(workspaceEntity);

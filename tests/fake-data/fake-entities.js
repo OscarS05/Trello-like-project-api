@@ -8,7 +8,7 @@ const mockJobWithBullMQ = (options = {}) => {
 };
 
 const createUser = (overrides = {}) => ({
-  id: `f81625ba-cee1-4b48-92a8-3f3065d219fb`,
+  id: 'f81625ba-cee1-4b48-92a8-3f3065d219fb',
   email: 'John@email.com',
   name: 'John Doe',
   role: 'basic',
@@ -19,7 +19,9 @@ const createUser = (overrides = {}) => ({
 const createWorkspace = (overrides = {}) => ({
   id: 'e033629e-7fee-48e9-a28f-86a3ed4423b0',
   name: 'NestJS',
+  description: 'Personal project',
   userId: 'f81625ba-cee1-4b48-92a8-3f3065d219fb',
+  createdAt: '2025-05-23T17:38:42.864Z',
   ...overrides,
 });
 

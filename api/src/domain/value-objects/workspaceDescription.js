@@ -8,7 +8,6 @@ class WorkspaceDescription {
     this.value = value;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   validate(value) {
     return typeof value === 'string' && value.length <= 255;
   }
