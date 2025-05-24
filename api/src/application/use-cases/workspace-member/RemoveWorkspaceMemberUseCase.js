@@ -25,6 +25,24 @@ class RemoveWorkspaceMemberUseCase {
     projectsOfMemberToBeRemoved,
     teamsOfMemberToBeRemoved,
   ) {
+    if (!requesterAsWorkspaceMember || !requesterAsWorkspaceMember.id) {
+      throw boom.badRequest('requesterAsWorkspaceMember was not provided');
+    }
+    if (!workspaceMemberToBeRemoved || !workspaceMemberToBeRemoved.id) {
+      throw boom.badRequest('workspaceMemberToBeRemoved was not provided');
+    }
+    if (!Array.isArray(workspaceMembers) || workspaceMembers.length === 0) {
+      throw boom.badRequest(
+        'workspaceMembers was not provided or there are not members',
+      );
+    }
+    if (!Array.isArray(projectsOfMemberToBeRemoved)) {
+      throw boom.badRequest('projectsOfMemberToBeRemoved was not provided');
+    }
+    if (!Array.isArray(teamsOfMemberToBeRemoved)) {
+      throw boom.badRequest('teamsOfMemberToBeRemoved was not provided');
+    }
+
     if (
       requesterAsWorkspaceMember.workspaceId !==
       workspaceMemberToBeRemoved.workspaceId
@@ -41,9 +59,11 @@ class RemoveWorkspaceMemberUseCase {
     }
     if (
       requesterAsWorkspaceMember.role === 'member' &&
-      workspaceMemberToBeRemoved.role === 'member'
+      workspaceMemberToBeRemoved.id !== requesterAsWorkspaceMember.id
     ) {
-      throw boom.forbidden('You cannot remove another member');
+      throw boom.forbidden(
+        'You cannot remove another member. You have the member role',
+      );
     }
 
     if (teamsOfMemberToBeRemoved.length >= 1) {
@@ -196,7 +216,7 @@ class RemoveWorkspaceMemberUseCase {
     const admins = [];
     const members = [];
 
-    workspaceMembers.forEch((member) => {
+    workspaceMembers.forEach((member) => {
       if (member.role === 'admin') admins.push(member);
       if (member.role === 'member') members.push(member);
     });

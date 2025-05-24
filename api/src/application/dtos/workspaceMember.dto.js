@@ -16,19 +16,22 @@ class WorkspaceMemberDto {
       role: workspaceMember.role,
       workspaceId: workspaceMember.workspaceId,
       addedAt: workspaceMember.addedAt,
-      teams: workspaceMember.teams.map((team) => {
-        return {
-          id: team.id,
-          name: team.name,
-        };
-      }),
-      projects: workspaceMember.projects.map((project) => {
-        return {
-          id: project.id,
-          name: project.name,
-          visibility: project.visibility,
-        };
-      }),
+      teams:
+        Array.isArray(workspaceMember.teams) && workspaceMember.teams.length > 0
+          ? workspaceMember.teams.map((team) => ({
+              id: team.id,
+              name: team.name,
+            }))
+          : [],
+      projects:
+        Array.isArray(workspaceMember.projects) &&
+        workspaceMember.projects.length > 0
+          ? workspaceMember.projects.map((project) => ({
+              id: project.id,
+              name: project.name,
+              visibility: project.visibility,
+            }))
+          : [],
     };
   }
 }

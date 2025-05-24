@@ -105,7 +105,7 @@ describe('GetWorkspacesAndProjectsUseCase', () => {
     });
   });
 
-  test('It should return a successful 1', async () => {
+  test('It should return a successful data', async () => {
     const result = await getWorkspacesAndProjectsUseCase.execute(userId);
 
     expect(mockWorkspaceRepository.findAll).toHaveBeenCalledWith(userId);
