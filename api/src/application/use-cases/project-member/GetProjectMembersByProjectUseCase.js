@@ -6,6 +6,10 @@ class GetProjectMembersByProjectUseCase {
   }
 
   async execute(projectId) {
+    if (!projectId) {
+      throw new Error('projectId was not provided');
+    }
+
     const projectMembers =
       await this.projectMemberRepository.findAllByProject(projectId);
     return projectMembers.map(

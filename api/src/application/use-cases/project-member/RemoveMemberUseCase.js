@@ -1,12 +1,18 @@
 const boom = require('@hapi/boom');
 
 class RemoveMemberUseCase {
-  constructor({ projectMemberRepository }) {
+  constructor({ projectMemberRepository, projectRepository }) {
     this.projectMemberRepository = projectMemberRepository;
+    this.projectRepository = projectRepository;
   }
 
   async deleteProjectMember(projectMemberId) {
-    return this.projectMemberRepository.delete(projectMemberId);
+    const removedMember =
+      await this.projectMemberRepository.delete(projectMemberId);
+    if (removedMember === 0) {
+      throw boom.internal('Something went wrong removing the project member');
+    }
+    return removedMember;
   }
 
   async execute(
@@ -14,6 +20,16 @@ class RemoveMemberUseCase {
     projectMemberToBeRemoved,
     projectMembers,
   ) {
+    if (!requesterAsProjectMember?.id) {
+      throw boom.badRequest('requesterAsProjectMember was not provided');
+    }
+    if (!projectMemberToBeRemoved?.id) {
+      throw boom.badRequest('projectMemberToBeRemoved was not provided');
+    }
+    if (!Array.isArray(projectMembers) || projectMembers.length === 0) {
+      throw boom.badRequest('Invalid project members data');
+    }
+
     if (
       requesterAsProjectMember.role === 'admin' &&
       projectMemberToBeRemoved.role === 'owner'
@@ -36,7 +52,13 @@ class RemoveMemberUseCase {
 
   async handleOwnerExit(projectMemberToBeRemoved, projectMembers) {
     if (projectMembers.length === 1 && projectMembers[0].role === 'owner') {
-      return this.projectRepository.delete(projectMemberToBeRemoved.projectId);
+      const removedProject = await this.projectRepository.delete(
+        projectMemberToBeRemoved.projectId,
+      );
+      if (removedProject === 0) {
+        throw boom.internal('Something went wrong removing the project');
+      }
+      return removedProject;
     }
 
     const admins = [];
@@ -55,11 +77,13 @@ class RemoveMemberUseCase {
         'No suitable member found to transfer project ownership',
       );
 
-    await this.projectMemberRepository.transferOwnership(
-      projectMemberToBeRemoved.projectId,
-      projectMemberToBeRemoved,
-      newProjectOwner,
-    );
+    if (newProjectOwner) {
+      await this.projectMemberRepository.transferOwnership(
+        projectMemberToBeRemoved.projectId,
+        projectMemberToBeRemoved,
+        newProjectOwner,
+      );
+    }
 
     return this.deleteProjectMember(projectMemberToBeRemoved.id);
   }

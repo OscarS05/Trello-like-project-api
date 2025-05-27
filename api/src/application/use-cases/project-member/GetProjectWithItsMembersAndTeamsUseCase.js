@@ -7,17 +7,30 @@ class GetProjectWithItsMembersAndTeamsUseCase {
   }
 
   async execute(projectId) {
+    if (!projectId) {
+      throw new Error('projectId was not provided');
+    }
+
     const project =
       await this.projectMemberRepository.findProjectWithItsMembersAndTeams(
         projectId,
       );
 
-    const formattedProjectMembers = project.projectMembers.map((pm) =>
-      ProjectMemberDto.fromModel(pm, project.teams),
-    );
-    const formattedTeams = project.teams.map((team) =>
-      TeamDto.fromModel(team, project.projectMembers),
-    );
+    if (!project?.id) return {};
+
+    const formattedProjectMembers =
+      project?.projectMembers?.length > 0
+        ? project.projectMembers.map((pm) =>
+            ProjectMemberDto.fromModel(pm, project.teams),
+          )
+        : [];
+
+    const formattedTeams =
+      project?.teams?.length > 0
+        ? project.teams.map((team) =>
+            TeamDto.fromModel(team, project.projectMembers),
+          )
+        : [];
 
     return { projectMembers: formattedProjectMembers, teams: formattedTeams };
   }

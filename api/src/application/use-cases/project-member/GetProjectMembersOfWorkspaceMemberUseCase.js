@@ -6,11 +6,18 @@ class GetProjectMembersOfWorkspaceMemberUseCase {
   }
 
   async execute(workspaceMemberId) {
+    if (!workspaceMemberId) {
+      throw new Error('workspaceMemberId was not provided');
+    }
+
     const projectMembers =
       await this.projectMemberRepository.findAll(workspaceMemberId);
-    return projectMembers.map((projectMember) =>
-      ProjectMemberDto.withProject(projectMember),
-    );
+
+    return projectMembers?.length > 0
+      ? projectMembers.map((projectMember) =>
+          ProjectMemberDto.withProject(projectMember),
+        )
+      : [];
   }
 }
 

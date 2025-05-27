@@ -16,6 +16,15 @@ const createUser = (overrides = {}) => ({
   ...overrides,
 });
 
+const createAnotherUser = (overrides = {}) => ({
+  id: '81f72543-69d9-4764-9b73-57e0cf785731',
+  email: 'Pedro@email.com',
+  name: 'Pedro',
+  role: 'basic',
+  createdAt: '2025-04-23T23:40:07.036Z',
+  ...overrides,
+});
+
 const createWorkspace = (overrides = {}) => ({
   id: 'e033629e-7fee-48e9-a28f-86a3ed4423b0',
   name: 'NestJS',
@@ -110,7 +119,7 @@ const createAnotherTeamMember = (overrides = {}) => ({
 const createList = (overrides = {}) => ({
   id: '1792d3bc-b24c-4727-acd2-45ff116d27cb',
   name: 'Done',
-  projectId: 'cba6445a-9bf3-4181-9b0a-60ab44ae746d',
+  projectId: '8f6e2597-057c-4d84-9851-ae6d7ca9a392',
   createdAt: '2025-04-03T22:41:58.163Z',
   ...overrides,
 });
@@ -137,7 +146,7 @@ const createCardAttachment = (overrides = {}) => ({
 const createCardMember = (overrides = {}) => ({
   id: '55ba6680-e21f-4416-a6cc-ce369000b1da',
   name: 'lilo',
-  projectMemberId: '26de1037-0474-4e11-bca1-ec344376744b',
+  projectMemberId: 'b1c2d3e4-f5g6-7891-ba12-dc43fe678901',
   cardId: '1a8ad354-e5bb-49f7-95b3-5cdfa0533233',
   ...overrides,
 });
@@ -146,7 +155,7 @@ const createLabel = (overrides = {}) => ({
   id: '28436f1c-b90e-4b0d-815f-0ad9016ce92b',
   name: 'In progress',
   color: '#FFFFFF',
-  projectId: 'cba6445a-9bf3-4181-9b0a-60ab44ae746d',
+  projectId: '8f6e2597-057c-4d84-9851-ae6d7ca9a392',
   ...overrides,
 });
 
@@ -154,7 +163,7 @@ const createLabelByCard = (overrides = {}) => ({
   id: '28436f1c-b90e-4b0d-815f-0ad9016ce92b',
   name: 'In progress',
   color: '#FFFFFF',
-  projectId: 'cba6445a-9bf3-4181-9b0a-60ab44ae746d',
+  projectId: '8f6e2597-057c-4d84-9851-ae6d7ca9a392',
   isVisible: true,
   ...overrides,
 });
@@ -181,13 +190,14 @@ const createChecklistItemMember = (overrides = {}) => ({
   id: '93cb4c3c-c9c4-420d-8d2e-0268b74036b0',
   name: 'lilo',
   checklistItemId: '327c2217-6383-4305-b20a-ca6d9cb1758d',
-  projectMemberId: '26de1037-0474-4e11-bca1-ec344376744b',
+  projectMemberId: 'e5f6a7b8-c9d0-2345-9bcd-ef1234567890',
   addedAt: '2025-04-09T00:57:42.282Z',
   ...overrides,
 });
 
 module.exports = {
   createUser,
+  createAnotherUser,
   createWorkspace,
   createWorkspaceMember,
   createAnotherWorkspaceMember,

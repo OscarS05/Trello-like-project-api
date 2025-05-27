@@ -6,6 +6,10 @@ class GetMemberByIdUseCase {
   }
 
   async execute(projectMemberId) {
+    if (!projectMemberId) {
+      throw new Error('projectMemberId was not provided');
+    }
+
     const projectMember =
       await this.projectMemberRepository.findProjectMemberById(projectMemberId);
     return !projectMember?.id ? {} : new ProjectMemberDto(projectMember);
