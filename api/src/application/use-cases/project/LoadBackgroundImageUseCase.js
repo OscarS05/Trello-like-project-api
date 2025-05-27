@@ -9,6 +9,16 @@ class LoadBackgroundImageUseCase {
   }
 
   async execute(fileData, folder, projectId) {
+    if (!fileData || !fileData.buffer) {
+      throw boom.badData('fileData was not provided');
+    }
+    if (!folder) {
+      throw boom.badData('folder was not provided');
+    }
+    if (!projectId) {
+      throw boom.badData('projectId was not provided');
+    }
+
     if (fileData.size > MAX_FILE_SIZE_IN_BYTES) {
       throw boom.badData('The file is too large');
     }

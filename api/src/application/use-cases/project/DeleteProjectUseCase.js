@@ -8,6 +8,10 @@ class DeleteProjectUseCase {
   }
 
   async execute(project) {
+    if (!project?.id) throw Boom.badRequest('project was not provided');
+    if (!project?.backgroundUrl && !project?.backgroundUrl?.length > 0)
+      throw Boom.badRequest('backgroundUrl was not provided');
+
     const currentUrl = project.backgroundUrl;
     const isCloudinaryImage = currentUrl?.includes('res.cloudinary.com');
 
@@ -25,7 +29,14 @@ class DeleteProjectUseCase {
         throw Boom.badRequest('Failed to delete file from Cloudinary');
     }
 
-    return this.projectRepository.delete(project.id);
+    const deletedFromDb = await this.projectRepository.delete(project.id);
+    if (deletedFromDb === 0) {
+      throw Boom.notFound(
+        'Something went wrong in DB. Project not found or could not be deleted',
+      );
+    }
+
+    return deletedFromDb;
   }
 }
 

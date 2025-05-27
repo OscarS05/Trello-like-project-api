@@ -6,9 +6,13 @@ class GetAllProjectInformationUseCase {
   }
 
   async execute(projectId) {
+    if (!projectId) {
+      throw new Error('Project ID was not provided or is required');
+    }
+
     const project =
       await this.projectRepository.getAllProjectInformation(projectId);
-    return new ProjectDto(project);
+    return project?.id ? new ProjectDto(project) : {};
   }
 }
 

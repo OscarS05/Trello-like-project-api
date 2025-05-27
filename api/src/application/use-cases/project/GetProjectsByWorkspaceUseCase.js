@@ -6,9 +6,15 @@ class GetProjectsByWorkspaceUseCase {
   }
 
   async execute(workspaceId) {
+    if (!workspaceId) {
+      throw new Error('Workspace ID was not provided or is required');
+    }
+
     const projects =
       await this.projectRepository.findAllByWorkspace(workspaceId);
-    return projects.map((project) => new ProjectDto(project));
+    return projects?.length
+      ? projects.map((project) => new ProjectDto(project))
+      : [];
   }
 }
 

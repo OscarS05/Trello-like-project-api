@@ -107,6 +107,85 @@ const createAnotherTeamMember = (overrides = {}) => ({
   ...overrides,
 });
 
+const createList = (overrides = {}) => ({
+  id: '1792d3bc-b24c-4727-acd2-45ff116d27cb',
+  name: 'Done',
+  projectId: 'cba6445a-9bf3-4181-9b0a-60ab44ae746d',
+  createdAt: '2025-04-03T22:41:58.163Z',
+  ...overrides,
+});
+
+const createCard = (overrides = {}) => ({
+  id: '1a8ad354-e5bb-49f7-95b3-5cdfa0533233',
+  name: 'Task 2',
+  description: 'description',
+  listId: '1792d3bc-b24c-4727-acd2-45ff116d27cb',
+  createdAt: '2025-04-04T01:43:05.229Z',
+  ...overrides,
+});
+
+const createCardAttachment = (overrides = {}) => ({
+  id: 'dbb98467-81ad-4018-90f6-cbf581eac82d',
+  filename: 'Agroplus-db-scheme.jpg',
+  url: 'https://res.cloudinary.com/dfprxzekh/image/upload/v1744326304/card-attachments/file_ysjlp7.jpg',
+  cardId: '1a8ad354-e5bb-49f7-95b3-5cdfa0533233',
+  type: 'image/jpeg',
+  createdAt: '2025-04-10T23:05:04.884Z',
+  ...overrides,
+});
+
+const createCardMember = (overrides = {}) => ({
+  id: '55ba6680-e21f-4416-a6cc-ce369000b1da',
+  name: 'lilo',
+  projectMemberId: '26de1037-0474-4e11-bca1-ec344376744b',
+  cardId: '1a8ad354-e5bb-49f7-95b3-5cdfa0533233',
+  ...overrides,
+});
+
+const createLabel = (overrides = {}) => ({
+  id: '28436f1c-b90e-4b0d-815f-0ad9016ce92b',
+  name: 'In progress',
+  color: '#FFFFFF',
+  projectId: 'cba6445a-9bf3-4181-9b0a-60ab44ae746d',
+  ...overrides,
+});
+
+const createLabelByCard = (overrides = {}) => ({
+  id: '28436f1c-b90e-4b0d-815f-0ad9016ce92b',
+  name: 'In progress',
+  color: '#FFFFFF',
+  projectId: 'cba6445a-9bf3-4181-9b0a-60ab44ae746d',
+  isVisible: true,
+  ...overrides,
+});
+
+const createChecklist = (overrides = {}) => ({
+  id: '449f8ab9-1f3a-4d7d-af3d-40be1a8958eb',
+  name: 'New checklist',
+  cardId: '1a8ad354-e5bb-49f7-95b3-5cdfa0533233',
+  createdAt: '2025-04-07T23:55:39.268Z',
+  ...overrides,
+});
+
+const createChecklistItem = (overrides = {}) => ({
+  id: '327c2217-6383-4305-b20a-ca6d9cb1758d',
+  name: 'item 1',
+  checklistId: '449f8ab9-1f3a-4d7d-af3d-40be1a8958eb',
+  isChecked: false,
+  dueDate: '2025-04-09T15:30:00.000Z',
+  createdAt: '2025-04-09T00:57:42.275Z',
+  ...overrides,
+});
+
+const createChecklistItemMember = (overrides = {}) => ({
+  id: '93cb4c3c-c9c4-420d-8d2e-0268b74036b0',
+  name: 'lilo',
+  checklistItemId: '327c2217-6383-4305-b20a-ca6d9cb1758d',
+  projectMemberId: '26de1037-0474-4e11-bca1-ec344376744b',
+  addedAt: '2025-04-09T00:57:42.282Z',
+  ...overrides,
+});
+
 module.exports = {
   createUser,
   createWorkspace,
@@ -119,4 +198,13 @@ module.exports = {
   createTeamMember,
   createAnotherTeamMember,
   mockJobWithBullMQ,
+  createList,
+  createCard,
+  createCardAttachment,
+  createCardMember,
+  createLabel,
+  createLabelByCard,
+  createChecklist,
+  createChecklistItem,
+  createChecklistItemMember,
 };

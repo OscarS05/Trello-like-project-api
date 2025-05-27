@@ -9,6 +9,19 @@ class UpdateBackgroundProjectUseCase {
   }
 
   async execute(project, url) {
+    if (!project?.id) throw Boom.badRequest('Project was not provided');
+    if (
+      !project.backgroundUrl ||
+      typeof url !== 'string' ||
+      project.backgroundUrl.length === 0
+    ) {
+      throw Boom.badRequest('Project background image URL is required');
+    }
+
+    if (!url || typeof url !== 'string' || url.trim().length === 0) {
+      throw Boom.badRequest('New background image URL is required');
+    }
+
     const currentUrl = project.backgroundUrl;
     const isCloudinaryImage = currentUrl?.includes('res.cloudinary.com');
 

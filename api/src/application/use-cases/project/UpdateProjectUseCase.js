@@ -8,14 +8,18 @@ class UpdateProjectUseCase {
   }
 
   async execute(projectId, projectData) {
+    if (!projectId) throw boom.badRequest('ProjectId was not provided');
+
     const projectUpdateEntity = new ProjectUpdateEntity(projectData);
 
     const [updatedRows, [updatedProject]] = await this.projectRepository.update(
       projectId,
       projectUpdateEntity,
     );
-    if (!updatedProject) throw boom.notFound('Failed to update project');
-    if (updatedRows === 0) throw boom.notFound('Project not found');
+    if (updatedRows === 0)
+      throw boom.notFound(
+        'Something went wrong, project not found or no changes made',
+      );
 
     return new ProjectDto(updatedProject);
   }
