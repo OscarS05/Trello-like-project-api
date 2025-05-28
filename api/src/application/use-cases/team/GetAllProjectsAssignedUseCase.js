@@ -4,7 +4,12 @@ class GetAllProjectsAssignedUseCase {
   }
 
   async execute(teamId) {
-    return this.teamRepository.findAllProjectsAssigned(teamId);
+    if (!teamId) throw new Error('teamId was not provided');
+
+    const projectsAssigned =
+      await this.teamRepository.findAllProjectsAssigned(teamId);
+
+    return projectsAssigned?.length > 0 ? projectsAssigned : [];
   }
 }
 

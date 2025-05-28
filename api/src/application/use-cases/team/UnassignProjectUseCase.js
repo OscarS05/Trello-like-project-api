@@ -7,7 +7,14 @@ class UnassignProjectUseCase {
   }
 
   async unassignProject(teamId, projectId) {
-    return this.teamRepository.unassignProject(teamId, projectId);
+    if (!teamId) throw new Error('teamId was not provided');
+    if (!projectId) throw new Error('teamId was not provided');
+
+    const result = await this.teamRepository.unassignProject(teamId, projectId);
+    if (result === 0) {
+      throw new Error('Something went wrong unassigning the project');
+    }
+    return result;
   }
 
   async execute(
@@ -17,8 +24,21 @@ class UnassignProjectUseCase {
     teamId,
     projectId,
   ) {
-    if (!removeTeamMembersFromProject)
+    if (!teamId) throw new Error('teamId was not provided');
+    if (!projectId) throw new Error('projectId was not provided');
+    if (!Array.isArray(teamMembers)) {
+      throw new Error('teamMembers provided is not an array');
+    }
+    if (!Array.isArray(projectMembers)) {
+      throw new Error('projectMembers provided is not an array');
+    }
+    if (typeof removeTeamMembersFromProject !== 'boolean') {
+      throw new Error('removeTeamMembersFromProject must be a boolean');
+    }
+
+    if (!removeTeamMembersFromProject) {
       return this.unassignProject(teamId, projectId);
+    }
 
     return this.unassignProjectRemovingMembers(
       teamMembers,
@@ -66,15 +86,18 @@ class UnassignProjectUseCase {
             teamMember.workspaceMemberId === projectMember.workspaceMemberId,
         ),
     );
+
     if (projectMembersNotInTeam.length === 0) {
       throw boom.forbidden(
         `The team members cannot be removed from the project because all project members are part of the team. ` +
           `Please, add a new member to the project ${projectId} before unassigning the team, or delete the project first`,
       );
     }
+
     const teamMemberIsOwnerOnProject = projectMembersInTeam.find(
       (member) => member.role === 'owner',
     );
+
     if (teamMemberIsOwnerOnProject) {
       const newOwner =
         projectMembersNotInTeam.find((member) => member.role === 'admin') ||

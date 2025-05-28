@@ -9,6 +9,8 @@ class UpdateTeamUseCase {
   }
 
   async execute(teamId, name) {
+    if (!teamId) throw boom.badRequest('teamId was not provided');
+
     const teamNameVO = new TeamName(name).value;
     const [updatedRows, [updatedTeam]] = await this.teamRepository.update(
       teamId,

@@ -4,6 +4,10 @@ class CountTeamsUseCase {
   }
 
   async execute(workspaceMemberId) {
+    if (!workspaceMemberId) {
+      throw new Error('workspaceMemberId was not provided');
+    }
+
     return this.teamRepository.countTeams(workspaceMemberId);
   }
 }

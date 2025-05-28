@@ -6,6 +6,10 @@ class GetTeamsByWorkspaceUseCase {
   }
 
   async execute(requesterAsWorkspaceMember) {
+    if (!requesterAsWorkspaceMember?.id) {
+      throw new Error('requesterAsWorkspaceMember was not provided');
+    }
+
     const teams = await this.teamRepository.findAllByWorkspace(
       requesterAsWorkspaceMember.workspaceId,
     );

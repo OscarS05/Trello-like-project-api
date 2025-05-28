@@ -6,8 +6,11 @@ class GetTeamUseCase {
   }
 
   async execute(teamId, workspaceId) {
+    if (!teamId) throw new Error('teamId was not provided');
+    if (!workspaceId) throw new Error('workspaceId was not provided');
+
     const team = await this.teamRepository.findById(teamId, workspaceId);
-    return new TeamDto(team);
+    return team?.id ? new TeamDto(team) : {};
   }
 }
 
