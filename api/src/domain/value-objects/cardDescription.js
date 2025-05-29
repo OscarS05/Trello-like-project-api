@@ -6,7 +6,6 @@ class CardDescription {
     this.value = value;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   ensureIsValid(value) {
     if (typeof value !== 'string' || value.trim() === '') {
       throw boom.badData('CardDescription must be a non-empty string.');
@@ -16,9 +15,9 @@ class CardDescription {
     }
   }
 
-  get value() {
-    return this.value;
-  }
+  // get value() {
+  //   return this.value;
+  // }
 
   toString() {
     return this.value;

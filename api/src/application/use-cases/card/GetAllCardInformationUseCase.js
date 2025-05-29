@@ -6,11 +6,15 @@ class GetAllCardInformationUseCase {
   }
 
   async execute(listId, cardId) {
+    if (!listId) throw new Error('listId was not provided');
+    if (!cardId) throw new Error('cardId was not provided');
+
     const card = await this.cardRepository.findAllCardInformation(
       listId,
       cardId,
     );
-    return CardDto.withAllCardInformation(card);
+
+    return card?.id ? CardDto.withAllCardInformation(card) : {};
   }
 }
 

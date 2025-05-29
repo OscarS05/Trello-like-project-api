@@ -9,6 +9,9 @@ class UpdateCardUseCase {
   }
 
   async execute(cardId, cardData) {
+    if (!cardId) throw new Error('cardId was not provided');
+    if (!cardData) throw new Error('cardData was not provided');
+
     const cardName = new CardName(cardData.newName).value;
     const cardDescription = new CardDescription(cardData.description).value;
 

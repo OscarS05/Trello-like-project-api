@@ -8,7 +8,6 @@ class CardName {
     this.#value = value;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   validate(value) {
     if (typeof value !== 'string' || value.trim() === '') {
       throw boom.badData('CardName must be a non-empty string.');

@@ -6,8 +6,11 @@ class GetCardUseCase {
   }
 
   async execute(cardId) {
+    if (!cardId) throw new Error('cardId was not provided');
+
     const card = await this.cardRepository.findOneById(cardId);
-    return new CardDto(card);
+
+    return card?.id ? new CardDto(card) : {};
   }
 }
 

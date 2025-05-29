@@ -24,7 +24,7 @@ describe('CheckProjectMembershipByListUseCase', () => {
       });
   });
 
-  test('It should return a list with its project', async () => {
+  test('It should return a list', async () => {
     const result = await checkProjectMembershipByListUseCase.execute(
       userId,
       listId,

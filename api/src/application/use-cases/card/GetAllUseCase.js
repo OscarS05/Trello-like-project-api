@@ -4,7 +4,11 @@ class GetAllUseCase {
   }
 
   async execute(listId) {
-    return this.cardRepository.findAll(listId);
+    if (!listId) throw new Error('listId was not provided');
+
+    const cards = await this.cardRepository.findAll(listId);
+
+    return cards?.length > 0 ? cards : [];
   }
 }
 

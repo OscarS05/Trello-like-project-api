@@ -9,11 +9,17 @@ class GetProjectMemberByCardUseCase {
   }
 
   async execute(userId, cardId) {
+    if (!userId) throw new Error('userId was not provided');
+    if (!cardId) throw new Error('cardId was not provided');
+
     const card = await this.cardRepository.findOneByIdWithList(cardId);
+
     if (!card?.id) throw boom.notFound('Card not found');
+
     const projectMember =
       await this.projectMemberRepository.getProjectMemberByCard(userId, card);
-    return new ProjectMemberDto(projectMember);
+
+    return projectMember?.id ? new ProjectMemberDto(projectMember) : {};
   }
 }
 
