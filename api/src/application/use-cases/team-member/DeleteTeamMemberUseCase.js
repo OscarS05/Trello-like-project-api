@@ -7,13 +7,35 @@ class DeleteTeamMemberUseCase {
   }
 
   async deleteTeamMember(teamMemberId) {
+    if (!teamMemberId) throw new Error('teamMemberId was not provided');
+
     const deletedMember = await this.teamMemberRepository.delete(teamMemberId);
-    if (deletedMember === 0)
-      throw boom.badImplementation('Failed to delete the team member');
+
+    if (deletedMember === 0) {
+      throw boom.badImplementation(
+        'Something went wrong. Failed to delete the team member',
+      );
+    }
+
     return deletedMember;
   }
 
   async execute(requesterAsTeamMember, memberToBeRemoved, teamMembers) {
+    if (!requesterAsTeamMember?.id) {
+      throw new Error('requesterAsTeamMember was not provided');
+    }
+    if (!memberToBeRemoved?.id) {
+      throw new Error('requesterAsTeamMember was not provided');
+    }
+    if (!Array.isArray(teamMembers)) {
+      throw new Error('teamMembers is not an array');
+    }
+    if (teamMembers?.length === 0) {
+      throw new Error(
+        'teamMembers is not valid because must have almost 1 member',
+      );
+    }
+
     if (requesterAsTeamMember.teamId !== memberToBeRemoved.teamId) {
       throw boom.conflict(
         'The team member to be removed does not belong in the team',

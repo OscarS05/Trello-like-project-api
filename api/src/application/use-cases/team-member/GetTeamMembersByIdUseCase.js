@@ -6,11 +6,16 @@ class GetTeamMembersByIdUseCase {
   }
 
   async execute(teamId, workspaceId) {
+    if (!teamId) throw new Error('teamId was not provided');
+    if (!workspaceId) throw new Error('workspaceId was not provided');
+
     const projectMembers = await this.teamMemberRepository.findAll(
       teamId,
       workspaceId,
     );
-    return projectMembers.map((member) => new TeamMemberDto(member));
+    return projectMembers?.length > 0
+      ? projectMembers.map((member) => new TeamMemberDto(member))
+      : [];
   }
 }
 
