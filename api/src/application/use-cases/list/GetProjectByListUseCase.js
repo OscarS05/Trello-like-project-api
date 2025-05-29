@@ -4,8 +4,11 @@ class GetProjectByListUseCase {
   }
 
   async execute(listId) {
+    if (!listId) throw new Error('listId was not provided');
+
     const listIWithItsProject =
       await this.listRepository.getProjectByList(listId);
+
     return listIWithItsProject?.id ? listIWithItsProject : {};
   }
 }

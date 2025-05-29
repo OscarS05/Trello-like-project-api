@@ -6,8 +6,10 @@ class GetAllListsUseCase {
   }
 
   async execute(projectId) {
+    if (!projectId) throw new Error('projectId was not provided');
+
     const lists = await this.listRepository.findAll(projectId);
-    return lists.map((list) => new ListDto(list));
+    return lists?.length > 0 ? lists.map((list) => new ListDto(list)) : [];
   }
 }
 

@@ -7,11 +7,22 @@ class UpdateListUseCase {
   }
 
   async execute(listId, newName) {
+    if (!listId) throw new Error('listId was not provided');
+
     const listUpdateEntity = new ListName(newName).value;
 
-    const [[updatedList]] = await this.listRepository.update(listId, {
-      name: listUpdateEntity,
-    });
+    const [affectedRows, [updatedList]] = await this.listRepository.update(
+      listId,
+      {
+        name: listUpdateEntity,
+      },
+    );
+
+    if (affectedRows === 0) {
+      throw new Error(
+        'Something went wrong updating the list. Maybe the list does not exist',
+      );
+    }
 
     return new ListDto(updatedList);
   }

@@ -7,9 +7,16 @@ class CreateListUseCase {
   }
 
   async execute(listData) {
+    if (!listData?.projectId) {
+      throw new Error('projectId was not provided');
+    }
+
     const listEntity = new ListEntity(listData);
 
     const createdList = await this.listRepository.create(listEntity);
+    if (!createdList?.id) {
+      throw new Error('Something went wrong creating the list');
+    }
 
     return new ListDto(createdList);
   }

@@ -8,7 +8,6 @@ class ListName {
     this.#value = value;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   validate(value) {
     if (typeof value !== 'string' || value.trim() === '') {
       throw boom.badData('ListName must be a non-empty string.');
