@@ -6,8 +6,12 @@ class GetAllCardMembersUseCase {
   }
 
   async execute(cardId) {
+    if (!cardId) throw new Error('cardId was not provided');
+
     const cardMembers = await this.cardMemberRepository.findAll(cardId);
-    return cardMembers.map((member) => new CardMemberDto(member));
+    return cardMembers?.length > 0
+      ? cardMembers.map((member) => new CardMemberDto(member))
+      : [];
   }
 }
 
