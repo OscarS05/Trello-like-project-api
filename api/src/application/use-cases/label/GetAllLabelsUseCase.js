@@ -6,6 +6,8 @@ class GetAllLabelsUseCase {
   }
 
   async execute(projectId) {
+    if (!projectId) throw new Error('projectId was not provided');
+
     const labels = await this.labelRepository.findAll(projectId);
     return labels.length > 0 ? labels.map((label) => new LabelDTO(label)) : [];
   }

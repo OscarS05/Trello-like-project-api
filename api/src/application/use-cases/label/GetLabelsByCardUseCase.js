@@ -6,11 +6,16 @@ class GetLabelsByCardUseCase {
   }
 
   async execute(cardId) {
+    if (!cardId) throw new Error('cardId was not provided');
+
     const cardWithLabels = await this.labelRepository.findLabelsByCard(cardId);
 
     return cardWithLabels?.labels?.length > 0
       ? cardWithLabels.labels.map((label) => {
-          const labelData = label.get({ plain: true });
+          const labelData =
+            typeof label?.get === 'function'
+              ? label.get({ plain: true })
+              : label;
           return new LabelDto({
             ...labelData,
             isVisible: label.CardLabel?.isVisible || undefined,

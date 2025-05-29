@@ -4,7 +4,19 @@ class DeleteLabelUseCase {
   }
 
   async execute(labelId) {
-    return this.labelRepository.delete(labelId);
+    if (!labelId) {
+      throw new Error('labelId was not provided');
+    }
+
+    const result = await this.labelRepository.delete(labelId);
+
+    if (result === 0) {
+      throw new Error(
+        'Something went wrong deleting the label. Maybe, the label does don exist',
+      );
+    }
+
+    return result;
   }
 }
 

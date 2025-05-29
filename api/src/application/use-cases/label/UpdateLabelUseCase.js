@@ -7,6 +7,8 @@ class UpdateLabelUseCase {
   }
 
   async execute(labelId, labelData) {
+    if (!labelId) throw new Error('labelId was not provided');
+
     const updateLabelEntity = new UpdateLabelEntity(labelData);
 
     const [updatedRows, [updatedLabel]] = await this.labelRepository.update(

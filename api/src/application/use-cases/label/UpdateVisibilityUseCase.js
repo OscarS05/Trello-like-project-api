@@ -7,6 +7,16 @@ class UpdateVisibilityUseCase {
   }
 
   async execute(isVisible, { cardId, labelId }) {
+    if (!isVisible || typeof isVisible !== 'string') {
+      throw new Error('isVisible was not provided');
+    }
+    if (!cardId) {
+      throw new Error('cardId was not provided');
+    }
+    if (!labelId) {
+      throw new Error('labelId was not provided');
+    }
+
     const updateVisibilityLabelEntity = new UpdateVisibilityLabelEntity({
       isVisible,
     });
@@ -16,6 +26,7 @@ class UpdateVisibilityUseCase {
         { cardId, labelId },
         updateVisibilityLabelEntity,
       );
+
     return updatedLabel?.labelId
       ? new LabelDto(updatedLabel).updateVisibility(updatedLabel)
       : updatedRows;
