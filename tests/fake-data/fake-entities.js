@@ -139,6 +139,7 @@ const createCardAttachment = (overrides = {}) => ({
   url: 'https://res.cloudinary.com/dfprxzekh/image/upload/v1744326304/card-attachments/file_ysjlp7.jpg',
   cardId: '1a8ad354-e5bb-49f7-95b3-5cdfa0533233',
   type: 'image/jpeg',
+  publicId: 'card-attachment/Agroplus-db-scheme',
   createdAt: '2025-04-10T23:05:04.884Z',
   ...overrides,
 });

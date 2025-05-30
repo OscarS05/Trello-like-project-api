@@ -9,6 +9,19 @@ class AddJobForAttachmentsUseCase {
   }
 
   async execute({ fileData, folder, cardId }) {
+    if (
+      !fileData ||
+      !fileData?.buffer ||
+      !fileData?.size ||
+      !fileData?.mimetype
+    ) {
+      throw new Error('fileData was not provided');
+    }
+    if (!folder || typeof folder !== 'string') {
+      throw new Error('folder was not provided');
+    }
+    if (!cardId) throw new Error('cardId was not provided');
+
     if (fileData.size > MAX_FILE_SIZE_IN_BYTES) {
       throw boom.badData('The file is too large');
     }
