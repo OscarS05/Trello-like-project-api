@@ -9,6 +9,19 @@ class CreateChecklistByCopyingItemsUseCase {
   }
 
   async execute(checklistData, checklistWithItems) {
+    if (!checklistData?.cardId) throw new Error('cardId was not provided');
+    if (!checklistData?.name) {
+      throw new Error('the checklist name was not provided');
+    }
+    if (!checklistWithItems?.id) {
+      throw new Error(
+        'The checklist does not exist or does not belong to the card',
+      );
+    }
+    if (checklistWithItems.items?.length === 0) {
+      throw new Error('The selected checklist has no items to copy');
+    }
+
     const checklistEntity = new ChecklistEntity(checklistData);
     const itemEntities = checklistWithItems.items.map(
       (item) =>
@@ -16,10 +29,21 @@ class CreateChecklistByCopyingItemsUseCase {
     );
 
     const newChecklist = await this.checklistRepository.create(checklistEntity);
-    const formattedNewChecklist = newChecklist.get({ plain: true });
+
+    if (!newChecklist?.id) {
+      throw new Error('Something went wrong creating the checklist');
+    }
+
+    const formattedNewChecklist = newChecklist?.get
+      ? newChecklist.get({ plain: true })
+      : newChecklist;
 
     const newItems =
       await this.checklistItemRepository.bulkCreate(itemEntities);
+
+    if (newItems?.length === 0) {
+      throw new Error('Something went wrong creating the checklist items');
+    }
 
     return new ChecklistDto({ ...formattedNewChecklist, items: newItems });
   }

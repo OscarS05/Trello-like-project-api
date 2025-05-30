@@ -8,6 +8,8 @@ class UpdateChecklistUseCase {
   }
 
   async execute(checklistId, checklistData) {
+    if (!checklistId) throw new Error('checklistId was not provided');
+    if (!checklistData?.newName) throw new Error('newName was not provided');
     const updateChecklistEntity = new ChecklistName(checklistData.newName)
       .value;
 

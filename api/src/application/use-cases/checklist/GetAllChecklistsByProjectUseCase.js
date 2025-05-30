@@ -6,8 +6,11 @@ class GetAllChecklistsByProjectUseCase {
   }
 
   async execute(projectId) {
+    if (!projectId) throw new Error('projectId was not provided');
+
     const project =
       await this.checklistRepository.findChecklistsByProject(projectId);
+
     if (!project || !project.lists) return [];
 
     return project.lists.flatMap((list) => {

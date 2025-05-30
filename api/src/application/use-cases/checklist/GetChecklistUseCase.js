@@ -6,8 +6,10 @@ class GetChecklistUseCase {
   }
 
   async execute(checklistId) {
+    if (!checklistId) throw new Error('checklistId was not provided');
+
     const checklist = await this.checklistRepository.findOne(checklistId);
-    return new ChecklistDto(checklist);
+    return checklist?.id ? new ChecklistDto(checklist) : {};
   }
 }
 
