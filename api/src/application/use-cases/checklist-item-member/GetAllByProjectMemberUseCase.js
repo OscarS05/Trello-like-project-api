@@ -7,18 +7,20 @@ class GetAllByProjectMemberUseCase {
   }
 
   async execute(checklistItemId, projectMemberIds) {
-    if (!checklistItemId) throw boom.badData('checklistItemId is required');
-    if (!Array.isArray(projectMemberIds) || projectMemberIds.length === 0)
-      throw boom.badData('projectMemberIds must be a non-empty array');
+    if (!checklistItemId)
+      throw boom.badData('checklistItemId was not provided');
+    if (!Array.isArray(projectMemberIds))
+      throw boom.badData('projectMemberIds was not provided');
+    if (projectMemberIds?.length === 0) return [];
 
     const checklistItemMembers =
       await this.checklistItemMemberRepository.findAllByProjectMember(
         checklistItemId,
         projectMemberIds,
       );
-    return checklistItemMembers.map(
-      (member) => new ChecklistItemMemberDto(member),
-    );
+    return checklistItemMembers?.length > 0
+      ? checklistItemMembers.map((member) => new ChecklistItemMemberDto(member))
+      : [];
   }
 }
 

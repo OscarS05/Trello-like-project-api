@@ -7,6 +7,9 @@ class AddMemberToItemUseCase {
   }
 
   async execute(checklistItemId, availableMembersToBeAddedIds) {
+    if (!checklistItemId) throw new Error('checklistItemId was not provided');
+    if (availableMembersToBeAddedIds?.length === 0) return [];
+
     const checklistItemMemberEntities = availableMembersToBeAddedIds.map(
       (pmId) =>
         new ChecklistItemMemberEntity({

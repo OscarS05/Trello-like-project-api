@@ -6,12 +6,14 @@ class GetAllItemMembersUseCase {
   }
 
   async execute(checklistItemId) {
+    if (!checklistItemId) throw new Error('checklistItemId was not provided');
+
     const checklistItemMembers =
       await this.checklistItemMemberRepository.findAll(checklistItemId);
 
     return checklistItemMembers?.length > 0
       ? checklistItemMembers.map((m) => {
-          const formattedMembers = m.get({ plain: true });
+          const formattedMembers = m?.get ? m.get({ plain: true }) : m;
           return new ChecklistItemMemberDto({
             ...formattedMembers,
             name:
