@@ -7,12 +7,18 @@ class UpdateTheCheckOfItemUseCase {
   }
 
   async execute(checklistItemId, isChecked) {
-    const [[updateChecklistItem]] = await this.checklistItemRepository.update(
-      checklistItemId,
-      { isChecked },
-    );
-    if (!updateChecklistItem?.id)
+    if (!checklistItemId) throw new Error('checklistItemId was not provided');
+    if (typeof isChecked !== 'boolean') {
+      throw new Error('checklistItemId was not provided');
+    }
+
+    const [affectedRows, [updateChecklistItem]] =
+      await this.checklistItemRepository.update(checklistItemId, { isChecked });
+
+    if (affectedRows === 0) {
       throw boom.badRequest('Something went wrong updating the check');
+    }
+
     return new ChecklistItemDto(updateChecklistItem);
   }
 }

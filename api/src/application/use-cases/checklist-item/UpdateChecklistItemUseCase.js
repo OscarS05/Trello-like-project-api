@@ -10,19 +10,27 @@ class UpdateChecklistItemUseCase {
   }
 
   async execute(checklistItemId, checklistItemData) {
+    if (!checklistItemId) throw new Error('checklistItemId was not provided');
+
     const updateChecklistItemEntity = new UpdateChecklistItemEntity(
       checklistItemData,
     );
 
-    const [[updatedItems]] = await this.checklistItemRepository.update(
-      checklistItemId,
-      updateChecklistItemEntity,
-    );
-    if (!updatedItems?.id)
-      throw boom.badRequest('Something went wrong updating the checklist item');
-    const formattedUpdatedItems = updatedItems.get({ plain: true });
+    const [affectedRows, [updatedItems]] =
+      await this.checklistItemRepository.update(
+        checklistItemId,
+        updateChecklistItemEntity,
+      );
 
-    let newItemMembers;
+    if (affectedRows === 0) {
+      throw boom.badRequest('Something went wrong updating the checklist item');
+    }
+
+    const formattedUpdatedItems = updatedItems?.get
+      ? updatedItems.get({ plain: true })
+      : updatedItems;
+
+    let newItemMembers = [];
 
     if (checklistItemData.assignedProjectMemberIds?.length > 0) {
       const checklistItemMemberEntities =

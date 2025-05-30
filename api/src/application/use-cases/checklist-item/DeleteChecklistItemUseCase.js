@@ -4,7 +4,15 @@ class DeleteChecklistItemUseCase {
   }
 
   async execute(checklistItemId) {
-    return this.checklistItemRepository.delete(checklistItemId);
+    if (!checklistItemId) throw new Error('checklistItemId was not provided');
+
+    const result = await this.checklistItemRepository.delete(checklistItemId);
+
+    if (result === 0) {
+      throw new Error('Something went wrong deleting the checklist item');
+    }
+
+    return result;
   }
 }
 

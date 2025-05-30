@@ -6,6 +6,9 @@ class CheckListItemByIdAndProjectUseCase {
   }
 
   async execute(checklistItemId, projectId) {
+    if (!checklistItemId) throw new Error('checklistItemId was not provided');
+    if (!projectId) throw new Error('projectId was not provided');
+
     const checklistItem =
       await this.checklistItemRepository.findOneByIdAndProject(
         checklistItemId,

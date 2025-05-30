@@ -6,8 +6,11 @@ class GetChecklistItemByIdUseCase {
   }
 
   async execute(checklistItemId) {
+    if (!checklistItemId) throw new Error('checklistItemId was not provided');
+
     const checklistItem =
       await this.checklistItemRepository.findOne(checklistItemId);
+
     return checklistItem?.id ? new ChecklistItemDto(checklistItem) : {};
   }
 }

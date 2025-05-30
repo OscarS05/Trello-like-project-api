@@ -9,11 +9,22 @@ class CreateChecklistItemUseCase {
   }
 
   async execute(checklistItemData) {
+    if (!checklistItemData?.checklistId) {
+      throw new Error('checklist was not provided');
+    }
+
     const checklistItemEntity = new ChecklistItemEntity(checklistItemData);
 
     const newChecklistItem =
       await this.checklistItemRepository.create(checklistItemEntity);
-    const formattedNewChecklistItem = newChecklistItem.get({ plain: true });
+
+    if (!newChecklistItem?.id) {
+      throw new Error('Something went wrong creating the checklist item');
+    }
+
+    const formattedNewChecklistItem = newChecklistItem?.get
+      ? newChecklistItem.get({ plain: true })
+      : newChecklistItem;
 
     let assignedMembers = [];
 
