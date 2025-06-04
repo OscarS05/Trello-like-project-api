@@ -63,3 +63,32 @@ jobs:
         run: npm ci
       - name: run unit tests
         run: npm run test
+
+  e2e:
+    runs-on: ubuntu-latest
+    container:
+      image: node:20
+
+    services:
+      postgres-e2e:
+        image: postgres:13
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_DB: db_e2e
+          POSTGRES_USER: e2e
+          POSTGRES_PASSWORD: e2e123
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: install dependencies
+        run: npm ci
+      - name: run e2e
+        run: npm run e2e:ci
+        env:
+          PORT: 3000
+          DATABASE_URL: postgres://e2e:e2e123@localhost:5433/db_e2e
+          JWT_SECRET_VERIFY_EMAIL: verify-email-test
+          JWT_ACCESS_SECRET: access-secret-test
+          JWT_REFRESH_SECRET: refresh-secret-test

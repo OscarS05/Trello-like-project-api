@@ -3,7 +3,7 @@ const boom = require('@hapi/boom');
 class Password {
   constructor(value) {
     if (!this.validate(value)) {
-      throw boom.badData(
+      throw boom.badRequest(
         'The password must have at least 8 characters and contain at least one number',
       );
     }
@@ -12,19 +12,21 @@ class Password {
 
   validate(password) {
     if (password.length < 8) {
-      throw boom.badData('Password must be at least 8 characters long');
+      throw boom.badRequest('Password must be at least 8 characters long');
     }
 
     if (!/[A-Z]/.test(password)) {
-      throw boom.badData('Password must contain at least one uppercase letter');
+      throw boom.badRequest(
+        'Password must contain at least one uppercase letter',
+      );
     }
 
     if (!/\d/.test(password)) {
-      throw boom.badData('Password must contain at least one number');
+      throw boom.badRequest('Password must contain at least one number');
     }
 
     if (!/[!@#$%^&*]/.test(password)) {
-      throw boom.badData(
+      throw boom.badRequest(
         'Password must contain at least one special character (!@#$%^&*)',
       );
     }

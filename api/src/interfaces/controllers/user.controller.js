@@ -21,7 +21,9 @@ const getUserByEmail = async (req, res, next) => {
 
 const getUsers = async (req, res, next) => {
   try {
-    const users = await userService.getUsers();
+    const queries = req.query;
+
+    const users = await userService.getUsers(queries);
 
     res.json(users);
   } catch (error) {
@@ -51,7 +53,7 @@ const deleteAccount = async (req, res, next) => {
     if (rowsDeleted === 0) throw boom.notFound('User not found');
 
     res
-      .status(201)
+      .status(200)
       .json({ message: 'The user was successfully deleted', rowsDeleted });
   } catch (error) {
     next(error);

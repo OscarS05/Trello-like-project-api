@@ -21,8 +21,12 @@ class UserRepository extends IUserRepository {
   }
 
   async findAll(query = {}) {
+    const { limit, offset, ...rest } = query;
+
     return this.db.models.User.findAll({
-      where: query,
+      where: rest,
+      limit,
+      offset,
       attributes: { exclude: ['password', 'recoveryToken'] },
     });
   }

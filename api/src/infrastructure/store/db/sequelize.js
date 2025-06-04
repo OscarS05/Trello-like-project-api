@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 const { Sequelize } = require('sequelize');
 
 const { config } = require('../../../../config/config');
@@ -6,8 +7,11 @@ const setupModels = require('./models');
 
 const options = {
   dialect: 'postgres',
-  // eslint-disable-next-line no-console
-  logging: config.isProd ? (msg) => logger.info(msg) : console.log,
+  logging: config.isProd
+    ? (msg) => logger.info(msg)
+    : config.env === 'development'
+      ? console.info
+      : false,
 };
 
 if (config.isProd) {

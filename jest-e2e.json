@@ -1,0 +1,8 @@
+{
+  "moduleFileExtensions": ["js"],
+  "rootDir": ".",
+  "setupFilesAfterEnv": ["<rootDir>/tests/setupTest.js"],
+  "testEnvironment": "node",
+  "testRegex": ".e2e.js$",
+  "coverageDirectory": "coverage_e2e"
+}

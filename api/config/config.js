@@ -1,7 +1,20 @@
-require('dotenv').config();
+const env = process.env.NODE_ENV || 'development';
+
+const envs = {
+  development: '.env',
+  e2e: '.env.e2e',
+};
+
+const options = {};
+
+if (envs[env]) {
+  options.path = envs[env];
+}
+
+require('dotenv').config(options);
 
 const config = {
-  env: process.env.NODE_ENV || 'development',
+  env,
   isProd: process.env.NODE_ENV === 'production',
   port: process.env.PORT || 3000,
   apiKey: process.env.API_KEY,
