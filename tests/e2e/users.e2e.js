@@ -291,7 +291,7 @@ describe('tests for /users path', () => {
       const deletedUser = await models.User.findOne({
         where: { email: 'user2@email.com' },
       });
-      console.log(deletedUser);
+
       expect(statusCode).toBe(200);
       expect(body.rowsDeleted).toBe(1);
       expect(deletedUser).toEqual(null);
