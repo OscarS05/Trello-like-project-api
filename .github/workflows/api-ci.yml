@@ -73,11 +73,16 @@ jobs:
       postgres-e2e:
         image: postgres:13
         ports:
-          - 5434:5432
+          - 5432:5432
         env:
           POSTGRES_DB: db_e2e
           POSTGRES_USER: e2e
           POSTGRES_PASSWORD: e2e123
+
+      redis-e2e:
+        image: redis:8
+        ports:
+          - 6380:6379
 
     steps:
       - name: Checkout
@@ -88,7 +93,10 @@ jobs:
         run: npm run e2e:ci
         env:
           PORT: 3000
-          DATABASE_URL: postgres://e2e:e2e123@localhost:5434/db_e2e
+          DATABASE_URL: postgres://e2e:e2e123@postgres-e2e:5432/db_e2e
           JWT_SECRET_VERIFY_EMAIL: verify-email-test
           JWT_ACCESS_SECRET: access-secret-test
           JWT_REFRESH_SECRET: refresh-secret-test
+          REDIS_HOST: redis-e2e
+          REDIS_PORT: 6380
+          REDIS_PASSWORD:

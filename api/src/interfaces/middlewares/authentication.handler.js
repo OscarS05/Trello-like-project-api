@@ -44,6 +44,7 @@ async function refreshTokens(req, res, next) {
 
   try {
     const decodedAccessToken = authService.validateAccessToken(accessToken);
+
     if (decodedAccessToken) {
       req.user = decodedAccessToken;
       req.tokens = { accessToken };

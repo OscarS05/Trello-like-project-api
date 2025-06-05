@@ -12,3 +12,9 @@ jest.mock('cloudinary', () => ({
     config: jest.fn(),
   },
 }));
+
+jest.mock('nodemailer', () => ({
+  createTransport: jest.fn().mockReturnValue({
+    sendMail: jest.fn().mockResolvedValue(true),
+  }),
+}));

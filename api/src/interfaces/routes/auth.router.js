@@ -58,7 +58,7 @@ const {
  *       429:
  *         description: Too many login attempts, please try again later.
  */
-router.post('/login', limiter(5, 15 * 60 * 100, LOGIN_LIMITER_MESSAGE), login);
+router.post('/login', limiter(6, 15 * 60 * 100, LOGIN_LIMITER_MESSAGE), login);
 
 /**
  * @swagger
@@ -95,7 +95,7 @@ router.post('/login', limiter(5, 15 * 60 * 100, LOGIN_LIMITER_MESSAGE), login);
  */
 router.post(
   '/send-verification-email',
-  limiter(3, 15 * 60 * 100, EMAIL_LIMITER_MESSAGE),
+  limiter(4, 15 * 60 * 100, EMAIL_LIMITER_MESSAGE),
   sendVerificationEmail,
 );
 

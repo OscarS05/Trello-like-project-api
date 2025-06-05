@@ -70,7 +70,7 @@ const verifyEmailToActivateAccount = async (req, res, next) => {
     const tokenInCookies = req.cookies.verifyEmail;
 
     if (!token || !tokenInCookies)
-      throw boom.unauthorized('Tokens not provided');
+      throw boom.unauthorized('Tokens was not provided');
     if (tokenInCookies !== token)
       throw boom.unauthorized('Tokens do not match');
 
@@ -109,7 +109,7 @@ const changePassword = async (req, res, next) => {
   try {
     const { newPassword } = req.body;
     const token = req.cookies.verifyEmail;
-    if (!token) throw boom.unauthorized('Token not provided');
+    if (!token) throw boom.unauthorized('Token was not provided');
 
     const { message } = await authService.changePassword(token, newPassword);
     if (!message)
