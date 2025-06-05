@@ -61,8 +61,8 @@ async function checkOwnership(req, res, next) {
         workspaceId,
         user.sub,
       );
-    if (!workspaceMember) throw boom.notFound('Workspace member not found');
-    if (workspaceMember.propertyStatus === 'owner')
+    if (!workspaceMember?.id) throw boom.notFound('Workspace member not found');
+    if (workspaceMember.role !== 'owner')
       throw boom.forbidden(
         'You do not have the ownership to perfom this action',
       );
