@@ -98,5 +98,5 @@ jobs:
           JWT_ACCESS_SECRET: access-secret-test
           JWT_REFRESH_SECRET: refresh-secret-test
           REDIS_HOST: redis-e2e
-          REDIS_PORT: 6380
+          REDIS_PORT: 6379
           REDIS_PASSWORD:
