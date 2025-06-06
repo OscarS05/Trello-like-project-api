@@ -8,10 +8,10 @@ class GetUsersUseCase {
   }
 
   async execute(query) {
-    if (query.isVerified === 'false') query.isVerified = false;
-    if (query.isVerified === 'true') query.isVerified = true;
-
     const queryVO = new QueryVO(query);
+    if (queryVO.isVerified === 'false') queryVO.isVerified = false;
+    if (queryVO.isVerified === 'true') queryVO.isVerified = true;
+
     const users = await this.userRepository.findAll(queryVO.toObject());
     return users.map((user) => new UserDto(user));
   }

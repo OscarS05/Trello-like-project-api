@@ -114,8 +114,8 @@ describe('tests for /auth path', () => {
 
     beforeAll(async () => {
       const inputData = {
-        email: 'user4@email.com',
-        name: 'user4',
+        email: 'user90@email.com',
+        name: 'user90',
         password: 'Admin123@',
         confirmPassword: 'Admin123@',
       };

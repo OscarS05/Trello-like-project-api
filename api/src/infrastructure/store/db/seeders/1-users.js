@@ -39,6 +39,15 @@ module.exports = {
         role: 'basic',
         created_at: '2025-04-23T23:40:07.036Z',
       },
+      {
+        id: '5bd33955-b470-434c-8d5a-4528f759dc9f',
+        email: 'user4@email.com',
+        name: 'user4',
+        password: await hash('Customer123@'),
+        is_verified: true,
+        role: 'basic',
+        created_at: '2025-04-23T23:40:07.036Z',
+      },
     ]);
   },
 

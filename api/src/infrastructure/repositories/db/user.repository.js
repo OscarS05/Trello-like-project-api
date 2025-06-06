@@ -22,7 +22,6 @@ class UserRepository extends IUserRepository {
 
   async findAll(query = {}) {
     const { limit, offset, ...rest } = query;
-
     return this.db.models.User.findAll({
       where: rest,
       limit,

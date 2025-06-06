@@ -66,20 +66,23 @@ class RemoveWorkspaceMemberUseCase {
       );
     }
 
-    if (teamsOfMemberToBeRemoved.length >= 1) {
-      await this.removeMemberWithTeams(
-        workspaceMemberToBeRemoved,
-        workspaceMembers,
-        teamsOfMemberToBeRemoved,
-      );
+    if (workspaceMembers.length > 1) {
+      if (teamsOfMemberToBeRemoved.length >= 1) {
+        await this.removeMemberWithTeams(
+          workspaceMemberToBeRemoved,
+          workspaceMembers,
+          teamsOfMemberToBeRemoved,
+        );
+      }
+      if (projectsOfMemberToBeRemoved.length >= 1) {
+        await this.removeMemberWithProjects(
+          workspaceMemberToBeRemoved,
+          workspaceMembers,
+          projectsOfMemberToBeRemoved,
+        );
+      }
     }
-    if (projectsOfMemberToBeRemoved.length >= 1) {
-      await this.removeMemberWithProjects(
-        workspaceMemberToBeRemoved,
-        workspaceMembers,
-        projectsOfMemberToBeRemoved,
-      );
-    }
+
     if (requesterAsWorkspaceMember.id === workspaceMemberToBeRemoved.id) {
       return this.leaveTheWorkspace(
         workspaceMemberToBeRemoved,
@@ -118,6 +121,7 @@ class RemoveWorkspaceMemberUseCase {
           (teamMember) =>
             teamMember.workspaceMemberId !== workspaceMemberToBeRemoved.id,
         );
+
         if (availableMembers.length === 0) {
           throw boom.forbidden(
             `Cannot remove the member. No team members available to take ownership of team: ${team.name}`,
@@ -174,6 +178,7 @@ class RemoveWorkspaceMemberUseCase {
           (projectMember) =>
             projectMember.workspaceMemberId !== workspaceMemberToBeRemoved.id,
         );
+
         if (availableMembers.length === 0) {
           throw boom.forbidden(
             `Cannot remove the member. No project members available to take ownership of project: ${project.name}`,
@@ -207,7 +212,10 @@ class RemoveWorkspaceMemberUseCase {
   }
 
   async handleOwnerExit(requesterAsWorkspaceMember, workspaceMembers) {
-    if (workspaceMembers.length === 1 && workspaceMembers[0].role === 'owner') {
+    if (
+      workspaceMembers.length === 1 &&
+      workspaceMembers[0].id === requesterAsWorkspaceMember.id
+    ) {
       return this.workspaceRepository.delete(
         requesterAsWorkspaceMember.workspaceId,
       );

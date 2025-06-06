@@ -65,9 +65,8 @@ describe('tests for /users path', () => {
   describe('GET /users/', () => {
     test('Should return a list of user', async () => {
       const { statusCode, body } = await api.get(`/api/v1/users`);
-
       expect(statusCode).toEqual(200);
-      expect(body.length).toBe(3);
+      expect(body.length).toBe(4);
       expect(body[1].email).toEqual('user2@email.com');
     });
 
@@ -104,8 +103,8 @@ describe('tests for /users path', () => {
       );
 
       expect(statusCode).toEqual(200);
-      expect(body.length).toBe(2);
-      expect(body[0].email).toEqual('user2@email.com');
+      expect(body.length).toBe(1);
+      expect(body[0].email).toEqual('user3@email.com');
     });
 
     test('Should return an error because the role is not valid', async () => {
@@ -156,8 +155,8 @@ describe('tests for /users path', () => {
   describe('POST /users/', () => {
     test('Should return the created user', async () => {
       const inputData = {
-        email: 'user4@email.com',
-        name: 'user4',
+        email: 'user10@email.com',
+        name: 'user10',
         password: 'Admin123@',
         confirmPassword: 'Admin123@',
       };

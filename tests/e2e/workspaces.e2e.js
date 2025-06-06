@@ -118,22 +118,20 @@ describe('tests for /workspaces path', () => {
     test('It should return an error because the description is invalid', async () => {
       inputBody.description = 'This is a description @!**';
 
-      const { statusCode, body } = await api
+      const { statusCode } = await api
         .post(`/api/v1/workspaces`)
         .send(inputBody)
         .set({ Authorization: `Bearer ${accessTokenUser1}` });
-      console.log(statusCode, body);
       expect(statusCode).toEqual(400);
     });
 
     test('It should return an error because the name is invalid', async () => {
       inputBody.name = 'name @!**';
 
-      const { statusCode, body } = await api
+      const { statusCode } = await api
         .post(`/api/v1/workspaces`)
         .send(inputBody)
         .set({ Authorization: `Bearer ${accessTokenUser1}` });
-      console.log(statusCode, body);
       expect(statusCode).toEqual(400);
     });
   });

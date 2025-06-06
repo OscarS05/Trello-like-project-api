@@ -26,6 +26,7 @@ class UpdateRoleUseCase {
     }
     if (workspaceMemberToUpdateRole.role === 'owner')
       throw boom.forbidden("You cannot change the owner's role");
+
     if (workspaceMemberToUpdateRole.role === newRole)
       throw boom.conflict('The member already has this role');
 
