@@ -81,6 +81,7 @@ async function checkOwnership(req, res, next) {
       workspaceId,
       projectId,
     );
+
     if (!projectMember?.id)
       throw boom.forbidden('You do not belong to the project');
     if (projectMember.role !== 'owner')
