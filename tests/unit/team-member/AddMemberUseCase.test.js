@@ -26,6 +26,7 @@ describe('AddMemberUseCase', () => {
 
     mocktTeamMemberRepository = {
       create: jest.fn().mockResolvedValue(addedWorkspaceMember),
+      findByWorkspaceMemberId: jest.fn(),
     };
 
     addMemberUseCase = new AddMemberUseCase({
@@ -34,6 +35,8 @@ describe('AddMemberUseCase', () => {
   });
 
   test('It should return a successfully added team member', async () => {
+    mocktTeamMemberRepository.findByWorkspaceMemberId.mockResolvedValue(null);
+
     const result = await addMemberUseCase.execute(teamId, dataOfNewTeamMember);
 
     expect(mocktTeamMemberRepository.create).toHaveBeenCalledWith(

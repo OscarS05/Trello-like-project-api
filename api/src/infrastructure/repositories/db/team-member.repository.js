@@ -139,6 +139,12 @@ class TeamMemberRepository extends ITeamMemberRepository {
       ],
     });
   }
+
+  async findByWorkspaceMemberId({ teamId, workspaceMemberId }) {
+    return this.db.models.TeamMember.findOne({
+      where: { teamId, workspaceMemberId },
+    });
+  }
 }
 
 module.exports = TeamMemberRepository;

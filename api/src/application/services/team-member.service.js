@@ -11,7 +11,7 @@ class TeamMemberService {
       deleteTeamMemberUseCase,
       getTeamProjectsByTeamMemberUseCase,
     },
-    { getAllProjectsAssignedUseCase },
+    { getAllProjectsAssignedUseCase, getTeamUseCase },
   ) {
     this.getTeamProjectsByTeamMemberUseCase =
       getTeamProjectsByTeamMemberUseCase;
@@ -24,6 +24,7 @@ class TeamMemberService {
 
     // team use cases
     this.getAllProjectsAssignedUseCase = getAllProjectsAssignedUseCase;
+    this.getTeamUseCase = getTeamUseCase;
   }
 
   async addMember(teamId, dataOfNewTeamMember) {
@@ -34,11 +35,11 @@ class TeamMemberService {
     if (!addedMember?.id)
       throw boom.notFound('Something went wrong while adding the team member');
 
-    const teamMember = await this.getTeamMember(teamId, addedMember.id);
-    if (!teamMember?.id)
+    const addedTeamMember = await this.getTeamMember(teamId, addedMember.id);
+    if (!addedTeamMember?.id)
       throw boom.notFound('The new team member does not belong to the team');
 
-    return teamMember;
+    return addedTeamMember;
   }
 
   async updateRole(teamId, teamMemberId, newRole) {
@@ -109,7 +110,9 @@ class TeamMemberService {
     ]);
 
     if (!teamMember?.id)
-      throw boom.notFound('Team member does not belong to the team');
+      throw boom.notFound(
+        'Team member does not belong to the team or team was not found',
+      );
     if (projectTeams.length === 0) return [];
 
     return this.getTeamProjectsByTeamMemberUseCase.execute(
@@ -127,6 +130,13 @@ class TeamMemberService {
   }
 
   async getTeamMembers(teamId, workspaceId) {
+    const team = await this.getTeamUseCase.execute(teamId, workspaceId);
+    if (!team?.id) {
+      throw boom.notFound(
+        'The teamId provided does not belong in the workspace',
+      );
+    }
+
     return this.getTeamMembersByIdUseCase.execute(teamId, workspaceId);
   }
 }

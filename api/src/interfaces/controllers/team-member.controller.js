@@ -58,8 +58,8 @@ const updateRole = async (req, res, next) => {
       newRole,
     );
 
-    res.status(201).json({
-      message: 'The team member was added successfully',
+    res.status(200).json({
+      message: 'The team member was updated successfully',
       updatedMember,
     });
   } catch (error) {
@@ -72,14 +72,14 @@ const transferOwnership = async (req, res, next) => {
     const { teamMemberId } = req.params;
     const currentTeamMember = req.teamMember;
 
-    const updatedMember = await teamMemberService.transferOwnership(
+    const updatedRows = await teamMemberService.transferOwnership(
       currentTeamMember,
       teamMemberId,
     );
 
-    res.status(201).json({
+    res.status(200).json({
       message: 'The team member was updated successfully',
-      updatedMember,
+      updatedRows,
     });
   } catch (error) {
     next(error);

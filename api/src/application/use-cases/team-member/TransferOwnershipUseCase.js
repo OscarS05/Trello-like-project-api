@@ -26,7 +26,7 @@ class TransferOwnershipUseCase {
       newTeamMember,
     );
 
-    if (!updatedMember?.id) {
+    if (updatedMember[0] === 0) {
       throw new Error(
         'Something went wrong transfer the ownership. Zero rows was affected',
       );

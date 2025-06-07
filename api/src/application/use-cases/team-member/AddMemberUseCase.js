@@ -1,3 +1,5 @@
+const boom = require('@hapi/boom');
+
 const TeamMemberEntity = require('../../../domain/entities/TeamMemberEntity');
 const TeamMemberDto = require('../../dtos/teamMember.dto');
 
@@ -18,6 +20,14 @@ class AddMemberUseCase {
     }
     if (!teamId) {
       throw new Error('teamId was not provided');
+    }
+
+    const teamMember = await this.teamMemberRepository.findByWorkspaceMemberId({
+      teamId,
+      workspaceMemberId: dataOfNewTeamMember.workspaceMemberId,
+    });
+    if (teamMember?.id) {
+      throw boom.conflict('The workspaceMember already belong to the team');
     }
 
     const teamMemberEntity = new TeamMemberEntity(dataOfNewTeamMember);
