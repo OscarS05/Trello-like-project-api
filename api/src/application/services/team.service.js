@@ -50,6 +50,26 @@ class TeamService {
   }
 
   async assignProject(workspaceId, teamId, projectId) {
+    const [team, project] = await Promise.all([
+      this.getTeam(teamId, workspaceId),
+      this.getProjectUseCase.execute(projectId),
+    ]);
+
+    if (team.workspaceId !== project.workspaceId) {
+      throw boom.badRequest(
+        'the project does not belong to the same workspace as the team',
+      );
+    }
+
+    const projectTeam = await this.getProjectAssignedUseCase.execute(
+      teamId,
+      projectId,
+    );
+
+    if (projectTeam?.projectId || projectTeam?.teamId) {
+      throw boom.conflict('The assignment already exists');
+    }
+
     const [teamMembers, projectMembers] = await Promise.all([
       this.getTeamMembers(teamId, workspaceId),
       this.getProjectMembersByProjectUseCase.execute(projectId),
@@ -81,15 +101,26 @@ class TeamService {
         this.getTeamMembers(teamId, workspaceId),
         this.getProjectMembersByProjectUseCase.execute(projectId),
       ]);
-    if (!team)
+
+    if (!team?.id)
       throw boom.notFound(
         'Team does not exist or does not belong to this workspace',
       );
-    if (!project)
+    if (!project?.id)
       throw boom.notFound(
         'Project does not exist or does not belong to this workspace',
       );
-    if (!projectTeam)
+    if (team.workspaceId !== workspaceId) {
+      throw boom.badRequest(
+        'the teamId provided does not belong to the worksapce',
+      );
+    }
+    if (project.workspaceId !== workspaceId) {
+      throw boom.badRequest(
+        'the projectId provided does not belong to the worksapce',
+      );
+    }
+    if (!projectTeam?.projectId || !projectTeam?.teamId)
       throw boom.notFound('Team is not assigned to this project');
     if (teamMembers.length === 0)
       throw boom.notFound('Team does not have any members');

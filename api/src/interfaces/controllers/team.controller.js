@@ -31,7 +31,7 @@ const createTeam = async (req, res, next) => {
       throw boom.badRequest('The team create operation returns null');
 
     res
-      .status(200)
+      .status(201)
       .json({ message: 'Team was successfully created', teamCreated });
   } catch (error) {
     next(error);
@@ -49,7 +49,7 @@ const assignTeamToProject = async (req, res, next) => {
     );
 
     res
-      .status(200)
+      .status(201)
       .json({ message: 'The team was successfully assigned', result });
   } catch (error) {
     next(error);

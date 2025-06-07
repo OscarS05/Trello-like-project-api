@@ -24,7 +24,7 @@ describe('DeleteTeamUseCase', () => {
     };
 
     mockProjectMemberRepository = {
-      delete: jest.fn().mockResolvedValue(1),
+      bulkDelete: jest.fn().mockResolvedValue(2),
     };
 
     deleteTeamUseCase = new DeleteTeamUseCase({
@@ -38,9 +38,9 @@ describe('DeleteTeamUseCase', () => {
       await deleteTeamUseCase.execute(teamId, projectMembersInTeam);
 
     expect(mockTeamRepository.delete).toHaveBeenCalledWith(teamId);
-    expect(mockProjectMemberRepository.delete).toHaveBeenCalledTimes(2);
+    expect(mockProjectMemberRepository.bulkDelete).toHaveBeenCalledTimes(1);
     expect(teamDeleted).toBe(1);
-    expect(teamMembersDeletedFromProjects).toEqual([1, 1]);
+    expect(teamMembersDeletedFromProjects).toEqual(2);
   });
 
   test('It should return an error because teamId was not provided', async () => {
@@ -79,17 +79,16 @@ describe('DeleteTeamUseCase', () => {
   });
 
   test('It should return an error because the delete project members failed', async () => {
-    mockProjectMemberRepository.delete.mockResolvedValueOnce(1);
-    mockProjectMemberRepository.delete.mockResolvedValueOnce(0);
+    mockProjectMemberRepository.bulkDelete.mockResolvedValueOnce(
+      new Error('Something went wrong'),
+    );
 
     try {
       await deleteTeamUseCase.execute(teamId, projectMembersInTeam);
     } catch (error) {
       expect(mockTeamRepository.delete).toHaveBeenCalledTimes(1);
-      expect(mockProjectMemberRepository.delete).toHaveBeenCalledTimes(2);
-      expect(error.message).toMatch(
-        /Something went wrong|deleted zero rows|[1, 0]/,
-      );
+      expect(mockProjectMemberRepository.bulkDelete).toHaveBeenCalledTimes(2);
+      expect(error.message).toMatch(/Something went wrong/);
     }
   });
 
