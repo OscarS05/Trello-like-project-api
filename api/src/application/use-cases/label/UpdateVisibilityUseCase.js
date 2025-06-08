@@ -1,4 +1,4 @@
-const UpdateVisibilityLabelEntity = require('../../../domain/entities/UpdateVisibilityLabelEntity');
+/* eslint-disable no-param-reassign */
 const LabelDto = require('../../dtos/label.dto');
 
 class UpdateVisibilityUseCase {
@@ -7,8 +7,10 @@ class UpdateVisibilityUseCase {
   }
 
   async execute(isVisible, { cardId, labelId }) {
-    if (!isVisible || typeof isVisible !== 'string') {
-      throw new Error('isVisible was not provided');
+    if (typeof isVisible !== 'boolean') {
+      if (isVisible !== 'false' && isVisible !== 'true') {
+        throw new Error('isVisible was not provided');
+      }
     }
     if (!cardId) {
       throw new Error('cardId was not provided');
@@ -16,15 +18,13 @@ class UpdateVisibilityUseCase {
     if (!labelId) {
       throw new Error('labelId was not provided');
     }
-
-    const updateVisibilityLabelEntity = new UpdateVisibilityLabelEntity({
-      isVisible,
-    });
+    if (isVisible === 'false') isVisible = false;
+    if (isVisible === 'true') isVisible = true;
 
     const [updatedRows, [updatedLabel]] =
       await this.labelRepository.updateVisibility(
         { cardId, labelId },
-        updateVisibilityLabelEntity,
+        { isVisible },
       );
 
     return updatedLabel?.labelId

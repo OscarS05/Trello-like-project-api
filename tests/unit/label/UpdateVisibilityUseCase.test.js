@@ -32,7 +32,7 @@ describe('UpdateVisibilityUseCase', () => {
 
     expect(mockLabelRepository.updateVisibility).toHaveBeenCalledWith(
       labelData,
-      { isVisible },
+      { isVisible: false },
     );
     expect(result).toMatchObject(
       new LabelDto(dbResponse).updateVisibility(dbResponse),

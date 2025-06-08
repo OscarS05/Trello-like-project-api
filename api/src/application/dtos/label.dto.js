@@ -11,7 +11,7 @@ class LabelDto {
     return {
       cardId: updatedLabel.cardId,
       labelId: updatedLabel.labelId,
-      isVisible: this.isVisible,
+      isVisible: this.isVisible || updatedLabel.isVisible,
     };
   }
 }

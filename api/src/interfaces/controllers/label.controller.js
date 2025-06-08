@@ -47,16 +47,16 @@ const updateLabelVisibilityInCard = async (req, res, next) => {
     const { cardId, labelId } = req.params;
     const { isVisible } = req.body;
 
-    const newLabel = await labelService.updateVisibilityLabel(isVisible, {
+    const updatedLabel = await labelService.updateVisibilityLabel(isVisible, {
       cardId,
       labelId,
     });
-    if (newLabel === 0)
+    if (updatedLabel === 0)
       throw boom.badRequest(
         'The update visibility of label returns 0 rows affected',
       );
 
-    res.status(201).json({ newLabel });
+    res.status(200).json({ updatedLabel });
   } catch (error) {
     next(error);
   }
@@ -86,11 +86,11 @@ const deleteLabel = async (req, res, next) => {
   try {
     const { labelId } = req.params;
 
-    const deletedCard = await labelService.deleteLabel(labelId);
+    const deletedLabel = await labelService.deleteLabel(labelId);
 
     res.status(200).json({
       message: 'The card member was successfully removed',
-      deletedCard,
+      deletedLabel,
     });
   } catch (error) {
     next(error);

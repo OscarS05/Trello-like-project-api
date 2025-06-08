@@ -81,6 +81,59 @@ router.get(
 
 /**
  * @swagger
+ * /cards/{cardId}/labels/:
+ *   get:
+ *     summary: Get labels assigned to a card
+ *     description: |
+ *       Retrieves all labels that have been assigned to a specific card via the `card_labels` table in the database.
+ *       Each label includes whether it is currently visible (`isVisible`) or not.
+ *
+ *       ### Authorization & Access Rules
+ *       - Requires a valid Bearer access token.
+ *       - The `cardId` must be a valid UUID.
+ *       - The user must be a member of the project that owns the card (any role).
+ *
+ *     tags:
+ *       - label
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: cardId
+ *         required: true
+ *         description: ID of the card to retrieve labels for
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     responses:
+ *       200:
+ *         description: List of labels associated with the card, including their visibility
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 visibleLabels:
+ *                   type: array
+ *                   items:
+ *                      $ref: '#/components/schemas/LabelWithVisibility'
+ *       401:
+ *         description: Invalid or missing token
+ *       403:
+ *         description: User does not have permission to access this card's labels
+ *       404:
+ *         description: Card not found
+ */
+cardMemberRouter.get(
+  '/:cardId/labels/',
+  validateSession,
+  validatorHandler(cardIdSchema, 'params'),
+  checkProjectMembershipByCard,
+  labelControllers.getLabelsByCard,
+);
+
+/**
+ * @swagger
  * /projects/{projectId}/cards/{cardId}/labels:
  *   post:
  *     summary: Create a new label for a project from a card
@@ -347,59 +400,6 @@ router.delete(
   validatorHandler(labelIdSchema, 'params'),
   checkProjectMembershipByUserId,
   labelControllers.deleteLabel,
-);
-
-/**
- * @swagger
- * /cards/{cardId}/labels/:
- *   get:
- *     summary: Get labels assigned to a card
- *     description: |
- *       Retrieves all labels that have been assigned to a specific card via the `card_labels` table in the database.
- *       Each label includes whether it is currently visible (`isVisible`) or not.
- *
- *       ### Authorization & Access Rules
- *       - Requires a valid Bearer access token.
- *       - The `cardId` must be a valid UUID.
- *       - The user must be a member of the project that owns the card (any role).
- *
- *     tags:
- *       - label
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: cardId
- *         required: true
- *         description: ID of the card to retrieve labels for
- *         schema:
- *           type: string
- *           format: uuid
- *     responses:
- *       200:
- *         description: List of labels associated with the card, including their visibility
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 visibleLabels:
- *                   type: array
- *                   items:
- *                      $ref: '#/components/schemas/LabelWithVisibility'
- *       401:
- *         description: Invalid or missing token
- *       403:
- *         description: User does not have permission to access this card's labels
- *       404:
- *         description: Card not found
- */
-cardMemberRouter.get(
-  '/:cardId/labels/',
-  validateSession,
-  validatorHandler(cardIdSchema, 'params'),
-  checkProjectMembershipByCard,
-  labelControllers.getLabelsByCard,
 );
 
 module.exports = { router, cardMemberRouter };

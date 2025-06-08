@@ -1,7 +1,14 @@
 const Joi = require('joi');
 
 const id = Joi.string().uuid();
-const name = Joi.string().min(1).max(30);
+const name = Joi.string()
+  .min(3)
+  .max(80)
+  .pattern(/^[A-Za-z0-9 ]+$/)
+  .messages({
+    'string.pattern.base':
+      'The name can only contain letters, numbers and spaces.',
+  });
 const color = Joi.string().pattern(/^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/);
 const boolean = Joi.boolean();
 
