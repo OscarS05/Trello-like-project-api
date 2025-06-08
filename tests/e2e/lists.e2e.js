@@ -84,7 +84,7 @@ describe('tests for list endpoints', () => {
       };
     });
 
-    test('It should return a created workspace without description', async () => {
+    test('It should return a created list', async () => {
       const { statusCode, body } = await api
         .post(`/api/v1/workspaces/${workspace.id}/projects/${project.id}/lists`)
         .send(inputBody)
@@ -115,7 +115,7 @@ describe('tests for list endpoints', () => {
       };
     });
 
-    test('It should return an updated workspace without description', async () => {
+    test('It should return an updated list', async () => {
       const { statusCode, body } = await api
         .patch(
           `/api/v1/workspaces/${workspace.id}/projects/${project.id}/lists/${list.id}`,
@@ -141,7 +141,7 @@ describe('tests for list endpoints', () => {
   });
 
   describe('DELETE /workspaces/{workspaceId}/projects/{projectId}/lists/{listId}', () => {
-    test('It should return an error because the user(member role) does not have permissions to delete the workspace', async () => {
+    test('It should return an error because the user(member role) does not have permissions to delete the list', async () => {
       const { statusCode } = await api
         .delete(
           `/api/v1/workspaces/${workspace.id}/projects/${project.id}/lists/${list.id}`,
