@@ -32,9 +32,11 @@ const checkAdminRoleInProjectByCard = async (req, res, next) => {
       cardId,
     );
     if (!projectMember?.id)
-      throw boom.notFound('Something went wrong with data');
+      throw boom.forbidden(
+        'Something went wrong with data. UserId does not belong to the project',
+      );
     if (projectMember.role === 'member')
-      throw boom.notFound('Something went wrong with data');
+      throw boom.forbidden('ProjectMember does not have permissions');
 
     req.projectMember = projectMember;
     next();

@@ -36,6 +36,17 @@ class CardMemberService {
         'The project member to be added does not belong to the project',
       );
     }
+
+    const cardMembers = await this.getCardMembers(cardId);
+    const memberToBeAdded = cardMembers.find(
+      (member) => member.projectMemberId === projectMemberId,
+    );
+    if (memberToBeAdded?.id) {
+      throw boom.conflict(
+        'The project member to be added already belongs to the card',
+      );
+    }
+
     const addedMember = await this.addMemberToCardUseCase.execute(
       cardId,
       projectMemberId,
@@ -61,6 +72,18 @@ class CardMemberService {
         'The member to be removed to the card does not belong to the project',
       );
     }
+
+    const cardMembers = await this.getCardMembers(cardId);
+    const cardMemberToBeAdded = cardMembers?.find(
+      (cardMember) => cardMember.projectMemberId === projectMemberId,
+    );
+
+    if (!cardMemberToBeAdded?.id) {
+      throw boom.conflict(
+        'The project member to be removed from the card does not exist on the card',
+      );
+    }
+
     return this.deleteCardMemberUseCase.execute(cardId, projectMemberId);
   }
 

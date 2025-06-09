@@ -320,7 +320,7 @@ describe('tests for list endpoints', () => {
   describe('DELETE /cards/{cardId}/attachments/{attachmentId}', () => {
     test('It should return an error because the attachment was not found', async () => {
       const { statusCode } = await api
-        .patch(
+        .delete(
           `/api/v1/cards/${card.id}/attachments/2741ab6d-5444-4112-8dd7-1fd0de7da37a`,
         )
         .set({ Authorization: `Bearer ${accessTokenUser1}` });
