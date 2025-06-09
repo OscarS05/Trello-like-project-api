@@ -15,6 +15,10 @@ class UpdateCardAttachmentUseCase {
     if (cardAttachment.type !== 'external-link') {
       // eslint-disable-next-line no-unused-expressions, no-param-reassign
       delete cardAttachmentData.url || null;
+
+      if (!cardAttachmentData?.filename) {
+        throw Boom.badRequest('filename was not provided to update attachment');
+      }
     }
 
     const entityUpdateCardAttachment = new EntityUpdateCardAttachment(

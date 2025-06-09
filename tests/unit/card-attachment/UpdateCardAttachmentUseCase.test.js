@@ -85,7 +85,7 @@ describe('UpdateCardAttachmentUseCase', () => {
 
     await expect(
       updateCardAttachmentUseCase.execute(cardAttachment, cardAttachmentData),
-    ).rejects.toThrow(/non-empty string/);
+    ).rejects.toThrow(/filename was not provided/);
 
     expect(mockCardAttachmentRepository.update).not.toHaveBeenCalled();
   });

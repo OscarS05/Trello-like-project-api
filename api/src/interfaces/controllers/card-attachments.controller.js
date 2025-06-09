@@ -67,7 +67,7 @@ const updateCardAttachment = async (req, res, next) => {
     const { cardId, attachmentId } = req.params;
     const cardAttachmentData = req.body;
 
-    const upadedCard = await cardAttachmentService.updateCardAttachment(
+    const upatedCard = await cardAttachmentService.updateCardAttachment(
       cardId,
       attachmentId,
       cardAttachmentData,
@@ -75,7 +75,7 @@ const updateCardAttachment = async (req, res, next) => {
 
     res.status(200).json({
       message: 'The card attachment was successfully updated',
-      upadedCard,
+      upatedCard,
     });
   } catch (error) {
     next(error);

@@ -53,7 +53,7 @@ const checkProjectMembershipByCard = async (req, res, next) => {
       cardId,
     );
     if (!projectMember?.id)
-      throw boom.notFound('Something went wrong with data');
+      throw boom.forbidden('Something went wrong with data');
 
     req.projectMember = projectMember;
     next();

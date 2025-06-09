@@ -8,11 +8,12 @@ class SaveCardAttachmentUseCase {
   }
 
   async execute(cardAttachmentData) {
-    if (!cardAttachmentData?.id) {
-      throw new Error('cardAttachment was not provided');
-    }
     if (!cardAttachmentData?.cardId) throw new Error('cardId was not provided');
-    if (!cardAttachmentData?.type || !cardAttachmentData?.publicId) {
+    if (
+      !cardAttachmentData?.type ||
+      (cardAttachmentData.type !== 'external-link' &&
+        !cardAttachmentData?.publicId)
+    ) {
       throw new Error(
         'cardAttachmentData does not contain the data of the saved attachment',
       );

@@ -14,8 +14,9 @@ class DeleteCardAttachmentUseCase {
         cardAttachment.publicId,
       );
 
-      if (deletedInStorage?.result !== 'ok')
+      if (deletedInStorage?.result !== 'ok') {
         throw Boom.badRequest('Failed to delete file from Cloudinary');
+      }
     }
 
     const result = await this.cardAttachmentRepository.delete(

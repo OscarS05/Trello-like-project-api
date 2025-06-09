@@ -18,9 +18,9 @@ module.exports = {
       {
         id: 'a5332d0a-6352-4599-89e6-48c70908f6ba',
         filename: 'Agroplus-db-scheme-2.jpg',
-        url: 'https://res.cloudinary.com/dfprxzekh/image/upload/v1744326304/card-attachments/file_ysjlp7.jpg',
+        url: 'https://github.com/OscarS05/Trello-like-project-api',
         card_id: '4600a009-a471-4416-bf24-e857d23d2ab3',
-        type: 'image/jpeg',
+        type: 'external-link',
         created_at: '2025-04-10T23:05:04.884Z',
       },
 

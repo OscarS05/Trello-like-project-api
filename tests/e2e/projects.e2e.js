@@ -260,8 +260,8 @@ describe('tests for projects endpoints', () => {
         .set({ Authorization: `Bearer ${accessTokenUser1}` })
         .attach('background-image', imagePath);
 
-      expect(statusCode).toEqual(500);
-      expect(body.stack).toMatch(/Invalid file type/);
+      expect(statusCode).toBe(400);
+      expect(body.message).toMatch(/Invalid file type/);
     });
 
     test('It should return an error because the requester does not have permissions to update the project', async () => {

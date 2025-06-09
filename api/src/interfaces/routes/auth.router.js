@@ -12,10 +12,10 @@ const {
 
 const EMAIL_LIMITER_MESSAGE =
   'Too many email requests, please try again after an 15 minutes';
-const LOGIN_LIMITER_MESSAGE = {
-  error: 'Too many login attempts',
-  message: 'Please wait 15 minutes and try again.',
-};
+// const LOGIN_LIMITER_MESSAGE = {
+//   error: 'Too many login attempts',
+//   message: 'Please wait 15 minutes and try again.',
+// };
 
 const {
   login,
@@ -58,7 +58,7 @@ const {
  *       429:
  *         description: Too many login attempts, please try again later.
  */
-router.post('/login', limiter(6, 15 * 60 * 100, LOGIN_LIMITER_MESSAGE), login);
+router.post('/login', login);
 
 /**
  * @swagger

@@ -72,6 +72,67 @@ router.get(
 
 /**
  * @swagger
+ * /cards/{cardId}/attachments/{attachmentId}/download:
+ *   get:
+ *     summary: Download a file attachment from a card
+ *     description: |
+ *       It acts as a proxy for downloading an attachment stored on an external hosting service. It can also be used to view card attachments, not just for downloading.
+ *
+ *       - This endpoint ensures the actual storage URL remains hidden.
+ *       - Only works for **file attachments**, not for external links.
+ *       - The attachment must belong to the card identified by `cardId`.
+ *
+ *       ### Authorization & Access Rules
+ *       - Requires a valid Bearer access token.
+ *       - Both `cardId` and `attachmentId` must be valid UUIDs.
+ *       - The requester must be a member of the project that owns the card (any role).
+ *
+ *     tags:
+ *       - card-attachment
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: cardId
+ *         required: true
+ *         description: ID of the card that owns the attachment
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *       - in: path
+ *         name: attachmentId
+ *         required: true
+ *         description: ID of the file attachment to download
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     responses:
+ *       200:
+ *         description: File attachment streamed for download
+ *         content:
+ *           application/octet-stream:
+ *             schema:
+ *               type: string
+ *               format: binary
+ *       400:
+ *         description: Cannot download external links
+ *       401:
+ *         description: Invalid or missing token
+ *       403:
+ *         description: User is not authorized to download this attachment
+ *       404:
+ *         description: Attachment not found or does not belong to the specified card
+ */
+router.get(
+  '/:cardId/attachments/:attachmentId/download',
+  validateSession,
+  validatorHandler(cardAttachmentSchema, 'params'),
+  checkProjectMembershipByCard,
+  cardAttachmentControllers.downloadCardAttachment,
+);
+
+/**
+ * @swagger
  * /cards/{cardId}/attachments:
  *   post:
  *     summary: Attach a file or link to a card
@@ -308,67 +369,6 @@ router.delete(
   validatorHandler(cardAttachmentSchema, 'params'),
   checkProjectMembershipByCard,
   cardAttachmentControllers.deleteCardAttachent,
-);
-
-/**
- * @swagger
- * /cards/{cardId}/attachments/{attachmentId}/download:
- *   get:
- *     summary: Download a file attachment from a card
- *     description: |
- *       It acts as a proxy for downloading an attachment stored on an external hosting service. It can also be used to view card attachments, not just for downloading.
- *
- *       - This endpoint ensures the actual storage URL remains hidden.
- *       - Only works for **file attachments**, not for external links.
- *       - The attachment must belong to the card identified by `cardId`.
- *
- *       ### Authorization & Access Rules
- *       - Requires a valid Bearer access token.
- *       - Both `cardId` and `attachmentId` must be valid UUIDs.
- *       - The requester must be a member of the project that owns the card (any role).
- *
- *     tags:
- *       - card-attachment
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: cardId
- *         required: true
- *         description: ID of the card that owns the attachment
- *         schema:
- *           type: string
- *           format: uuid
- *       - in: path
- *         name: attachmentId
- *         required: true
- *         description: ID of the file attachment to download
- *         schema:
- *           type: string
- *           format: uuid
- *     responses:
- *       200:
- *         description: File attachment streamed for download
- *         content:
- *           application/octet-stream:
- *             schema:
- *               type: string
- *               format: binary
- *       400:
- *         description: Cannot download external links
- *       401:
- *         description: Invalid or missing token
- *       403:
- *         description: User is not authorized to download this attachment
- *       404:
- *         description: Attachment not found or does not belong to the specified card
- */
-router.get(
-  '/:cardId/attachments/:attachmentId/download',
-  validateSession,
-  validatorHandler(cardAttachmentSchema, 'params'),
-  checkProjectMembershipByCard,
-  cardAttachmentControllers.downloadCardAttachment,
 );
 
 module.exports = router;

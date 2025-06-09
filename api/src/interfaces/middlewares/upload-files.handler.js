@@ -1,4 +1,5 @@
 const multer = require('multer');
+const boom = require('@hapi/boom');
 const path = require('path');
 
 const { validatorHandler } = require('./validator.handler');
@@ -12,7 +13,7 @@ const fileFilterByExtension = (allowedFormats) => {
     if (allowedFormats.includes(ext)) {
       cb(null, true);
     } else {
-      cb(new Error(`Invalid file type: ${ext}`), false);
+      cb(boom.badRequest(`Invalid file type: ${ext}`), false);
     }
   };
 };
