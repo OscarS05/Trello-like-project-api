@@ -6,10 +6,9 @@ const getAllChecklistsByProject = async (req, res, next) => {
   try {
     const { projectId } = req.params;
 
-    const checklists =
-      await checklistService.getAllChecklistsByProject(projectId);
+    const cards = await checklistService.getAllChecklistsByProject(projectId);
 
-    res.status(200).json({ checklists });
+    res.status(200).json({ cards });
   } catch (error) {
     next(error);
   }
@@ -47,8 +46,10 @@ const createChecklistByCopyingItems = async (req, res, next) => {
   try {
     const { cardId, checklistId } = req.params;
     const { name } = req.body;
+    const { projectId } = req.projectMember;
 
     const newChecklist = await checklistService.createChecklistByCopyingItems(
+      projectId,
       checklistId,
       { name, cardId },
     );
@@ -63,8 +64,10 @@ const updateChecklist = async (req, res, next) => {
   try {
     const { checklistId } = req.params;
     const checklistData = req.body;
+    const { projectId } = req.projectMember;
 
     const updatedChecklist = await checklistService.updateChecklist(
+      projectId,
       checklistId,
       checklistData,
     );
@@ -85,8 +88,12 @@ const updateChecklist = async (req, res, next) => {
 const deleteChecklist = async (req, res, next) => {
   try {
     const { checklistId } = req.params;
+    const { projectId } = req.projectMember;
 
-    const deletedCard = await checklistService.deleteChecklist(checklistId);
+    const deletedCard = await checklistService.deleteChecklist(
+      projectId,
+      checklistId,
+    );
 
     res
       .status(200)

@@ -35,15 +35,33 @@ class ChecklistService {
     return this.createChecklistUseCase.execute(checklistData);
   }
 
-  async createChecklistByCopyingItems(checklistId, checklistData) {
-    const checklistWithItems =
-      await this.getChecklistUseCase.execute(checklistId);
-    if (!checklistWithItems?.id)
-      throw boom.notFound(
-        'The checklist does not exist or does not belong to the card',
+  verifyIfChecklistBelongsToProject(checklistByProject, checklistId) {
+    const isChecklistBelongingToProject =
+      checklistByProject?.length > 0
+        ? checklistByProject.find((card) =>
+            card.checklists.some((checklist) => checklist.id === checklistId),
+          )
+        : null;
+
+    if (!isChecklistBelongingToProject) {
+      throw boom.badRequest(
+        'The checklist provided to copy its items does not belong to the project',
       );
+    }
+    return isChecklistBelongingToProject;
+  }
+
+  async createChecklistByCopyingItems(projectId, checklistId, checklistData) {
+    const [checklistWithItems, checklistByProject] = await Promise.all([
+      this.getChecklistUseCase.execute(checklistId),
+      this.getAllChecklistsByProject(projectId),
+    ]);
+    if (!checklistWithItems?.id)
+      throw boom.notFound('The checklist does not exist');
     if (checklistWithItems.items?.length === 0)
       throw boom.conflict('The selected checklist has no items to copy');
+
+    this.verifyIfChecklistBelongsToProject(checklistByProject, checklistId);
 
     return this.createChecklistByCopyingItemsUseCase.execute(
       checklistData,
@@ -51,11 +69,19 @@ class ChecklistService {
     );
   }
 
-  async updateChecklist(checklistId, checklistData) {
+  async updateChecklist(projectId, checklistId, checklistData) {
+    const checklistByProject = await this.getAllChecklistsByProject(projectId);
+
+    this.verifyIfChecklistBelongsToProject(checklistByProject, checklistId);
+
     return this.updateChecklistUseCase.execute(checklistId, checklistData);
   }
 
-  async deleteChecklist(checklistId) {
+  async deleteChecklist(projectId, checklistId) {
+    const checklistByProject = await this.getAllChecklistsByProject(projectId);
+
+    this.verifyIfChecklistBelongsToProject(checklistByProject, checklistId);
+
     return this.deleteChecklistUseCase.execute(checklistId);
   }
 

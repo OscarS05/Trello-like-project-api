@@ -1,3 +1,5 @@
+const boom = require('@hapi/boom');
+
 const ChecklistEntity = require('../../../domain/entities/ChecklistEntity');
 const ChecklistItemEntity = require('../../../domain/entities/ChecklistItemEntity');
 const ChecklistDto = require('../../dtos/checklist.dto');
@@ -9,17 +11,18 @@ class CreateChecklistByCopyingItemsUseCase {
   }
 
   async execute(checklistData, checklistWithItems) {
-    if (!checklistData?.cardId) throw new Error('cardId was not provided');
+    if (!checklistData?.cardId)
+      throw boom.badRequest('cardId was not provided');
     if (!checklistData?.name) {
-      throw new Error('the checklist name was not provided');
+      throw boom.badRequest('the checklist name was not provided');
     }
     if (!checklistWithItems?.id) {
-      throw new Error(
+      throw boom.badRequest(
         'The checklist does not exist or does not belong to the card',
       );
     }
     if (checklistWithItems.items?.length === 0) {
-      throw new Error('The selected checklist has no items to copy');
+      throw boom.badRequest('The selected checklist has no items to copy');
     }
 
     const checklistEntity = new ChecklistEntity(checklistData);

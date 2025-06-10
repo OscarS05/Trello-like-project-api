@@ -32,6 +32,19 @@ module.exports = {
         card_id: 'c9e0f514-3979-490e-8f9d-af2dfd069668',
         created_at: '2025-04-07T23:57:24.939Z',
       },
+      // Card Implement authentication (project 2)
+      {
+        id: '661bb319-96ad-4af8-b127-61b686019066',
+        name: 'New checklist 5',
+        card_id: '8d4462a3-580d-4154-9cb1-95fe565770e5',
+        created_at: '2025-04-07T23:57:24.939Z',
+      },
+      {
+        id: '524dc63e-1c48-464f-8b30-2d57f29abba2',
+        name: 'New checklist 6',
+        card_id: '8d4462a3-580d-4154-9cb1-95fe565770e5',
+        created_at: '2025-04-07T23:57:24.939Z',
+      },
     ]);
   },
 

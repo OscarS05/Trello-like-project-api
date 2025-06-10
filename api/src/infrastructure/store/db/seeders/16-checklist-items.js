@@ -36,6 +36,21 @@ module.exports = {
         is_checked: false,
         created_at: '2025-04-09T00:57:42.275Z',
       },
+      // New checklist 5
+      {
+        id: 'b5f939cf-5a23-45bc-9fda-12183cafc073',
+        name: 'item 5',
+        checklist_id: '661bb319-96ad-4af8-b127-61b686019066',
+        is_checked: false,
+        created_at: '2025-04-09T00:57:42.275Z',
+      },
+      {
+        id: 'f1e17a23-5b94-430a-9ffc-36fd5eaeec60',
+        name: 'item 6',
+        checklist_id: '661bb319-96ad-4af8-b127-61b686019066',
+        is_checked: false,
+        created_at: '2025-04-09T00:57:42.275Z',
+      },
     ]);
   },
 
