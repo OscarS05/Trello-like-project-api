@@ -1,26 +1,76 @@
-# Autumn(Trello-like API)
+# Trello-like API
 
-Autumn is an API for collaborative project management inspired by Trello. It is built using **Node.js, Express.js, PostgreSQL, JWT authentication, Redis for caching, Sequelize ORM, BullMQ, and Docker**. The project follows **Clean Architecture, and Domain-Driven Design (DDD)** to ensure maintainability and scalability. It features authentication management, roles, teams, tasks, attachments, and more.
+Trello-like API is an API for collaborative project management inspired by Trello. It is built using **Node.js, Express.js, PostgreSQL, JWT authentication, Redis for caching, Sequelize ORM, BullMQ, and Docker** and testing with **Jest + Supertest**. The project follows **Clean Architecture, and Domain-Driven Design (DDD)** to ensure maintainability and scalability. It features authentication management, roles, teams, tasks, attachments, and more.
 
-[Swagger UI - Production](https://trello-like-project-api.onrender.com/api-docs)  
-**Note:** If you are testing the link in production, please wait a moment for the application to load. The free plan on Render suspends the application after 15 minutes of inactivity, but it will reactivate when you access the link. This process may take a few seconds.
+---
 
-## 🎥 Demonstration Video
+## 📦 Features
 
-Watch a **2-3 minute video demonstration** showcasing how to use the API via Swagger in production. The video highlights key features such as authentication, creating workspaces, and managing projects.
+- ✅ Authentication with JWT (access/refresh tokens)
+- ✅ Emails are sent to verify the authenticity of the user and to be able to change the password or activate the account.
+- ✅ Roles per subscription plan: `basic`, `premium`
+- ✅ **Collaborative project management and organization through roles using workspaces, projects, and teams, each with its own members**
+- ✅ User roles by context belonging to workspaces, projects or teams: `owner`, `admin`, `member`
+- ✅ You can organize your project using lists and cards. **If you wish, you can organize the tasks on each card using labels, checklists, adding attachments like images, assigning members to the card or to the checklist items.**
+- ✅ Clean Architecture + DDD
+- ✅ Full CRUD:
+  - Users (with recursive deletion)
+  - Workspaces, Projects, and Teams
+  - Lists, Cards, labels, attachments, checklists and checklist Items
+  - Members in: Workspaces, projects, teams, card members and chekcklist items
+- ✅ Assigning/de-assigning equipment to projects
+- ✅ Securely upload files and images with Cloudinary
+- ✅ Secure download via proxy endpoint with streams
+- ✅ Message queues with BullMQ for sending emails and uploading files
+- ✅ Authorization middlewares to manage permissions and roles
+- ✅ Validation with Joi
 
-[Trello-like API Demonstration Video](https://www.loom.com/share/97b510a937424fe49184aa59831e2bed?sid=8f42347b-79fc-4af5-8fa4-2fb56527952d)  
-Click the link above to watch a short demonstration showcasing some features of the Autumn API.
+## 🛠 Additional Features
+
+### ⏰ Cron Job
+
+The project includes an automated task using `node-cron` that runs every day at midnight (`00:00`). This scheduled job checks for users who haven't verified their email within **7 days** of account creation and removes them from the system. This helps keep the database clean and free of inactive accounts.
+
+## 🔐 Authentication and roles
+
+- **JWT Authentication** with refresh tokens managed from Redis and cookies.
+- **Subscription plans**:
+  - `basic`: Creation and limited membership of workspaces, projects, and teams
+  - `premium`: Limited but expanded ability to create and join workspaces, projects, and teams.
+- **Hierarchical roles** by entity (`workspace`, `project`, `team`):
+  - `owner`: Full control, including ownership transfer
+  - `admin`: manage members
+  - `member`: You can only contribute to the project with lists, cards, and information within each card, but you cannot manage members or update the project.
+
+---
+
+## Technologies Used
+
+- **Node.js** - Backend runtime
+- **Express.js** - Web framework
+- **PostgreSQL** - Database
+- **Sequelize ORM** - Object-Relational Mapping
+- **Redis** - Caching system
+- **JWT Authentication** - Secure authentication(Access/Refresh tokens)
+- **Docker** - Containerized environment
+- **Winston & Morgan** - Logging and performance monitoring
+- **Nodemailer** - Email service
+- **Joi** - Data validation
+- **Express-rate-limit** - Rate limiting middleware
+- **BullMQ** - Task queue for sending emails and uploading files in the background
+- **Cloudinary** - Host files and images for free
+- **Swagger** - API documentation
+- **PM2** - Management of production processes
+- **Jest** - Testing framework
+- **Supetest** - Node.js library for testing APIs
+
+---
 
 ## Table of Contents
 
-- [Documentation API](#documentation-api)
-- [User Testing Flow (via Swagger UI)](#user-testing-flow-via-swagger-ui)
-- [Technologies Used](#technologies-used)
-- [Authentication System](#authentication-system)
-- [Project Structure](#project-structure)
 - [📦 Features](#-features)
-- [🔐 Authentication and roles](#-authentication-and-roles)
+- [Technologies Used](#technologies-used)
+- [Project Structure](#project-structure)
 - [🧪 Testing](#-testing)
 - [How to Run the Project](#how-to-run-the-project)
   - [Prerequisites](#prerequisites)
@@ -28,10 +78,85 @@ Click the link above to watch a short demonstration showcasing some features of 
 - [Available Scripts](#available-scripts)
 - [ER schema of the database](#er-schema-of-the-database)
 - [Project Status](#project-status)
-- [Upcoming implementations](#upcoming-implementations)
 - [📤 API Example Requests & Responses](#-api-example-requests--responses)
+- [User Testing Flow (via Swagger UI)](#user-testing-flow-via-swagger-ui)
+- [Documentation API](#documentation-api)
 - [Developer](#developer)
 - [License](#license)
+
+---
+
+## Project Structure
+
+The project follows **Clean Architecture and Domain-Driven Design (DDD)** principles. The `api/src/` and `tests/` directory is structured as follows:
+
+```
+api/src/
+├── application/
+│   ├── dtos/
+│   ├── services/
+│   └── use-cases/
+├── domain/
+│   ├── repositories/ (contracts)
+│   ├── entities/
+│   └── value-objects/
+├── infrastructure/
+│   ├── adapters/
+|   ├── queues/
+│   ├── repositories/ (implementations)
+│   └── store/ (DB, ORM, cache configuration)
+├── interfaces/
+│   ├── controllers/
+│   ├── middlewares/
+│   ├── routes/
+│   └── schemas/
+├── config/ (environment variables)
+└── utils/ (helpers)
+
+/tests/
+├── unit/
+│   └── [Entidad]/
+│       └── [UseCaseName].test.js   # Ej: user/DeleteAccountUseCase.test.js
+│
+├── e2e/
+│   └── [Entidad].e2e.js            # Ej: users.e2e.js — all user endpoints
+│
+└── setupTest.js                    # Global mocks: Cloudinary, Nodemailer, etc.
+```
+
+## 🧪 Testing
+
+This project includes **comprehensive automated testing using Jest**:
+
+✅ Current test coverage:
+
+- Statements: 84.39%
+- Branches: 59.34%
+- Functions: 83.94%
+- Lines: 86.85%
+
+This coverage is based on end-to-end testing, ensuring that real user flows and API behavior are validated. Unit testing was also applied to core use cases.
+
+- **Test Types**:
+
+  - Unit tests:
+    Located in /tests/unit/.
+    Each folder corresponds to a domain entity and contains tests for its use cases individually (e.g. User/DeleteAccountUseCase.test.js).
+
+- End-to-End (E2E) tests:
+
+  - Located in /tests/e2e/.
+    Each file represents a domain entity and tests all related endpoints (e.g. users.e2e.js includes tests for user registration, login, profile update, etc.).
+    These tests include seeded data to simulate real scenarios.
+
+- Running tests
+
+  - Unit test with: `npm run test`
+  - E2E test with: `npm run e2e`
+
+  **Remember**: Make sure to have the .env.e2e environment file properly configured.
+
+---
 
 ## Documentation API
 
@@ -57,115 +182,6 @@ Swagger UI offers a user-friendly way to test the API endpoints, view request/re
 Here you can see a preview of the Swagger documentation:
 ![Swagger UI Screenshot](./api/utils/docs/assets/docs-swagger-example.png)
 ![Swagger UI Screenshot](./api/utils/docs/assets/docs-swagger-example-2.png)
-
----
-
-## Technologies Used
-
-- **Node.js** - Backend runtime
-- **Express.js** - Web framework
-- **PostgreSQL** - Database
-- **Sequelize ORM** - Object-Relational Mapping
-- **Redis** - Caching system
-- **JWT Authentication** - Secure authentication(Access/Refresh tokens)
-- **Passport.js** - Authentication middleware
-- **Docker** - Containerized environment
-- **Winston & Morgan** - Logging and performance monitoring
-- **Nodemailer** - Email service
-- **Joi** - Data validation
-- **Express-rate-limit** - Rate limiting middleware
-- **BullMQ** - Task queue for sending emails and uploading files in the background
-- **Cloudinary** - Host files and images for free
-- **Swagger** - API documentation
-- **PM2** - Management of production processes
-
-## Authentication System
-
-Autumn implements a **JWT-based authentication system** with access and refresh tokens. A key feature of this system is **auto-authentication**: as long as the refresh token remains valid, the user session remains active indefinitely. However, if the user does not log in for **15 consecutive days**, the refresh token will expire and and re-authentication will be required.
-
-## Project Structure
-
-The project follows **Clean Architecture and Domain-Driven Design (DDD)** principles. The `api/src/` directory is structured as follows:
-
-```
-api/src/
-├── application/
-│   ├── dtos/
-│   ├── services/
-│   └── use-cases/
-├── domain/
-│   ├── repositories/ (contracts)
-│   ├── entities/
-│   └── value-objects/
-├── infrastructure/
-│   ├── adapters/
-|   ├── queues/
-│   ├── repositories/ (implementations)
-│   └── store/ (DB, ORM, cache configuration)
-├── interfaces/
-│   ├── controllers/
-│   ├── middlewares/
-│   ├── routes/
-│   └── schemas/
-├── config/ (environment variables)
-└── utils/ (helpers)
-```
-
-## 📦 Features
-
-- ✅ Authentication with JWT (access/refresh tokens)
-- ✅ Validation with Joi
-- ✅ Global Error Middleware
-- ✅ Authentication and authorization middleware
-- ✅ Clean Architecture + DDD
-- ✅ Full CRUD::
-- Users (with recursive deletion)
-- Workspaces, Projects, and Teams
-- Lists, Cards, Checklists, and Items
-- Members(Workspaces, projects, teams), Labels, and Attachments
-- ✅ User roles by context belonging to workspaces, projects or teams: `owner`, `admin`, `member`
-- ✅ Roles per subscription plan: `basic`, `premium`
-- ✅ Assigning/de-assigning equipment to projects
-- ✅ Securely upload files and images with Cloudinary
-- ✅ Secure download via proxy endpoint with streams
-- ✅ Message queues with BullMQ for sending emails and uploading files
-
-## 🛠 Additional Features
-
-### ⏰ Cron Job
-
-The project includes an automated task using `node-cron` that runs every day at midnight (`00:00`). This scheduled job checks for users who haven't verified their email within **7 days** of account creation and removes them from the system. This helps keep the database clean and free of inactive accounts.
-
-### 🔐 Rate Limiting
-
-Rate limiting is implemented to enhance the system’s security by restricting the number of requests allowed to certain sensitive endpoints. This prevents abuse and brute-force attacks. The protected endpoints are:
-
-- `auth/login`
-- `auth/send-verification-email`
-- `auth/resend-verification-email`
-
-This mechanism improves overall system stability and security.
-
----
-
-## 🔐 Authentication and roles
-
-- **JWT Authentication** with refresh tokens managed from Redis and cookies.
-- **Subscription plans**:
-  - `basic`: Creation and limited membership of workspaces, projects, and teams
-  - `premium`: Limited but expanded ability to create and join workspaces, projects, and teams.
-- **Hierarchical roles** by entity (`workspace`, `project`, `team`):
-  - `owner`: owner (can transfer ownership)
-  - `admin`: manage members
-  - `member`: You can only contribute to the project with lists, cards, and information within each card, but you cannot manage members or update the project.
-
----
-
-## 🧪 Testing
-
-Currently **automated tests are not included**, but functionality has been verified with extensive manual testing.
-
-> Different testing techniques will be implemented soon.
 
 ---
 
@@ -219,14 +235,21 @@ Currently **automated tests are not included**, but functionality has been verif
 ```bash
 "scripts": {
   "pm2": "pm2 start ecosystem.config.js",
-  "dev": "nodemon api/index.js",
-  "start": "node api/index.js",
-  "lint": "eslint",
+  "dev": "nodemon ./api/index.js",
+  "start": "pm2-runtime ecosystem.config.js",
+  "lint": "eslint ./api",
+  "lint:fix": "eslint ./api --fix",
+  "test": "jest",
   "migrations:generate": "sequelize-cli migration:generate --name",
   "migrations:run": "sequelize-cli db:migrate",
   "migrations:revert": "sequelize-cli db:migrate:undo",
   "migrations:delete": "sequelize-cli db:migrate:undo:all",
-  "migrations:status": "sequelize-cli db:migrate:status"
+  "migrations:status": "sequelize-cli db:migrate:status",
+  "seed:all": "sequelize-cli db:seed:all",
+  "seed:undo": "sequelize-cli db:seed:undo:all",
+  "e2e": "NODE_ENV=e2e jest --config ./jest-e2e.json --verbose --detectOpenHandles --forceExit --runInBand",
+  "e2e:ci": "NODE_ENV=ci jest --config ./jest-e2e.json --verbose --detectOpenHandles --forceExit --runInBand",
+  "e2e:coverage": "NODE_ENV=e2e jest --config ./jest-e2e.json --verbose --detectOpenHandles --forceExit --coverage"
 }
 ```
 
@@ -240,17 +263,13 @@ The file with the ER diagram is located in the root of the project:
 
 If you want to view the .png image of the database's ER schema, you must view it from the GitHub repository because it cannot be viewed properly in VSC.
 
+---
+
 ## Project Status
 
 The project is completed.
 All backend functionalities have been implemented successfully.
 It runs locally with tools like Insomnia or Postman.
-
-## Upcoming implementations
-
-- **Real-time notification system**.
-- **Real-time chat for projects using Socket.io**.
-- **Comprehensive testing implementation**.
 
 ---
 
@@ -561,6 +580,18 @@ body:
   ]
 }
 ```
+
+## Test in swagger
+
+[Swagger UI - Production](https://trello-like-project-api.onrender.com/api-docs)  
+**Note:** If you are testing the link in production, please wait a moment/minutes for the application to load. The free plan on Render suspends the application after 15 minutes of inactivity, but it will reactivate when you access the link. This process may take a few seconds. It's also possible that my free hosting plan has expired and the link isn't working.
+
+## 🎥 Demonstration Video
+
+Watch a **2-3 minute video demonstration** showcasing how to use the API via Swagger in production. The video highlights key features such as authentication, creating workspaces, and managing projects.
+
+[Trello-like API Demonstration Video](https://www.loom.com/share/97b510a937424fe49184aa59831e2bed?sid=8f42347b-79fc-4af5-8fa4-2fb56527952d)  
+Click the link above to watch a short demonstration showcasing some features of the Autumn API.
 
 ---
 
