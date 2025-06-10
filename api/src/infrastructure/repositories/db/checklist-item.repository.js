@@ -28,8 +28,6 @@ class ChecklistItemRepository extends IChecklistItemRepository {
   }
 
   async findOneByIdAndProject(checklistItemId, projectId) {
-    console.log(checklistItemId, projectId);
-
     return this.db.models.ChecklistItem.findOne({
       where: { id: checklistItemId },
       include: [

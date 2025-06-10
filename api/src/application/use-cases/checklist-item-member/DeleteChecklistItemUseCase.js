@@ -1,11 +1,29 @@
+const boom = require('@hapi/boom');
+
 class DeleteChecklistItemUseCase {
   constructor({ checklistItemMemberRepository }) {
     this.checklistItemMemberRepository = checklistItemMemberRepository;
   }
 
   async execute(checklistItemId, projectMemberId) {
-    if (!checklistItemId) throw new Error('checklistItemId was not provided');
-    if (!projectMemberId) throw new Error('projectMemberId was not provided');
+    if (!checklistItemId) {
+      throw boom.badRequest('checklistItemId was not provided');
+    }
+    if (!projectMemberId) {
+      throw boom.badRequest('projectMemberId was not provided');
+    }
+
+    const checklistItemMember =
+      await this.checklistItemMemberRepository.findOne({
+        checklistItemId,
+        projectMemberId,
+      });
+
+    if (!checklistItemMember?.id) {
+      throw boom.badData(
+        'The checklistItemMember does not belong to the project',
+      );
+    }
 
     const result = await this.checklistItemMemberRepository.delete(
       checklistItemId,
@@ -13,7 +31,7 @@ class DeleteChecklistItemUseCase {
     );
 
     if (result === 0) {
-      throw new Error(
+      throw boom.badRequest(
         'Something went wrong removing the checklist item member',
       );
     }

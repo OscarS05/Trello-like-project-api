@@ -81,6 +81,12 @@ class ChecklistItemMemberRepository extends IChecklistItemMemberRepository {
       where: { checklistItemId, projectMemberId: projectMemberIds },
     });
   }
+
+  async findOne({ checklistItemId, projectMemberId }) {
+    return this.db.models.ChecklistItemMember.findOne({
+      where: { checklistItemId, projectMemberId },
+    });
+  }
 }
 
 module.exports = ChecklistItemMemberRepository;

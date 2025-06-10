@@ -74,7 +74,7 @@ const checkProjectMembershipByChecklist = async (req, res, next) => {
       checklistId,
     );
     if (!projectMember?.id)
-      throw boom.notFound('Something went wrong with data');
+      throw boom.forbidden('You do not belong to the project');
 
     req.projectMember = projectMember;
     next();

@@ -1,5 +1,8 @@
 const DeleteChecklistItemUseCase = require('../../../api/src/application/use-cases/checklist-item-member/DeleteChecklistItemUseCase');
-const { createChecklistItem } = require('../../fake-data/fake-entities');
+const {
+  createChecklistItem,
+  createChecklistItemMember,
+} = require('../../fake-data/fake-entities');
 
 describe('DeleteChecklistItemUseCase', () => {
   const fakeChecklistItemId = createChecklistItem().id;
@@ -11,6 +14,7 @@ describe('DeleteChecklistItemUseCase', () => {
   beforeEach(() => {
     mockChecklistItemMemberRepository = {
       delete: jest.fn().mockResolvedValue(1),
+      findOne: jest.fn(),
     };
 
     deleteChecklistItemUseCase = new DeleteChecklistItemUseCase({
@@ -19,12 +23,17 @@ describe('DeleteChecklistItemUseCase', () => {
   });
 
   test('It should return a 1', async () => {
+    mockChecklistItemMemberRepository.findOne.mockResolvedValue(
+      createChecklistItemMember(),
+    );
+
     const result = await deleteChecklistItemUseCase.execute(
       fakeChecklistItemId,
       fakeProjectMemberId,
     );
 
     expect(mockChecklistItemMemberRepository.delete).toHaveBeenCalledTimes(1);
+    expect(mockChecklistItemMemberRepository.findOne).toHaveBeenCalledTimes(1);
     expect(result).toBe(1);
   });
 
@@ -43,6 +52,9 @@ describe('DeleteChecklistItemUseCase', () => {
   });
 
   test('It should return an empty array because the create operation did not find anything', async () => {
+    mockChecklistItemMemberRepository.findOne.mockResolvedValue(
+      createChecklistItemMember(),
+    );
     mockChecklistItemMemberRepository.delete.mockResolvedValue(0);
 
     await expect(
