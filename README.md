@@ -583,6 +583,8 @@ body:
 
 ## Test in swagger
 
+**CURRENTLY NOT AVAILABLE**
+
 [Swagger UI - Production](https://trello-like-project-api.onrender.com/api-docs)  
 **Note:** If you are testing the link in production, please wait a moment/minutes for the application to load. The free plan on Render suspends the application after 15 minutes of inactivity, but it will reactivate when you access the link. This process may take a few seconds. It's also possible that my free hosting plan has expired and the link isn't working.
 
