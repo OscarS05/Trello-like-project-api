@@ -154,7 +154,7 @@ This coverage is based on end-to-end testing, ensuring that real user flows and 
   - Unit test with: `npm run test`
   - E2E test with: `npm run e2e`
 
-  **Remember**: Make sure to have the .env.e2e environment file properly configured.
+  **Remember**: After downloading the project make sure that the .env.e2e file is in the repository to be able to run the tests.
 
 ---
 
