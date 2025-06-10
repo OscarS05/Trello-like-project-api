@@ -45,7 +45,7 @@ describe('UpdateTheCheckOfItemUseCase', () => {
 
   test('It should return an error because isChecked was not provided or not is a boolean', async () => {
     await expect(
-      updateTheCheckOfItemUseCase.execute(fakeChecklistItemId, 'false'),
+      updateTheCheckOfItemUseCase.execute(fakeChecklistItemId, 'yes'),
     ).rejects.toThrow(/was not provided/);
     expect(mockChecklistItemRepository.update).not.toHaveBeenCalled();
   });

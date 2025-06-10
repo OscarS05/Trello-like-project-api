@@ -87,14 +87,14 @@ const deleteChecklistItem = async (req, res, next) => {
     const { checklistItemId } = req.params;
     const requesterAsProjectMember = req.projectMember;
 
-    const deletedCard = await checklistItemService.deleteChecklistItem(
+    const deletedItem = await checklistItemService.deleteChecklistItem(
       requesterAsProjectMember,
       checklistItemId,
     );
 
     res.status(200).json({
       message: 'The checklist item was successfully removed',
-      deletedCard,
+      deletedItem,
     });
   } catch (error) {
     next(error);

@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 const boom = require('@hapi/boom');
 const ChecklistItemDto = require('../../dtos/checklist-item.dto');
 
@@ -9,8 +10,13 @@ class UpdateTheCheckOfItemUseCase {
   async execute(checklistItemId, isChecked) {
     if (!checklistItemId) throw new Error('checklistItemId was not provided');
     if (typeof isChecked !== 'boolean') {
-      throw new Error('checklistItemId was not provided');
+      if (isChecked !== 'false' && isChecked !== 'true') {
+        throw new Error('isChecked was not provided');
+      }
     }
+
+    if (isChecked === 'false') isChecked = false;
+    if (isChecked === 'true') isChecked = true;
 
     const [affectedRows, [updateChecklistItem]] =
       await this.checklistItemRepository.update(checklistItemId, { isChecked });

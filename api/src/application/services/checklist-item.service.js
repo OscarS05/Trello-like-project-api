@@ -43,16 +43,17 @@ class ChecklistItemService {
         checklistItemData.assignedProjectMemberIds,
         requesterAsProjectMember.projectId,
       );
+
+      if (projectMembers?.length === 0)
+        throw boom.badData(
+          'The provided project member ids do not belong to the project',
+        );
+
+      checklistItemData.assignedProjectMemberIds = projectMembers.map(
+        (member) => member.id,
+      );
     }
 
-    if (projectMembers.length === 0)
-      throw boom.badData(
-        'The provided project member ids do not belong to the project',
-      );
-
-    checklistItemData.assignedProjectMemberIds = projectMembers.map(
-      (member) => member.id,
-    );
     return this.createChecklistItemUseCase.execute(checklistItemData);
   }
 
